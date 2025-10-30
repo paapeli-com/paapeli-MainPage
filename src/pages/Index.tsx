@@ -12,17 +12,29 @@ import {
   Github,
   Linkedin
 } from "lucide-react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 import heroBg from "@/assets/hero-bg.jpg";
-import dataFlow from "@/assets/data-flow.jpg";
+import architectureDiagram from "@/assets/architecture-diagram.png";
 import otaUpdate from "@/assets/ota-update.jpg";
 import dashboardPreview from "@/assets/dashboard-preview.jpg";
 
 const Index = () => {
+  const { t, isRTL } = useLanguage();
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Fixed Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-foreground/95 backdrop-blur-sm border-b border-white/10">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="text-2xl font-bold text-primary">Paapeli</div>
+          <LanguageSwitcher />
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section 
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
         style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${heroBg})`,
           backgroundSize: 'cover',
@@ -32,18 +44,17 @@ const Index = () => {
         <div className="container mx-auto px-4 py-20 text-center relative z-10">
           <div className="animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Build, Connect, and Manage<br />IoT Infrastructure — Intelligently.
+              {t('heroTitle')}
             </h1>
             <p className="text-xl md:text-2xl text-accent mb-8 max-w-3xl mx-auto">
-              Paapeli is an AI-powered IoT cloud that helps you connect devices, 
-              collect insights, and control your infrastructure from anywhere.
+              {t('heroSubtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6">
-                Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                {t('getStarted')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
               </Button>
               <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20 text-lg px-8 py-6">
-                Learn More
+                {t('learnMore')}
               </Button>
             </div>
           </div>
@@ -54,48 +65,47 @@ const Index = () => {
       <section className="py-20 bg-card">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-foreground">
-            Key Features
+            {t('keyFeatures')}
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
               <Link2 className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-2xl font-bold mb-4 text-foreground">Device Management</h3>
+              <h3 className="text-2xl font-bold mb-4 text-foreground">{t('deviceManagement')}</h3>
               <p className="text-muted-foreground">
-                Connect and monitor thousands of IoT devices with full telemetry and remote control.
+                {t('deviceManagementDesc')}
               </p>
             </Card>
             <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
               <Cloud className="h-12 w-12 text-secondary mb-4" />
-              <h3 className="text-2xl font-bold mb-4 text-foreground">Cloud-Native Architecture</h3>
+              <h3 className="text-2xl font-bold mb-4 text-foreground">{t('cloudNative')}</h3>
               <p className="text-muted-foreground">
-                Built on scalable, secure cloud infrastructure — ready for industrial and smart city applications.
+                {t('cloudNativeDesc')}
               </p>
             </Card>
             <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
               <Brain className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-2xl font-bold mb-4 text-foreground">AI-Powered Insights</h3>
+              <h3 className="text-2xl font-bold mb-4 text-foreground">{t('aiInsights')}</h3>
               <p className="text-muted-foreground">
-                Detect anomalies, predict trends, and optimize performance using real-time AI analytics.
+                {t('aiInsightsDesc')}
               </p>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* Data Flow Section */}
+      {/* Architecture Diagram Section */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-8 text-foreground">
-            From Sensor to Insight — Seamlessly.
+            {t('dataFlowTitle')}
           </h2>
           <p className="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
-            Paapeli securely collects data from your devices, processes it in real time, 
-            and delivers actionable insights directly to your dashboard.
+            {t('dataFlowDesc')}
           </p>
           <div className="max-w-5xl mx-auto">
             <img 
-              src={dataFlow} 
-              alt="Data Flow Diagram" 
+              src={architectureDiagram} 
+              alt="Architecture Diagram" 
               className="w-full rounded-lg shadow-xl"
             />
           </div>
@@ -106,35 +116,35 @@ const Index = () => {
       <section className="py-20 bg-card">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-foreground">
-            Designed for Every Industry
+            {t('useCasesTitle')}
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border">
               <Building2 className="h-10 w-10 text-secondary mb-4" />
-              <h3 className="text-xl font-bold mb-3 text-foreground">Smart Cities</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">{t('smartCities')}</h3>
               <p className="text-muted-foreground">
-                Monitor energy usage, traffic, and environment sensors in real time.
+                {t('smartCitiesDesc')}
               </p>
             </Card>
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border">
               <Cog className="h-10 w-10 text-primary mb-4" />
-              <h3 className="text-xl font-bold mb-3 text-foreground">Industrial IoT</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">{t('industrialIoT')}</h3>
               <p className="text-muted-foreground">
-                Connect PLCs and sensors to automate and optimize manufacturing operations.
+                {t('industrialIoTDesc')}
               </p>
             </Card>
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border">
               <Sprout className="h-10 w-10 text-secondary mb-4" />
-              <h3 className="text-xl font-bold mb-3 text-foreground">Smart Agriculture</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">{t('smartAgriculture')}</h3>
               <p className="text-muted-foreground">
-                Track soil moisture, temperature, and automate irrigation systems.
+                {t('smartAgricultureDesc')}
               </p>
             </Card>
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border">
               <Droplet className="h-10 w-10 text-primary mb-4" />
-              <h3 className="text-xl font-bold mb-3 text-foreground">Energy & Oil</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">{t('energyOil')}</h3>
               <p className="text-muted-foreground">
-                Monitor gas, temperature, and safety parameters remotely and securely.
+                {t('energyOilDesc')}
               </p>
             </Card>
           </div>
@@ -144,24 +154,23 @@ const Index = () => {
       {/* OTA Updates Section */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
+          <div className={`grid md:grid-cols-2 gap-12 items-center ${isRTL ? 'md:flex-row-reverse' : ''}`}>
+            <div className={isRTL ? 'md:order-2' : ''}>
               <img 
                 src={otaUpdate} 
                 alt="OTA Updates" 
                 className="w-full rounded-lg shadow-xl"
               />
             </div>
-            <div>
+            <div className={isRTL ? 'md:order-1' : ''}>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
-                Secure Firmware Updates, Simplified.
+                {t('otaTitle')}
               </h2>
               <p className="text-xl text-muted-foreground mb-8">
-                Manage firmware versions, sign updates, and roll out releases gradually — 
-                all through a simple OTA dashboard.
+                {t('otaDesc')}
               </p>
               <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-                Explore OTA <ArrowRight className="ml-2 h-5 w-5" />
+                {t('exploreOTA')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
               </Button>
             </div>
           </div>
@@ -172,10 +181,10 @@ const Index = () => {
       <section className="py-20 bg-card">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-8 text-foreground">
-            Visualize and Control with Ease
+            {t('dashboardTitle')}
           </h2>
           <p className="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
-            Build your own dashboards, set alert rules, and manage your entire IoT network from one place.
+            {t('dashboardDesc')}
           </p>
           <div className="max-w-6xl mx-auto mb-8">
             <img 
@@ -186,7 +195,7 @@ const Index = () => {
           </div>
           <div className="text-center">
             <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              See Live Demo <ArrowRight className="ml-2 h-5 w-5" />
+              {t('seeLiveDemo')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
             </Button>
           </div>
         </div>
@@ -196,17 +205,17 @@ const Index = () => {
       <section className="py-20 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
-            Ready to Build Your IoT Cloud?
+            {t('ctaTitle')}
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Start connecting your devices and visualizing data in minutes.
+            {t('ctaSubtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8">
-              Try Dashboard <ArrowRight className="ml-2 h-5 w-5" />
+              {t('tryDashboard')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
             </Button>
             <Button size="lg" variant="outline" className="text-lg px-8 border-2">
-              Request Demo
+              {t('requestDemo')}
             </Button>
           </div>
         </div>
@@ -219,26 +228,26 @@ const Index = () => {
             <div>
               <h3 className="text-2xl font-bold text-primary mb-4">Paapeli</h3>
               <p className="text-muted-foreground text-sm">
-                AI-Powered Cloud Platform for IoT and Smart Infrastructure
+                {t('tagline')}
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-foreground">Product</h4>
+              <h4 className="font-semibold mb-4 text-foreground">{t('product')}</h4>
               <ul className="space-y-2 text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">Home</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Docs</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Pricing</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">{t('home')}</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">{t('docs')}</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">{t('pricing')}</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-foreground">Resources</h4>
+              <h4 className="font-semibold mb-4 text-foreground">{t('resources')}</h4>
               <ul className="space-y-2 text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">Status</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">{t('status')}</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">{t('contact')}</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-foreground">Connect</h4>
+              <h4 className="font-semibold mb-4 text-foreground">{t('connect')}</h4>
               <div className="flex gap-4">
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
                   <Linkedin className="h-6 w-6" />
@@ -250,7 +259,7 @@ const Index = () => {
             </div>
           </div>
           <div className="border-t border-border pt-8 text-center text-muted-foreground text-sm">
-            © 2025 Paapeli. All rights reserved.
+            {t('copyright')}
           </div>
         </div>
       </footer>
