@@ -1,7 +1,7 @@
 export const translations = {
   en: {
     // Hero Section
-    heroTitle: "Build, Connect, and Manage IoT Infrastructure — Intelligently.",
+    heroTitle: "Build, Connect, and Manage IoT Infrastructure Intelligently.",
     heroSubtitle: "Paapeli is an AI-powered IoT cloud that helps you connect devices, collect insights, and control your infrastructure from anywhere.",
     getStarted: "Get Started",
     learnMore: "Learn More",
@@ -16,7 +16,7 @@ export const translations = {
     aiInsightsDesc: "Detect anomalies, predict trends, and optimize performance using real-time AI analytics.",
     
     // Data Flow
-    dataFlowTitle: "From Sensor to Insight — Seamlessly.",
+    dataFlowTitle: "From Sensor to Insight, Seamlessly",
     dataFlowDesc: "Paapeli securely collects data from your devices, processes it in real time, and delivers actionable insights directly to your dashboard.",
     
     // Use Cases
@@ -32,7 +32,7 @@ export const translations = {
     
     // OTA Updates
     otaTitle: "Secure Firmware Updates, Simplified.",
-    otaDesc: "Manage firmware versions, sign updates, and roll out releases gradually — all through a simple OTA dashboard.",
+    otaDesc: "Manage firmware versions, sign updates, and roll out releases gradually. all through a simple OTA dashboard.",
     exploreOTA: "Explore OTA",
     
     // Dashboard
@@ -60,48 +60,48 @@ export const translations = {
   },
   ar: {
     // Hero Section
-    heroTitle: "بناء وربط وإدارة البنية التحتية لإنترنت الأشياء — بذكاء.",
-    heroSubtitle: "باپيلي هي سحابة إنترنت الأشياء المدعومة بالذكاء الاصطناعي التي تساعدك على ربط الأجهزة وجمع الرؤى والتحكم في البنية التحتية من أي مكان.",
+    heroTitle: "بناء وربط وإدارة البنية التحتية لإنترنت الأشياء، بذكاء",
+    heroSubtitle: "باپيلي هي سحابة إنترنت الأشياء المدعومة بالذكاء الاصطناعي التي تساعدك على ربط الأجهزة وجمع الرؤى والتحكم في البنية التحتية من أي مكان",
     getStarted: "ابدأ الآن",
     learnMore: "اعرف المزيد",
     
     // Features
     keyFeatures: "الميزات الرئيسية",
     deviceManagement: "إدارة الأجهزة",
-    deviceManagementDesc: "ربط ومراقبة آلاف أجهزة إنترنت الأشياء مع القياس عن بُعد والتحكم الكامل.",
+    deviceManagementDesc: "ربط ومراقبة آلاف أجهزة إنترنت الأشياء مع القياس عن بُعد والتحكم الكامل",
     cloudNative: "بنية سحابية أصلية",
-    cloudNativeDesc: "مبنية على بنية تحتية سحابية قابلة للتطوير وآمنة — جاهزة للتطبيقات الصناعية والمدن الذكية.",
+    cloudNativeDesc: "مبنية على بنية تحتية سحابية قابلة للتطوير وآمنة — جاهزة للتطبيقات الصناعية والمدن الذكية",
     aiInsights: "رؤى مدعومة بالذكاء الاصطناعي",
-    aiInsightsDesc: "كشف الحالات الشاذة والتنبؤ بالاتجاهات وتحسين الأداء باستخدام تحليلات الذكاء الاصطناعي في الوقت الفعلي.",
+    aiInsightsDesc: "كشف الحالات الشاذة والتنبؤ بالاتجاهات وتحسين الأداء باستخدام تحليلات الذكاء الاصطناعي في الوقت الفعلي",
     
     // Data Flow
-    dataFlowTitle: "من المستشعر إلى الرؤية — بسلاسة.",
-    dataFlowDesc: "تجمع باپيلي البيانات من أجهزتك بشكل آمن، وتعالجها في الوقت الفعلي، وتقدم رؤى قابلة للتنفيذ مباشرة إلى لوحة التحكم الخاصة بك.",
+    dataFlowTitle: "من المستشعر إلى الرؤية — بسلاسة",
+    dataFlowDesc: "تجمع باپيلي البيانات من أجهزتك بشكل آمن، وتعالجها في الوقت الفعلي، وتقدم رؤى قابلة للتنفيذ مباشرة إلى لوحة التحكم الخاصة بك",
     
     // Use Cases
     useCasesTitle: "مصممة لكل صناعة",
     smartCities: "المدن الذكية",
-    smartCitiesDesc: "مراقبة استخدام الطاقة وحركة المرور ومستشعرات البيئة في الوقت الفعلي.",
+    smartCitiesDesc: "مراقبة استخدام الطاقة وحركة المرور ومستشعرات البيئة في الوقت الفعلي",
     industrialIoT: "إنترنت الأشياء الصناعي",
-    industrialIoTDesc: "ربط أجهزة التحكم المنطقية القابلة للبرمجة والمستشعرات لأتمتة وتحسين عمليات التصنيع.",
+    industrialIoTDesc: "ربط أجهزة التحكم المنطقية القابلة للبرمجة والمستشعرات لأتمتة وتحسين عمليات التصنيع",
     smartAgriculture: "الزراعة الذكية",
-    smartAgricultureDesc: "تتبع رطوبة التربة ودرجة الحرارة وأتمتة أنظمة الري.",
+    smartAgricultureDesc: "تتبع رطوبة التربة ودرجة الحرارة وأتمتة أنظمة الري",
     energyOil: "الطاقة والنفط",
-    energyOilDesc: "مراقبة الغاز ودرجة الحرارة ومعايير السلامة عن بُعد وبشكل آمن.",
+    energyOilDesc: "مراقبة الغاز ودرجة الحرارة ومعايير السلامة عن بُعد وبشكل آمن",
     
     // OTA Updates
-    otaTitle: "تحديثات البرامج الثابتة الآمنة، مبسطة.",
-    otaDesc: "إدارة إصدارات البرامج الثابتة، وتوقيع التحديثات، وطرح الإصدارات تدريجياً — كل ذلك من خلال لوحة تحكم بسيطة.",
+    otaTitle: "تحديثات البرامج الثابتة الآمنة، مبسطة",
+    otaDesc: "إدارة إصدارات البرامج الثابتة، وتوقيع التحديثات، وطرح الإصدارات تدريجياً — كل ذلك من خلال لوحة تحكم بسيطة",
     exploreOTA: "استكشف التحديثات",
     
     // Dashboard
     dashboardTitle: "التصور والتحكم بسهولة",
-    dashboardDesc: "قم ببناء لوحات التحكم الخاصة بك، وضع قواعد التنبيه، وإدارة شبكة إنترنت الأشياء بالكامل من مكان واحد.",
+    dashboardDesc: "قم ببناء لوحات التحكم الخاصة بك، وضع قواعد التنبيه، وإدارة شبكة إنترنت الأشياء بالكامل من مكان واحد",
     seeLiveDemo: "شاهد العرض التوضيحي",
     
     // CTA
     ctaTitle: "هل أنت مستعد لبناء سحابة إنترنت الأشياء الخاصة بك؟",
-    ctaSubtitle: "ابدأ في ربط أجهزتك وتصور البيانات في دقائق.",
+    ctaSubtitle: "ابدأ في ربط أجهزتك وتصور البيانات في دقائق",
     tryDashboard: "جرب لوحة التحكم",
     requestDemo: "اطلب عرضاً توضيحياً",
     
@@ -119,48 +119,48 @@ export const translations = {
   },
   fa: {
     // Hero Section
-    heroTitle: "ساخت، اتصال و مدیریت زیرساخت اینترنت اشیا — به صورت هوشمند.",
-    heroSubtitle: "پاپلی یک پلتفرم ابری اینترنت اشیا است که با هوش مصنوعی به شما کمک می‌کند دستگاه‌ها را متصل کنید، بینش جمع‌آوری کنید و زیرساخت خود را از هر جا کنترل کنید.",
+    heroTitle: "ساخت، اتصال و مدیریت زیرساخت اینترنت اشیا به صورت هوشمند",
+    heroSubtitle: "پاپلی یک پلتفرم ابری اینترنت اشیا است که با هوش مصنوعی به شما کمک می‌کند دستگاه‌ها را متصل کنید، داده‌ها را تحلیل کنید و زیرساخت خود را از هر جا به شکل هوشمند کنترل کنید",
     getStarted: "شروع کنید",
     learnMore: "بیشتر بدانید",
     
     // Features
     keyFeatures: "ویژگی‌های کلیدی",
     deviceManagement: "مدیریت دستگاه",
-    deviceManagementDesc: "اتصال و نظارت بر هزاران دستگاه اینترنت اشیا با تله‌متری کامل و کنترل از راه دور.",
+    deviceManagementDesc: "اتصال و نظارت بر هزاران دستگاه اینترنت اشیا با هر نوع پروتکلی با تله‌متری کامل و کنترل از راه دور",
     cloudNative: "معماری ابری بومی",
-    cloudNativeDesc: "ساخته شده بر روی زیرساخت ابری مقیاس‌پذیر و ایمن — آماده برای کاربردهای صنعتی و شهرهای هوشمند.",
-    aiInsights: "بینش‌های هوش مصنوعی",
-    aiInsightsDesc: "شناسایی ناهنجاری‌ها، پیش‌بینی روندها و بهینه‌سازی عملکرد با استفاده از تحلیل هوش مصنوعی در زمان واقعی.",
+    cloudNativeDesc: "ساخته شده بر روی زیرساخت ابری مقیاس‌پذیر و ایمن — آماده برای کاربردهای صنعتی و شهرهای هوشمند",
+    aiInsights: "‌تحلیل‌های هوش مصنوعی",
+    aiInsightsDesc: "شناسایی ناهنجاری‌ها، پیش‌بینی روندها و بهینه‌سازی عملکرد با استفاده از تحلیل هوش مصنوعی در زمان واقعی",
     
     // Data Flow
-    dataFlowTitle: "از سنسور تا بینش — به طور یکپارچه.",
-    dataFlowDesc: "پاپلی به طور امن داده‌ها را از دستگاه‌های شما جمع‌آوری می‌کند، آن‌ها را در زمان واقعی پردازش می‌کند و بینش‌های قابل اجرا را مستقیماً به داشبورد شما ارائه می‌دهد.",
+    dataFlowTitle: "از سنسور تا تحلیل داده‌ها، به طور یکپارچه",
+    dataFlowDesc: "پاپلی به طور امن داده‌ها را از دستگاه‌های شما جمع‌آوری می‌کند، آن‌ها را در زمان واقعی پردازش می‌کند و بینش‌های قابل اجرا را مستقیماً به داشبورد شما ارائه می‌دهد",
     
     // Use Cases
     useCasesTitle: "طراحی شده برای هر صنعتی",
     smartCities: "شهرهای هوشمند",
-    smartCitiesDesc: "نظارت بر مصرف انرژی، ترافیک و سنسورهای محیطی در زمان واقعی.",
+    smartCitiesDesc: "نظارت بر مصرف انرژی، ترافیک و سنسورهای محیطی در زمان واقعی",
     industrialIoT: "اینترنت اشیای صنعتی",
-    industrialIoTDesc: "اتصال PLCها و سنسورها برای خودکارسازی و بهینه‌سازی عملیات تولید.",
+    industrialIoTDesc: "اتصال PLCها و سنسورها برای خودکارسازی و بهینه‌سازی عملیات تولید",
     smartAgriculture: "کشاورزی هوشمند",
-    smartAgricultureDesc: "ردیابی رطوبت خاک، دما و خودکارسازی سیستم‌های آبیاری.",
+    smartAgricultureDesc: "ردیابی رطوبت خاک، دما و خودکارسازی سیستم‌های آبیاری",
     energyOil: "انرژی و نفت",
-    energyOilDesc: "نظارت بر گاز، دما و پارامترهای ایمنی از راه دور و به صورت ایمن.",
+    energyOilDesc: "نظارت بر گاز، دما و پارامترهای ایمنی از راه دور و به صورت ایمن",
     
     // OTA Updates
-    otaTitle: "به‌روزرسانی‌های ایمن سیستم‌عامل، ساده‌شده.",
-    otaDesc: "مدیریت نسخه‌های سیستم‌عامل، امضای به‌روزرسانی‌ها و انتشار تدریجی نسخه‌ها — همه از طریق یک داشبورد ساده.",
+    otaTitle: "به‌روزرسانی‌های ایمن سیستم‌عامل و فریمور‌ها",
+    otaDesc: "مدیریت نسخه‌های سیستم‌عامل، نسخه‌بندی به‌روزرسانی‌ها و انتشار تدریجی نسخه‌ها، همه از طریق یک داشبورد ساده",
     exploreOTA: "کاوش به‌روزرسانی‌ها",
     
     // Dashboard
-    dashboardTitle: "تجسم و کنترل با سهولت",
-    dashboardDesc: "داشبوردهای خود را بسازید، قوانین هشدار تنظیم کنید و کل شبکه اینترنت اشیا خود را از یک مکان مدیریت کنید.",
+    dashboardTitle: "سادگی در مدیریت کل زیرساخت",
+    dashboardDesc: "داشبوردهای خود را بسازید، قوانین هشدار تنظیم کنید و کل شبکه اینترنت اشیا خود را از یک مکان مدیریت کنید",
     seeLiveDemo: "مشاهده دمو زنده",
     
     // CTA
     ctaTitle: "آماده ساخت ابر اینترنت اشیای خود هستید؟",
-    ctaSubtitle: "شروع به اتصال دستگاه‌های خود و تجسم داده‌ها در چند دقیقه کنید.",
+    ctaSubtitle: "شروع به اتصال دستگاه‌های خود و مدیریت و تحلیل داده‌ها در چند دقیقه کنید",
     tryDashboard: "امتحان داشبورد",
     requestDemo: "درخواست دمو",
     
