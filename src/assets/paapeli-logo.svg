@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7A00"></stop>
+      <stop offset="100%" stop-color="#FFB347"></stop>
+    </linearGradient>
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0077B6"></stop>
+      <stop offset="100%" stop-color="#00B4D8"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Top Left -->
+  <ellipse cx="65" cy="65" rx="40" ry="28" fill="url(#grad-orange)" transform="rotate(-25 65 65)"></ellipse>
+  <!-- Top Right -->
+  <ellipse cx="135" cy="65" rx="40" ry="28" fill="url(#grad-orange)" transform="rotate(25 135 65)"></ellipse>
+  <!-- Bottom Left -->
+  <ellipse cx="65" cy="135" rx="40" ry="28" fill="url(#grad-blue)" transform="rotate(25 65 135)"></ellipse>
+  <!-- Bottom Right -->
+  <ellipse cx="135" cy="135" rx="40" ry="28" fill="url(#grad-orange)" transform="rotate(-25 135 135)"></ellipse>
+</svg>
