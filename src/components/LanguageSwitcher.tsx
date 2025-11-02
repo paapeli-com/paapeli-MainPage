@@ -21,7 +21,7 @@ export const LanguageSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 border-white/20 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
+        <Button variant="outline" size="sm" className="gap-2 border-white/20 bg-white/10 backdrop-blur-sm text-black hover:bg-white/20">
           <Globe className="h-4 w-4" />
           <span className="hidden sm:inline">
             {languages.find(l => l.code === language)?.nativeName}
