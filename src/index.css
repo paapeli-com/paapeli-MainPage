@@ -120,7 +120,7 @@ body {
 [lang="fa"],
 [dir="rtl"]:lang(fa),
 html[lang="fa"] body {
-  font-family: 'Yekan', sans-serif !important;
+  font-family: 'Vazirmatn', sans-serif !important;
   direction: rtl;
   text-align: right;
 }
