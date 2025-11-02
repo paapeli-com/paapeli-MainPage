@@ -47,7 +47,7 @@ export const Navigation = () => {
               <NavigationMenuList>
                 {/* Products Menu */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent">
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-sm">
                     {t('products')}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -57,7 +57,7 @@ export const Navigation = () => {
                           href="#iot-platform"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
-                          <div className="text-sm font-medium leading-none">
+                          <div className="!text-sm font-medium leading-none">
                             {t('iotCloudPlatform')}
                           </div>
                           <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
@@ -70,7 +70,7 @@ export const Navigation = () => {
                           href="#ota"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
-                          <div className="text-sm font-medium leading-none">
+                          <div className="!text-sm font-medium leading-none">
                             {t('ota')}
                           </div>
                           <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
@@ -83,7 +83,7 @@ export const Navigation = () => {
                           href="#intelligence"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
-                          <div className="text-sm font-medium leading-none">
+                          <div className="!text-sm font-medium leading-none">
                             {t('intelligenceInsight')}
                           </div>
                           <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
@@ -99,7 +99,7 @@ export const Navigation = () => {
                 <NavigationMenuItem>
                   <a
                     href="#use-cases"
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                   >
                     {t('useCases')}
                   </a>
@@ -108,7 +108,7 @@ export const Navigation = () => {
                 <NavigationMenuItem>
                   <a
                     href="https://docs.paapeli.com/"
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                   >
                     {t('docs')}
                   </a>
@@ -117,7 +117,7 @@ export const Navigation = () => {
                 <NavigationMenuItem>
                   <a
                     href="https://docs.paapeli.com/blog/"
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                   >
                     {t('blog')}
                   </a>
