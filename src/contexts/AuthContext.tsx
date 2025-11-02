@@ -16,7 +16,8 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, username: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => void;
   getCurrentSession: () => Promise<CognitoUserSession | null>;
 }
@@ -89,7 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  const signUp = async (email: string, password: string, username: string): Promise<void> => {
+  const signUp = async (email: string, password: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       userPool.signUp(
         email,
@@ -105,6 +106,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       );
     });
+  };
+
+  const signInWithGoogle = async (): Promise<void> => {
+    // Google OAuth flow through Cognito
+    const domain = `paapeli-${REGION}.auth.${REGION}.amazoncognito.com`;
+    const redirectUri = `${window.location.origin}/auth-callback`;
+    const googleAuthUrl = `https://${domain}/oauth2/authorize?identity_provider=Google&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=CODE&client_id=${CLIENT_ID}&scope=email openid profile`;
+    
+    window.location.href = googleAuthUrl;
+    return Promise.resolve();
   };
 
   const signOut = () => {
@@ -125,6 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         signIn,
         signUp,
+        signInWithGoogle,
         signOut,
         getCurrentSession,
       }}
