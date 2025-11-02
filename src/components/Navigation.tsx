@@ -60,7 +60,7 @@ export const Navigation = () => {
                           <div className="text-sm font-medium leading-none">
                             {t('iotCloudPlatform')}
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
                             {t('iotCloudPlatformNavDesc')}
                           </p>
                         </a>
@@ -73,7 +73,7 @@ export const Navigation = () => {
                           <div className="text-sm font-medium leading-none">
                             {t('ota')}
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
                             {t('otaNavDesc')}
                           </p>
                         </a>
@@ -86,7 +86,7 @@ export const Navigation = () => {
                           <div className="text-sm font-medium leading-none">
                             {t('intelligenceInsight')}
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
                             {t('intelligenceInsightNavDesc')}
                           </p>
                         </a>
