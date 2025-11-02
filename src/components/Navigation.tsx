@@ -51,9 +51,9 @@ export const Navigation = () => {
           </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className={`hidden md:flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <NavigationMenu>
-              <NavigationMenuList>
+              <NavigationMenuList className={isRTL ? 'flex-row-reverse' : ''}>
                 {/* Products Menu */}
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">

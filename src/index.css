@@ -110,6 +110,10 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+  
+  html {
+    scrollbar-gutter: stable;
+  }
 }
 body {
   font-family: 'Inter', sans-serif;
