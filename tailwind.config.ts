@@ -16,7 +16,7 @@ export default {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         vazirmatn: ['Vazirmatn', 'sans-serif'],
-        cairo: ['Cairo', 'sans-serif'],
+        tajawal: ['Tajawal', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

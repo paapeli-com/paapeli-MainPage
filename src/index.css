@@ -157,7 +157,7 @@ html[lang="fa"] body {
 [lang="ar"],
 [dir="rtl"]:lang(ar),
 html[lang="ar"] body {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: 'Tajawal', sans-serif !important;
   direction: rtl;
   text-align: right;
 }
