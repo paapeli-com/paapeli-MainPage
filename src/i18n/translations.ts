@@ -46,6 +46,18 @@ export const translations = {
     tryDashboard: "Try Dashboard",
     requestDemo: "Request Demo",
     
+    // Navigation
+    products: "Products",
+    iotCloudPlatform: "IoT Cloud Platform",
+    ota: "OTA",
+    intelligenceInsight: "Intelligence Insight",
+    useCases: "Use Cases",
+    blog: "Blog",
+    login: "Login",
+    account: "Account",
+    dashboard: "Dashboard",
+    logout: "Logout",
+    
     // Footer
     product: "Product",
     home: "Home",
@@ -105,6 +117,18 @@ export const translations = {
     tryDashboard: "جرب لوحة التحكم",
     requestDemo: "اطلب عرضاً توضيحياً",
     
+    // Navigation
+    products: "المنتجات",
+    iotCloudPlatform: "منصة سحابة إنترنت الأشياء",
+    ota: "التحديثات عن بُعد",
+    intelligenceInsight: "الرؤى الذكية",
+    useCases: "حالات الاستخدام",
+    blog: "المدونة",
+    login: "تسجيل الدخول",
+    account: "الحساب",
+    dashboard: "لوحة التحكم",
+    logout: "تسجيل الخروج",
+    
     // Footer
     product: "المنتج",
     home: "الرئيسية",
@@ -163,6 +187,18 @@ export const translations = {
     ctaSubtitle: "شروع به اتصال دستگاه‌های خود و مدیریت و تحلیل داده‌ها در چند دقیقه کنید",
     tryDashboard: "امتحان داشبورد",
     requestDemo: "درخواست دمو",
+    
+    // Navigation
+    products: "محصولات",
+    iotCloudPlatform: "پلتفرم ابری اینترنت اشیا",
+    ota: "به‌روزرسانی از راه دور",
+    intelligenceInsight: "تحلیل‌های هوشمند",
+    useCases: "موارد استفاده",
+    blog: "وبلاگ",
+    login: "ورود",
+    account: "حساب کاربری",
+    dashboard: "داشبورد",
+    logout: "خروج",
     
     // Footer
     product: "محصول",
