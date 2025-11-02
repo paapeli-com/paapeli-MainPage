@@ -12,29 +12,20 @@ import {
   Github,
   Linkedin
 } from "lucide-react";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Navigation } from "@/components/Navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import heroBg from "@/assets/hero-bg.jpg";
 import architectureDiagram from "@/assets/architecture-diagram.png";
 import otaUpdate from "@/assets/ota-update.jpg";
 import dashboardPreview from "@/assets/dashboard-preview.jpg";
-import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 const Index = () => {
   const { t, isRTL } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
-      {/* Fixed Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm border-b border-white/10">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-            <img src={paapeliLogo} alt="Paapeli Logo" className="h-10 w-auto bg-transparent" />
-            <span className="text-2xl font-bold text-primary">Paapeli</span>
-          </div>
-          <LanguageSwitcher />
-        </div>
-      </nav>
+      {/* Navigation */}
+      <Navigation />
 
       {/* Hero Section */}
       <section 
