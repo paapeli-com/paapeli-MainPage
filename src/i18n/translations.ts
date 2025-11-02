@@ -16,7 +16,7 @@ export const translations = {
     aiInsightsDesc: "Detect anomalies, predict trends, and optimize performance using real-time AI analytics.",
     
     // Data Flow
-    dataFlowTitle: "From Sensor to Insight, Seamlessly",
+    dataFlowTitle: "From Sensor to Insight",
     dataFlowDesc: "Paapeli securely collects data from your devices, processes it in real time, and delivers actionable insights directly to your dashboard.",
     
     // Use Cases
@@ -31,7 +31,7 @@ export const translations = {
     energyOilDesc: "Monitor gas, temperature, and safety parameters remotely and securely.",
     
     // OTA Updates
-    otaTitle: "Secure Firmware Updates, Simplified.",
+    otaTitle: "Secure Firmware Updates",
     otaDesc: "Manage firmware versions, sign updates, and roll out releases gradually. all through a simple OTA dashboard.",
     exploreOTA: "Explore OTA",
     
