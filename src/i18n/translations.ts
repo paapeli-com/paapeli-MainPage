@@ -1,7 +1,7 @@
 export const translations = {
   en: {
     // Hero Section
-    heroTitle: "Build, Connect, and Manage IoT Infrastructure Intelligently.",
+    heroTitle: "Build, Connect, and Manage IoT Infrastructure Intelligently",
     heroSubtitle: "Paapeli is an AI-powered IoT cloud that helps you connect devices, collect insights, and control your infrastructure from anywhere.",
     getStarted: "Get Started",
     learnMore: "Learn More",
