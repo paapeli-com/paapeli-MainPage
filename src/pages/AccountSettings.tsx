@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigation } from "@/components/Navigation";
@@ -10,6 +12,13 @@ import { User, Mail, Shield } from "lucide-react";
 const AccountSettings = () => {
   const { t, isRTL } = useLanguage();
   const { user, session } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5" dir={isRTL ? 'rtl' : 'ltr'}>
