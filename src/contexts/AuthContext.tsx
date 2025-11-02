@@ -2,8 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserSession, CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
 const REGION = 'me-central-1';
-const USER_POOL_ID = 'me-central-1_RstB04Sei';
-const CLIENT_ID = '1c3v0mkpp53qjkrpcdk6o43vp2';
+const USER_POOL_ID = 'me-central-1_jUc2ZSBqj';
+const CLIENT_ID = '7jhesbocrlhcu8ftsaiic1iqm2';
 const COGNITO_DOMAIN = 'paapeli-dev-auth.auth.me-central-1.amazoncognito.com';
 
 const userPool = new CognitoUserPool({
