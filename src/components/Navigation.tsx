@@ -42,10 +42,13 @@ export const Navigation = () => {
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <button 
+            onClick={() => navigate('/')} 
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <img src={paapeliLogo} alt="Paapeli Logo" className="h-10 w-auto" />
             <span className="text-2xl font-bold text-primary">Paapeli</span>
-          </div>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
@@ -144,12 +147,19 @@ export const Navigation = () => {
               <div 
                 className="relative group"
                 onMouseEnter={(e) => {
-                  const menu = e.currentTarget.querySelector('[data-menu]');
-                  if (menu) menu.classList.remove('hidden');
+                  const menu = e.currentTarget.querySelector('[data-menu]') as HTMLElement;
+                  if (menu) {
+                    clearTimeout((menu as any).hideTimeout);
+                    menu.classList.remove('hidden');
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  const menu = e.currentTarget.querySelector('[data-menu]');
-                  if (menu) menu.classList.add('hidden');
+                  const menu = e.currentTarget.querySelector('[data-menu]') as HTMLElement;
+                  if (menu) {
+                    (menu as any).hideTimeout = setTimeout(() => {
+                      menu.classList.add('hidden');
+                    }, 200);
+                  }
                 }}
               >
                 <Button variant="outline" size="sm" className="gap-2">
@@ -159,6 +169,16 @@ export const Navigation = () => {
                 <div 
                   data-menu
                   className="hidden absolute right-0 top-full mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-50"
+                  onMouseEnter={(e) => {
+                    const menu = e.currentTarget as HTMLElement;
+                    clearTimeout((menu as any).hideTimeout);
+                  }}
+                  onMouseLeave={(e) => {
+                    const menu = e.currentTarget as HTMLElement;
+                    (menu as any).hideTimeout = setTimeout(() => {
+                      menu.classList.add('hidden');
+                    }, 200);
+                  }}
                 >
                   <div className="py-1">
                     <button

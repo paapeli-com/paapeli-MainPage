@@ -120,7 +120,9 @@ const Login = () => {
           <Card className="p-8 bg-white shadow-lg border-0">
             <div className="text-center mb-8">
               <div className="flex justify-center mb-6">
-                <img src={paapeliLogo} alt="Paapeli Logo" className="h-12 w-auto" />
+                <Link to="/">
+                  <img src={paapeliLogo} alt="Paapeli Logo" className="h-12 w-auto hover:opacity-80 transition-opacity cursor-pointer" />
+                </Link>
               </div>
               <h1 className="text-2xl font-normal text-gray-800 mb-2">
                 {isSignUp 
