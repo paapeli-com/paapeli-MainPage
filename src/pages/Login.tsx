@@ -13,12 +13,14 @@ import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 const Login = () => {
   const { language, isRTL } = useLanguage();
-  const { signIn, signUp, signInWithGoogle } = useAuth();
+  const { signIn, signUp, confirmSignUp, signInWithGoogle } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -60,13 +62,13 @@ const Login = () => {
         toast({
           title: language === 'en' ? 'Success!' : language === 'ar' ? 'نجح!' : 'موفق!',
           description: language === 'en'
-            ? 'Account created. Please check your email to verify your account.'
+            ? 'Account created. Please check your email for verification code.'
             : language === 'ar'
-            ? 'تم إنشاء الحساب. يرجى التحقق من بريدك الإلكتروني للتحقق من حسابك.'
-            : 'حساب ایجاد شد. لطفاً ایمیل خود را برای تأیید حساب بررسی کنید.',
+            ? 'تم إنشاء الحساب. يرجى التحقق من بريدك الإلكتروني لرمز التحقق.'
+            : 'حساب ایجاد شد. لطفاً ایمیل خود را برای کد تأیید بررسی کنید.',
         });
-        setIsSignUp(false);
-        setFormData({ email: '', password: '' });
+        setNeedsVerification(true);
+        setFormData({ ...formData, password: '' });
       } else {
         if (!formData.email || !formData.password) {
           toast({
@@ -92,6 +94,35 @@ const Login = () => {
       toast({
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
         description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerification = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      await confirmSignUp(formData.email, verificationCode);
+      toast({
+        title: language === 'en' ? 'Verified!' : language === 'ar' ? 'تم التحقق!' : 'تأیید شد!',
+        description: language === 'en'
+          ? 'Your account has been verified. You can now sign in.'
+          : language === 'ar'
+          ? 'تم التحقق من حسابك. يمكنك الآن تسجيل الدخول.'
+          : 'حساب شما تأیید شد. اکنون می‌توانید وارد شوید.',
+      });
+      setNeedsVerification(false);
+      setVerificationCode('');
+      setFormData({ email: '', password: '' });
+      setIsSignUp(false);
+    } catch (error: any) {
+      toast({
+        title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
+        description: getCognitoErrorMessage(error, language as 'en' | 'ar' | 'fa'),
         variant: "destructive",
       });
     } finally {
@@ -131,7 +162,61 @@ const Login = () => {
               </h1>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {needsVerification ? (
+              <form onSubmit={handleVerification} className="space-y-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
+                  <p className="text-sm text-blue-800">
+                    {language === 'en' 
+                      ? 'Please check your email for the verification code.'
+                      : language === 'ar'
+                      ? 'يرجى التحقق من بريدك الإلكتروني للحصول على رمز التحقق.'
+                      : 'لطفاً ایمیل خود را برای کد تأیید بررسی کنید.'}
+                  </p>
+                </div>
+
+                <div>
+                  <Label htmlFor="code" className="text-gray-700 font-normal">
+                    {language === 'en' ? 'Verification Code' : language === 'ar' ? 'رمز التحقق' : 'کد تأیید'}
+                  </Label>
+                  <Input
+                    id="code"
+                    type="text"
+                    placeholder={language === 'en' ? 'Enter 6-digit code' : language === 'ar' ? 'أدخل الرمز المكون من 6 أرقام' : 'کد ۶ رقمی را وارد کنید'}
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                    className="mt-1 bg-white border-gray-300"
+                    disabled={isLoading}
+                    maxLength={6}
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-[#4a90e2] hover:bg-[#357abd] text-white font-normal"
+                  disabled={isLoading || verificationCode.length !== 6}
+                >
+                  {isLoading 
+                    ? (language === 'en' ? 'Verifying...' : language === 'ar' ? 'جاري التحقق...' : 'در حال تأیید...')
+                    : (language === 'en' ? 'Verify Email' : language === 'ar' ? 'التحقق من البريد الإلكتروني' : 'تأیید ایمیل')}
+                </Button>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNeedsVerification(false);
+                      setVerificationCode('');
+                      setFormData({ email: '', password: '' });
+                    }}
+                    className="text-sm text-[#4a90e2] hover:underline"
+                    disabled={isLoading}
+                  >
+                    {language === 'en' ? 'Back to sign up' : language === 'ar' ? 'العودة إلى التسجيل' : 'بازگشت به ثبت‌نام'}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label htmlFor="email" className="text-gray-700 font-normal">
                   {language === 'en' ? 'Email' : language === 'ar' ? 'البريد الإلكتروني' : 'ایمیل'}
@@ -232,25 +317,26 @@ const Login = () => {
                 </svg>
                 {language === 'en' ? 'Continue with Google' : language === 'ar' ? 'المتابعة مع Google' : 'ادامه با Google'}
               </Button>
-            </form>
 
-            <div className="text-center mt-6">
-              <p className="text-sm text-gray-600">
-                {isSignUp 
-                  ? (language === 'en' ? 'Already have an account? ' : language === 'ar' ? 'هل لديك حساب بالفعل؟ ' : 'از قبل حساب دارید؟ ')
-                  : (language === 'en' ? "Don't have an account? " : language === 'ar' ? 'ليس لديك حساب؟ ' : 'حساب ندارید؟ ')}
-                <button
-                  type="button"
-                  onClick={() => setIsSignUp(!isSignUp)}
-                  className="text-[#4a90e2] hover:underline font-normal"
-                  disabled={isLoading}
-                >
+              <div className="text-center mt-6">
+                <p className="text-sm text-gray-600">
                   {isSignUp 
-                    ? (language === 'en' ? 'Sign in' : language === 'ar' ? 'تسجيل الدخول' : 'ورود')
-                    : (language === 'en' ? 'Sign up' : language === 'ar' ? 'التسجيل' : 'ثبت‌نام')}
-                </button>
-              </p>
-            </div>
+                    ? (language === 'en' ? 'Already have an account? ' : language === 'ar' ? 'هل لديك حساب بالفعل؟ ' : 'از قبل حساب دارید؟ ')
+                    : (language === 'en' ? "Don't have an account? " : language === 'ar' ? 'ليس لديك حساب؟ ' : 'حساب ندارید؟ ')}
+                  <button
+                    type="button"
+                    onClick={() => setIsSignUp(!isSignUp)}
+                    className="text-[#4a90e2] hover:underline font-normal"
+                    disabled={isLoading}
+                  >
+                    {isSignUp 
+                      ? (language === 'en' ? 'Sign in' : language === 'ar' ? 'تسجيل الدخول' : 'ورود')
+                      : (language === 'en' ? 'Sign up' : language === 'ar' ? 'التسجيل' : 'ثبت‌نام')}
+                  </button>
+                </p>
+              </div>
+            </form>
+            )}
           </Card>
         </div>
       </section>

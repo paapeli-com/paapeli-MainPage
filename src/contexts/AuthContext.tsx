@@ -18,6 +18,7 @@ interface AuthContextType {
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
+  confirmSignUp: (email: string, code: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: (stayOnPage?: boolean) => boolean;
   getCurrentSession: () => Promise<CognitoUserSession | null>;
@@ -122,6 +123,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
+  const confirmSignUp = async (email: string, code: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const cognitoUser = new CognitoUser({
+        Username: email,
+        Pool: userPool,
+      });
+
+      cognitoUser.confirmRegistration(code, true, (err, result) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+  };
+
   const signInWithGoogle = async (): Promise<void> => {
     // Google OAuth flow through Cognito
     const redirectUri = `${window.location.origin}/auth-callback`;
@@ -150,6 +168,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         signIn,
         signUp,
+        confirmSignUp,
         signInWithGoogle,
         signOut,
         getCurrentSession,
