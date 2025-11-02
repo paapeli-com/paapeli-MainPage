@@ -61,6 +61,15 @@ export const translations = {
     dashboard: "Dashboard",
     logout: "Logout",
     
+    // Login Page
+    welcomeBack: "Welcome to Paapeli",
+    loginSubtitle: "Access your IoT dashboard",
+    or: "OR",
+    createAccount: "Create Account",
+    secureLogin: "Secure authentication powered by AWS Cognito",
+    loggingIn: "Logging you in...",
+    pleaseWait: "Please wait while we complete your authentication",
+    
     // Footer
     product: "Product",
     home: "Home",
@@ -135,6 +144,15 @@ export const translations = {
     dashboard: "لوحة التحكم",
     logout: "تسجيل الخروج",
     
+    // Login Page
+    welcomeBack: "مرحباً بك في باپيلي",
+    loginSubtitle: "الوصول إلى لوحة تحكم إنترنت الأشياء",
+    or: "أو",
+    createAccount: "إنشاء حساب",
+    secureLogin: "مصادقة آمنة بدعم من AWS Cognito",
+    loggingIn: "جاري تسجيل الدخول...",
+    pleaseWait: "يرجى الانتظار بينما نكمل المصادقة الخاصة بك",
+    
     // Footer
     product: "المنتج",
     home: "الرئيسية",
@@ -208,6 +226,15 @@ export const translations = {
     account: "حساب کاربری",
     dashboard: "داشبورد",
     logout: "خروج",
+    
+    // Login Page
+    welcomeBack: "به پاپلی خوش آمدید",
+    loginSubtitle: "دسترسی به داشبورد اینترنت اشیا",
+    or: "یا",
+    createAccount: "ایجاد حساب کاربری",
+    secureLogin: "احراز هویت امن با AWS Cognito",
+    loggingIn: "در حال ورود...",
+    pleaseWait: "لطفاً منتظر بمانید تا احراز هویت شما تکمیل شود",
     
     // Footer
     product: "محصول",

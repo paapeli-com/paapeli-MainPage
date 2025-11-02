@@ -24,7 +24,8 @@ export const Navigation = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    // Redirect to login page
+    window.location.href = '/login';
   };
 
   const handleLogout = () => {
