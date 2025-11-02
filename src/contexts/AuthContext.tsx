@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserSession } from 'amazon-cognito-identity-js';
+import { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserSession, CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
 const REGION = 'me-central-1';
 const USER_POOL_ID = 'me-central-1_RdwVKu4tt';
@@ -92,16 +92,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string): Promise<void> => {
     return new Promise((resolve, reject) => {
+      // Use email as username and set email attribute
+      const attributeList = [
+        new CognitoUserAttribute({
+          Name: 'email',
+          Value: email,
+        }),
+      ];
+
       userPool.signUp(
-        email,
+        email, // username (using email)
         password,
-        [],
-        [],
-        (err, result) => {
+        attributeList,
+        null, // validation data should be null, not []
+        (err: any, result) => {
           if (err) {
+            console.error('Cognito signUp error:', err);
+            console.error('Error code:', err?.code || 'no code');
+            console.error('Error message:', err?.message || 'no message');
+            console.error('Error name:', err?.name || 'no name');
             reject(err);
             return;
           }
+          console.log('SignUp successful:', result);
           resolve();
         }
       );

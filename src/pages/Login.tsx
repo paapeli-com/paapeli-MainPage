@@ -86,6 +86,8 @@ const Login = () => {
         navigate('/');
       }
     } catch (error: any) {
+      console.error('Authentication error:', error);
+      console.error('Error details:', { code: error?.code, name: error?.name, message: error?.message });
       const errorMessage = getCognitoErrorMessage(error, language as 'en' | 'ar' | 'fa');
       toast({
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
