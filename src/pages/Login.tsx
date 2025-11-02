@@ -1,90 +1,184 @@
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Navigation } from "@/components/Navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { LogIn, UserPlus } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 const Login = () => {
   const { t, isRTL } = useLanguage();
+  const { signIn, signUp } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
 
-  const COGNITO_DOMAIN = "https://paapeli-dev-auth.auth.me-central-1.amazoncognito.com";
-  const CLIENT_ID = "1bq97rv5ese04a9spkmlaorl4t";
-  const REDIRECT_URI = "https://paapeli.com/auth/callback";
-  const SCOPES = "email+openid+profile";
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  const handleLogin = () => {
-    const loginUrl = `${COGNITO_DOMAIN}/login?client_id=${CLIENT_ID}&response_type=code&scope=${SCOPES}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-    window.location.href = loginUrl;
-  };
+    try {
+      if (isSignUp) {
+        if (!formData.username || !formData.email || !formData.password) {
+          toast({
+            title: "Error",
+            description: "All fields are required",
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        if (formData.password.length < 8) {
+          toast({
+            title: "Error",
+            description: "Password must be at least 8 characters",
+            variant: "destructive",
+          });
+          return;
+        }
 
-  const handleSignup = () => {
-    const signupUrl = `${COGNITO_DOMAIN}/signup?client_id=${CLIENT_ID}&response_type=code&scope=${SCOPES}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-    window.location.href = signupUrl;
+        await signUp(formData.email, formData.password, formData.username);
+        toast({
+          title: "Success!",
+          description: "Account created. Please check your email to verify your account.",
+        });
+        setIsSignUp(false);
+        setFormData({ username: '', email: '', password: '' });
+      } else {
+        if (!formData.email || !formData.password) {
+          toast({
+            title: "Error",
+            description: "Email and password are required",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        await signIn(formData.email, formData.password);
+        toast({
+          title: "Welcome back!",
+          description: "Successfully signed in.",
+        });
+        navigate('/');
+      }
+    } catch (error: any) {
+      const errorMessage = error.message || "Authentication failed";
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-[#f5f5f5]" dir={isRTL ? 'rtl' : 'ltr'}>
       <Navigation />
       
-      <section className="relative min-h-screen flex items-center justify-center pt-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container mx-auto px-4 py-20">
-          <div className="max-w-md mx-auto">
-            <Card className="p-8 border-border shadow-xl bg-card">
-              {/* Logo and Title */}
-              <div className="text-center mb-8">
-                <div className="flex justify-center mb-4">
-                  <img src={paapeliLogo} alt="Paapeli Logo" className="h-16 w-auto" />
+      <section className="relative min-h-screen flex items-center justify-center pt-20 px-4">
+        <div className="w-full max-w-md">
+          <Card className="p-8 bg-white shadow-lg border-0">
+            <div className="text-center mb-8">
+              <div className="flex justify-center mb-6">
+                <img src={paapeliLogo} alt="Paapeli Logo" className="h-12 w-auto" />
+              </div>
+              <h1 className="text-2xl font-normal text-gray-800 mb-2">
+                {isSignUp ? 'Sign up with a new account' : 'Sign in to your account'}
+              </h1>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {isSignUp && (
+                <div>
+                  <Label htmlFor="username" className="text-gray-700 font-normal">
+                    Username
+                  </Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    placeholder="Username"
+                    value={formData.username}
+                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                    className="mt-1 bg-white border-gray-300"
+                    disabled={isLoading}
+                  />
                 </div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  {t('welcomeBack') || 'Welcome to Paapeli'}
-                </h1>
-                <p className="text-muted-foreground">
-                  {t('loginSubtitle') || 'Access your IoT dashboard'}
-                </p>
+              )}
+
+              <div>
+                <Label htmlFor="email" className="text-gray-700 font-normal">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@host.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="mt-1 bg-white border-gray-300"
+                  disabled={isLoading}
+                />
               </div>
 
-              {/* Login Button */}
+              <div>
+                <Label htmlFor="password" className="text-gray-700 font-normal">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="mt-1 bg-white border-gray-300"
+                  disabled={isLoading}
+                />
+              </div>
+
               <Button
-                onClick={handleLogin}
-                size="lg"
-                className="w-full mb-4 bg-primary hover:bg-primary/90 text-primary-foreground text-lg"
+                type="submit"
+                className="w-full bg-[#4a90e2] hover:bg-[#357abd] text-white font-normal"
+                disabled={isLoading}
               >
-                <LogIn className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                {t('login') || 'Login'}
+                {isLoading ? 'Please wait...' : (isSignUp ? 'Sign up' : 'Sign in')}
               </Button>
+            </form>
 
-              {/* Divider */}
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-card text-muted-foreground">
-                    {t('or') || 'OR'}
-                  </span>
-                </div>
+            <div className="text-center mt-6">
+              <p className="text-sm text-gray-600">
+                {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  className="text-[#4a90e2] hover:underline font-normal"
+                  disabled={isLoading}
+                >
+                  {isSignUp ? 'Sign in' : 'Sign up'}
+                </button>
+              </p>
+            </div>
+
+            {!isSignUp && (
+              <div className="text-center mt-4">
+                <Link to="/forgot-password" className="text-sm text-[#4a90e2] hover:underline">
+                  Forgot password?
+                </Link>
               </div>
-
-              {/* Sign Up Button */}
-              <Button
-                onClick={handleSignup}
-                size="lg"
-                variant="outline"
-                className="w-full text-lg border-2"
-              >
-                <UserPlus className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                {t('createAccount') || 'Create Account'}
-              </Button>
-
-              {/* Additional Info */}
-              <div className="mt-8 pt-6 border-t border-border text-center">
-                <p className="text-sm text-muted-foreground">
-                  {t('secureLogin') || 'Secure authentication powered by AWS Cognito'}
-                </p>
-              </div>
-            </Card>
-          </div>
+            )}
+          </Card>
         </div>
       </section>
     </div>

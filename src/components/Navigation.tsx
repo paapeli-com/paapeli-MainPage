@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -16,20 +16,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { User, LogOut, LayoutDashboard } from "lucide-react";
 import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 export const Navigation = () => {
   const { t, isRTL } = useLanguage();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, signOut, user } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = () => {
-    // Redirect to login page
-    window.location.href = '/login';
+    navigate('/login');
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    signOut();
+    navigate('/');
   };
 
   return (
@@ -131,7 +133,7 @@ export const Navigation = () => {
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
 
-            {!isLoggedIn ? (
+            {!isAuthenticated ? (
               <Button onClick={handleLogin} variant="default" size="sm">
                 {t('login')}
               </Button>
