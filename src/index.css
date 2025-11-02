@@ -113,6 +113,7 @@ All colors MUST be HSL.
   
   html {
     scrollbar-gutter: stable;
+    overflow-y: scroll;
   }
 }
 body {
