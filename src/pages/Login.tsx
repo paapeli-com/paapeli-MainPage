@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 const Login = () => {
   const { language, isRTL } = useLanguage();
-  const { signIn, signUp, confirmSignUp, signInWithGoogle } = useAuth();
+  const { signIn, signUp, confirmSignUp, resendConfirmationCode, signInWithGoogle } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -21,10 +21,19 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [needsVerification, setNeedsVerification] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
+  const [resendTimer, setResendTimer] = useState(0);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
+  // Timer for resend code
+  React.useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendTimer]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +77,7 @@ const Login = () => {
             : 'حساب ایجاد شد. لطفاً ایمیل خود را برای کد تأیید بررسی کنید.',
         });
         setNeedsVerification(true);
+        setResendTimer(30);
         setFormData({ ...formData, password: '' });
       } else {
         if (!formData.email || !formData.password) {
@@ -124,6 +134,32 @@ const Login = () => {
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
         description: getCognitoErrorMessage(error, language as 'en' | 'ar' | 'fa'),
         variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    if (resendTimer > 0) return;
+    
+    setIsLoading(true);
+    try {
+      await resendConfirmationCode(formData.email);
+      setResendTimer(30);
+      toast({
+        title: language === 'en' ? 'Code sent' : language === 'ar' ? 'تم إرسال الرمز' : 'کد ارسال شد',
+        description: language === 'en' 
+          ? 'Please check your email for the verification code.'
+          : language === 'ar'
+          ? 'يرجى التحقق من بريدك الإلكتروني للحصول على رمز التحقق.'
+          : 'لطفاً ایمیل خود را برای کد تأیید بررسی کنید.',
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
+        description: getCognitoErrorMessage(error, language as 'en' | 'ar' | 'fa'),
       });
     } finally {
       setIsLoading(false);
@@ -200,19 +236,36 @@ const Login = () => {
                     : (language === 'en' ? 'Verify Email' : language === 'ar' ? 'التحقق من البريد الإلكتروني' : 'تأیید ایمیل')}
                 </Button>
 
-                <div className="text-center">
+                <div className="text-center space-y-2">
                   <button
                     type="button"
-                    onClick={() => {
-                      setNeedsVerification(false);
-                      setVerificationCode('');
-                      setFormData({ email: '', password: '' });
-                    }}
-                    className="text-sm text-[#4a90e2] hover:underline"
-                    disabled={isLoading}
+                    onClick={handleResendCode}
+                    disabled={resendTimer > 0 || isLoading}
+                    className="text-sm text-[#4a90e2] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {language === 'en' ? 'Back to sign up' : language === 'ar' ? 'العودة إلى التسجيل' : 'بازگشت به ثبت‌نام'}
+                    {resendTimer > 0 
+                      ? (language === 'en' 
+                          ? `Resend code (${resendTimer}s)` 
+                          : language === 'ar' 
+                          ? `إعادة إرسال الرمز (${resendTimer}ث)` 
+                          : `ارسال مجدد کد (${resendTimer}ث)`)
+                      : (language === 'en' ? 'Resend code' : language === 'ar' ? 'إعادة إرسال الرمز' : 'ارسال مجدد کد')
+                    }
                   </button>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNeedsVerification(false);
+                        setVerificationCode('');
+                        setFormData({ email: '', password: '' });
+                      }}
+                      className="text-sm text-[#4a90e2] hover:underline"
+                      disabled={isLoading}
+                    >
+                      {language === 'en' ? 'Back to sign up' : language === 'ar' ? 'العودة إلى التسجيل' : 'بازگشت به ثبت‌نام'}
+                    </button>
+                  </div>
                 </div>
               </form>
             ) : (

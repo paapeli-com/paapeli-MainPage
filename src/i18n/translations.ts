@@ -71,6 +71,9 @@ export const translations = {
     loggingIn: "Logging you in...",
     pleaseWait: "Please wait while we complete your authentication",
     
+    // Forgot Password
+    forgotPassword: "Forgot password?",
+    
     // Footer
     product: "Product",
     home: "Home",
@@ -155,6 +158,9 @@ export const translations = {
     loggingIn: "جاري تسجيل الدخول...",
     pleaseWait: "يرجى الانتظار بينما نكمل المصادقة الخاصة بك",
     
+    // Forgot Password
+    forgotPassword: "هل نسيت كلمة المرور؟",
+    
     // Footer
     product: "المنتج",
     home: "الرئيسية",
@@ -238,6 +244,9 @@ export const translations = {
     secureLogin: "احراز هویت امن با AWS Cognito",
     loggingIn: "در حال ورود...",
     pleaseWait: "لطفاً منتظر بمانید تا احراز هویت شما تکمیل شود",
+    
+    // Forgot Password
+    forgotPassword: "رمز عبور را فراموش کرده‌اید؟",
     
     // Footer
     product: "محصول",

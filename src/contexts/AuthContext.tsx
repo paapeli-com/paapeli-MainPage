@@ -19,6 +19,9 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   confirmSignUp: (email: string, code: string) => Promise<void>;
+  resendConfirmationCode: (email: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  confirmPassword: (email: string, code: string, newPassword: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: (stayOnPage?: boolean) => boolean;
   getCurrentSession: () => Promise<CognitoUserSession | null>;
@@ -140,6 +143,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
+  const resendConfirmationCode = async (email: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const cognitoUser = new CognitoUser({
+        Username: email,
+        Pool: userPool,
+      });
+
+      cognitoUser.resendConfirmationCode((err, result) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+  };
+
+  const forgotPassword = async (email: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const cognitoUser = new CognitoUser({
+        Username: email,
+        Pool: userPool,
+      });
+
+      cognitoUser.forgotPassword({
+        onSuccess: () => {
+          resolve();
+        },
+        onFailure: (err) => {
+          reject(err);
+        },
+      });
+    });
+  };
+
+  const confirmPassword = async (email: string, code: string, newPassword: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const cognitoUser = new CognitoUser({
+        Username: email,
+        Pool: userPool,
+      });
+
+      cognitoUser.confirmPassword(code, newPassword, {
+        onSuccess: () => {
+          resolve();
+        },
+        onFailure: (err) => {
+          reject(err);
+        },
+      });
+    });
+  };
+
   const signInWithGoogle = async (): Promise<void> => {
     // Google OAuth flow through Cognito
     const redirectUri = `${window.location.origin}/auth-callback`;
@@ -169,6 +225,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signIn,
         signUp,
         confirmSignUp,
+        resendConfirmationCode,
+        forgotPassword,
+        confirmPassword,
         signInWithGoogle,
         signOut,
         getCurrentSession,
