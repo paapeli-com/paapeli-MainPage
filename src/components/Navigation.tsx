@@ -17,7 +17,7 @@ import {
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { User, LogOut, LayoutDashboard } from "lucide-react";
+import { Settings, LogOut } from "lucide-react";
 import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 export const Navigation = () => {
@@ -30,8 +30,11 @@ export const Navigation = () => {
   };
 
   const handleLogout = () => {
-    signOut();
-    navigate('/');
+    signOut(true);
+  };
+
+  const handleAccountSettings = () => {
+    navigate('/account-settings');
   };
 
   return (
@@ -138,29 +141,43 @@ export const Navigation = () => {
                 {t('login')}
               </Button>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <User className="h-4 w-4" />
-                    <span className="hidden sm:inline">{t('account')}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-popover border-border">
-                  <DropdownMenuItem className="cursor-pointer">
-                    <User className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                    {t('account')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
-                    <LayoutDashboard className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                    {t('dashboard')}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive">
-                    <LogOut className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                    {t('logout')}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div 
+                className="relative group"
+                onMouseEnter={(e) => {
+                  const menu = e.currentTarget.querySelector('[data-menu]');
+                  if (menu) menu.classList.remove('hidden');
+                }}
+                onMouseLeave={(e) => {
+                  const menu = e.currentTarget.querySelector('[data-menu]');
+                  if (menu) menu.classList.add('hidden');
+                }}
+              >
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t('account')}</span>
+                </Button>
+                <div 
+                  data-menu
+                  className="hidden absolute right-0 top-full mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-50"
+                >
+                  <div className="py-1">
+                    <button
+                      onClick={handleAccountSettings}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center cursor-pointer"
+                    >
+                      <Settings className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      {t('accountSettings')}
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center cursor-pointer text-destructive"
+                    >
+                      <LogOut className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      {t('logout')}
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>

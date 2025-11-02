@@ -2,8 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserSession, CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
 const REGION = 'me-central-1';
-const USER_POOL_ID = 'me-central-1_jUc2ZSBqj';
-const CLIENT_ID = '7jhesbocrlhcu8ftsaiic1iqm2';
+const USER_POOL_ID = 'me-central-1_WCBtB2Rc0';
+const CLIENT_ID = '37dl99jmgg21jve8e6n7pfd1da';
 const COGNITO_DOMAIN = 'paapeli-dev-auth.auth.me-central-1.amazoncognito.com';
 
 const userPool = new CognitoUserPool({
@@ -19,7 +19,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  signOut: () => void;
+  signOut: (stayOnPage?: boolean) => boolean;
   getCurrentSession: () => Promise<CognitoUserSession | null>;
 }
 
@@ -131,13 +131,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return Promise.resolve();
   };
 
-  const signOut = () => {
+  const signOut = (stayOnPage = false) => {
     const cognitoUser = userPool.getCurrentUser();
     if (cognitoUser) {
       cognitoUser.signOut();
     }
     setUser(null);
     setSession(null);
+    return stayOnPage;
   };
 
   return (

@@ -58,6 +58,7 @@ export const translations = {
     blog: "Blog",
     login: "Login",
     account: "Account",
+    accountSettings: "Account Settings",
     dashboard: "Dashboard",
     logout: "Logout",
     
@@ -141,6 +142,7 @@ export const translations = {
     blog: "المدونة",
     login: "تسجيل الدخول",
     account: "الحساب",
+    accountSettings: "إعدادات الحساب",
     dashboard: "لوحة التحكم",
     logout: "تسجيل الخروج",
     
@@ -224,6 +226,7 @@ export const translations = {
     blog: "وبلاگ",
     login: "ورود",
     account: "حساب کاربری",
+    accountSettings: "تنظیمات حساب",
     dashboard: "داشبورد",
     logout: "خروج",
     
