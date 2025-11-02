@@ -2,8 +2,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserSession, CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
 const REGION = 'me-central-1';
-const USER_POOL_ID = 'me-central-1_RdwVKu4tt';
-const CLIENT_ID = '1bq97rv5ese04a9spkmlaorl4t';
+const USER_POOL_ID = 'me-central-1_RstB04Sei';
+const CLIENT_ID = '1c3v0mkpp53qjkrpcdk6o43vp2';
+const COGNITO_DOMAIN = 'paapeli-dev-auth.auth.me-central-1.amazoncognito.com';
 
 const userPool = new CognitoUserPool({
   UserPoolId: USER_POOL_ID,
@@ -123,9 +124,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithGoogle = async (): Promise<void> => {
     // Google OAuth flow through Cognito
-    const domain = `paapeli-${REGION}.auth.${REGION}.amazoncognito.com`;
     const redirectUri = `${window.location.origin}/auth-callback`;
-    const googleAuthUrl = `https://${domain}/oauth2/authorize?identity_provider=Google&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=CODE&client_id=${CLIENT_ID}&scope=email openid profile`;
+    const googleAuthUrl = `https://${COGNITO_DOMAIN}/oauth2/authorize?identity_provider=Google&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=CODE&client_id=${CLIENT_ID}&scope=email openid profile`;
     
     window.location.href = googleAuthUrl;
     return Promise.resolve();
