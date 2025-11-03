@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import AuthCallback from "./pages/AuthCallback";
+import AuthError from "./pages/AuthError";
 import AccountSettings from "./pages/AccountSettings";
 import GoogleSignup from "./pages/GoogleSignup";
 import NotFound from "./pages/NotFound";
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/auth/error" element={<AuthError />} />
               <Route path="/account-settings" element={<AccountSettings />} />
               <Route path="/google-signup" element={<GoogleSignup />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
