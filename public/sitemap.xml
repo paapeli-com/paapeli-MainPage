@@ -13,7 +13,7 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- 📘 Docs Root -->
+  <!-- Docs Root -->
   <url>
     <loc>https://docs.paapeli.com/</loc>
     <lastmod>2025-11-02</lastmod>
@@ -21,7 +21,7 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- 📄 English Docs -->
+  <!-- English Docs -->
   <url>
     <loc>https://docs.paapeli.com/docs/category/getting-started</loc>
     <lastmod>2025-11-03</lastmod>
@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://docs.paapeli.com/blog/</loc>
-    <lastmod>2025-11-02</lastmod>
+    <lastmod>2025-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://docs.paapeli.com/fa/blog/</loc>
-    <lastmod>2025-11-02</lastmod>
+    <lastmod>2025-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -70,7 +70,7 @@
   </url>
   <url>
     <loc>https://docs.paapeli.com/ar/blog/</loc>
-    <lastmod>2025-11-02</lastmod>
+    <lastmod>2025-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
