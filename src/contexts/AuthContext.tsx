@@ -198,7 +198,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithGoogle = async (): Promise<void> => {
     // Google OAuth flow through Cognito
-    const redirectUri = `${window.location.origin}/auth-callback`;
+    const redirectUri = `${window.location.origin}/auth/callback`;
     const googleAuthUrl = `https://${COGNITO_DOMAIN}/oauth2/authorize?identity_provider=Google&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=CODE&client_id=${CLIENT_ID}&scope=email openid profile`;
     
     window.location.href = googleAuthUrl;
