@@ -21,9 +21,15 @@ import { Settings, LogOut } from "lucide-react";
 import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 export const Navigation = () => {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, language } = useLanguage();
   const { isAuthenticated, signOut, user } = useAuth();
   const navigate = useNavigate();
+
+  const getBlogUrl = () => {
+    return language === 'en' 
+      ? 'https://docs.paapeli.com/blog/'
+      : `https://docs.paapeli.com/${language}/blog/`;
+  };
 
   const handleLogin = () => {
     navigate('/login');
@@ -125,7 +131,7 @@ export const Navigation = () => {
 
                 <NavigationMenuItem>
                   <a
-                    href="https://docs.paapeli.com/blog/"
+                    href={getBlogUrl()}
                     className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                   >
                     {t('blog')}
