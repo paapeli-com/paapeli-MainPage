@@ -75,14 +75,5 @@
     <priority>0.7</priority>
   </url>
 
-    <!-- Github -->
-  <url>
-    <loc>https://github.com/paapeli-com</loc>
-    <lastmod>2025-11-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
 
 </urlset>
-
