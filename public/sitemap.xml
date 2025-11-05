@@ -35,26 +35,6 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- 🇮🇷 Persian (Farsi) -->
-  <url>
-    <loc>https://docs.paapeli.com/fa/</loc>
-    <lastmod>2025-11-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://docs.paapeli.com/fa/docs/category/getting-started/</loc>
-    <lastmod>2025-11-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docs.paapeli.com/fa/blog/</loc>
-    <lastmod>2025-11-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-
   <!-- 🇸🇦 Arabic -->
   <url>
     <loc>https://docs.paapeli.com/ar/</loc>

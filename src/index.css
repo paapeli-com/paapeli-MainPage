@@ -122,38 +122,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-[lang="fa"],
-[dir="rtl"]:lang(fa),
-html[lang="fa"] body {
-  font-family: 'Vazirmatn', sans-serif !important;
-  direction: rtl;
-  text-align: right;
-}
-
-[lang="fa"] p,
-[lang="fa"] li,
-[lang="fa"] a,
-[lang="fa"] small,
-[lang="fa"] div {
-  font-size: 0.94rem;
-  line-height: 1.85;
-  word-spacing: 0.06em;
-  letter-spacing: 0.02em;
-}
-
-[lang="fa"] h1,
-[lang="fa"] h2,
-[lang="fa"] h3,
-[lang="fa"] h4,
-[lang="fa"] h5 {
-  font-size: 1.74rem;
-  letter-spacing: normal;
-  word-spacing: normal;
-  line-height: 1.5;
-  letter-spacing: 0.03em;
-  word-spacing: 0.06em;
-}
-
 [lang="ar"],
 [dir="rtl"]:lang(ar),
 html[lang="ar"] body {
