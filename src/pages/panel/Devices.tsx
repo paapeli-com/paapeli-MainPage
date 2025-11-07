@@ -90,6 +90,7 @@ const Devices = () => {
   const [protocolFilter, setProtocolFilter] = useState<string>('all');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [sortPopoverOpen, setSortPopoverOpen] = useState(false);
+  const [sortDirection, setSortDirection] = useState<'desc' | 'asc'>('desc'); // desc = newest first
   
   // Form state
   const [deviceName, setDeviceName] = useState("");
@@ -258,6 +259,11 @@ const Devices = () => {
       deviceId.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesProtocol = protocolFilter === 'all' || device.protocol === protocolFilter;
     return matchesSearch && matchesProtocol;
+  }).sort((a, b) => {
+    // Sort by creation date based on sortDirection
+    const dateA = new Date(a.created_at || a.createdAt || a.created || 0).getTime();
+    const dateB = new Date(b.created_at || b.createdAt || b.created || 0).getTime();
+    return sortDirection === 'desc' ? dateB - dateA : dateA - dateB;
   });
 
   // Pagination
@@ -358,7 +364,7 @@ const Devices = () => {
               onClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}
               className="bg-[#00BCD4] hover:bg-[#00ACC1] gap-0 px-10 h-10 text-base font-medium"
             >
-              +{t("add")}
+              + {t("add")}
             </Button>
           </CardHeader>
           
@@ -388,7 +394,7 @@ const Devices = () => {
                       <ArrowUpDown className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[280px] p-4" side="bottom" align="start" sideOffset={5}>
+                  <PopoverContent className="w-[280px] p-4" side="bottom" sideOffset={5}>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between gap-3">
                         <Label className="text-sm font-medium">{t("protocol")}</Label>
@@ -403,7 +409,7 @@ const Devices = () => {
                           <SelectTrigger className="w-[160px] h-9">
                             <SelectValue />
                           </SelectTrigger>
-                    <SelectContent side="bottom" align="end" sideOffset={4}>
+                    <SelectContent position="popper" side="bottom" sideOffset={4}>
                       <SelectItem value="all">{t("allProtocols") || "All Protocols"}</SelectItem>
                       {availableProtocols.map((protocol) => (
                         <SelectItem key={protocol} value={protocol}>
@@ -512,7 +518,15 @@ const Devices = () => {
                     <TableHead className={isRTL ? 'text-center' : ''}>{t("deviceId")}</TableHead>
                     <TableHead className={isRTL ? 'text-center' : ''}>{t("protocol")}</TableHead>
                     <TableHead className={isRTL ? 'text-center' : ''}>{t("lastActivity")}</TableHead>
-                    <TableHead className={isRTL ? 'text-center' : ''}>{t("createdAt")} ↓</TableHead>
+                    <TableHead className={isRTL ? 'text-center' : ''}>
+                      {t("createdAt")}{' '}
+                      <button 
+                        onClick={() => setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')}
+                        className="inline-flex hover:text-primary transition-colors cursor-pointer"
+                      >
+                        {sortDirection === 'desc' ? '↓' : '↑'}
+                      </button>
+                    </TableHead>
                     <TableHead className="w-[100px]"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -581,7 +595,7 @@ const Devices = () => {
                     <SelectTrigger className="w-[70px] h-9">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="min-w-[70px]" side="top" align="start" sideOffset={4}>
+                    <SelectContent position="popper" className="min-w-[70px]" sideOffset={4}>
                       <SelectItem value="10">10</SelectItem>
                       <SelectItem value="20">20</SelectItem>
                       <SelectItem value="50">50</SelectItem>
