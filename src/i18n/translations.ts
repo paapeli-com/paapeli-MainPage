@@ -164,6 +164,11 @@ export const translations = {
     notAuthenticated: "Not authenticated",
     failedToAddDevice: "Failed to add device",
     deviceAddedSuccessfully: "Device added successfully",
+    deviceCreatedSuccessfully: "Device Created Successfully!",
+    saveCredentialsWarning: "Please save these credentials securely. You won't be able to see the API key again.",
+    apiKey: "API Key",
+    apiKeyWarning: "This API key will only be shown once. Make sure to copy and save it in a secure location.",
+    iHaveSavedTheCredentials: "I Have Saved the Credentials",
     
     // 404 Page
     pageNotFound: "Page Not Found",
@@ -338,6 +343,11 @@ export const translations = {
     notAuthenticated: "غير مصادق",
     failedToAddDevice: "فشل إضافة الجهاز",
     deviceAddedSuccessfully: "تمت إضافة الجهاز بنجاح",
+    deviceCreatedSuccessfully: "تم إنشاء الجهاز بنجاح!",
+    saveCredentialsWarning: "يرجى حفظ هذه البيانات بشكل آمن. لن تتمكن من رؤية مفتاح API مرة أخرى.",
+    apiKey: "مفتاح API",
+    apiKeyWarning: "سيتم عرض مفتاح API هذا مرة واحدة فقط. تأكد من نسخه وحفظه في مكان آمن.",
+    iHaveSavedTheCredentials: "لقد حفظت البيانات",
     
     // 404 Page
     pageNotFound: "الصفحة غير موجودة",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, LayoutGrid, Smartphone } from "lucide-react";
+import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -17,6 +17,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Device {
   id: string;
@@ -24,6 +31,12 @@ interface Device {
   deviceId: string;
   lastActivity: string;
   createdAt: string;
+}
+
+interface DeviceCredentials {
+  deviceId: string;
+  apiKey: string;
+  name: string;
 }
 
 const Devices = () => {
@@ -34,11 +47,54 @@ const Devices = () => {
   const [devices, setDevices] = useState<Device[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [credentialsDialogOpen, setCredentialsDialogOpen] = useState(false);
+  const [newDeviceCredentials, setNewDeviceCredentials] = useState<DeviceCredentials | null>(null);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
   
   // Form state
   const [deviceName, setDeviceName] = useState("");
   const [protocol, setProtocol] = useState("MQTT");
   const [label, setLabel] = useState("");
+
+  useEffect(() => {
+    if (session) {
+      fetchDevices();
+    }
+  }, [session]);
+
+  const fetchDevices = async () => {
+    try {
+      const accessToken = session?.getAccessToken().getJwtToken();
+      if (!accessToken) return;
+
+      const response = await fetch("https://api.paapeli.com/api/v1/devices", {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDevices(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch devices:", error);
+    }
+  };
+
+  const copyToClipboard = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (error) {
+      toast({
+        title: t("error"),
+        description: "Failed to copy to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleAddDevice = async () => {
     if (!deviceName.trim()) {
@@ -77,15 +133,19 @@ const Devices = () => {
       });
 
       if (!response.ok) {
-        throw new Error(t("failedToAddDevice"));
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || t("failedToAddDevice"));
       }
 
       const newDevice = await response.json();
       
-      toast({
-        title: t("success"),
-        description: t("deviceAddedSuccessfully"),
+      // Show credentials dialog with device ID and API key
+      setNewDeviceCredentials({
+        deviceId: newDevice.deviceId || newDevice.id,
+        apiKey: newDevice.apiKey || newDevice.key,
+        name: deviceName,
       });
+      setCredentialsDialogOpen(true);
 
       // Reset form and close
       setDeviceName("");
@@ -93,9 +153,10 @@ const Devices = () => {
       setLabel("");
       setAddPanelOpen(false);
       
-      // Refresh devices list (you would implement this with your actual API)
-      // fetchDevices();
+      // Refresh devices list
+      await fetchDevices();
     } catch (error) {
+      console.error("Device registration error:", error);
       toast({
         title: t("error"),
         description: error instanceof Error ? error.message : t("failedToAddDevice"),
@@ -105,6 +166,11 @@ const Devices = () => {
       setIsLoading(false);
     }
   };
+
+  const filteredDevices = devices.filter(device => 
+    device.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    device.deviceId.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <PanelLayout pageTitle={t("devices")} onAddClick={() => setAddPanelOpen(true)}>
@@ -143,7 +209,7 @@ const Devices = () => {
         {/* Devices Table */}
         <Card>
           <CardContent className="pt-6">
-            {devices.length === 0 ? (
+            {filteredDevices.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">{t("noDevicesFound")}</p>
               </div>
@@ -155,21 +221,21 @@ const Devices = () => {
                       <input type="checkbox" className="rounded border-input" />
                     </TableHead>
                     <TableHead>{t("name")}</TableHead>
-                    <TableHead>{t("apiLabel")}</TableHead>
+                    <TableHead>{t("deviceId")}</TableHead>
                     <TableHead>{t("lastActivity")}</TableHead>
                     <TableHead>{t("createdAt")} ↓</TableHead>
                     <TableHead className="w-[100px]"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {devices.map((device) => (
+                  {filteredDevices.map((device) => (
                     <TableRow key={device.id}>
                       <TableCell>
                         <input type="checkbox" className="rounded border-input" />
                       </TableCell>
                       <TableCell className="font-medium">{device.name}</TableCell>
-                      <TableCell>{device.deviceId}</TableCell>
-                      <TableCell>{device.lastActivity}</TableCell>
+                      <TableCell className="font-mono text-sm">{device.deviceId}</TableCell>
+                      <TableCell>{device.lastActivity || "-"}</TableCell>
                       <TableCell>{device.createdAt}</TableCell>
                       <TableCell>
                         <Button variant="ghost" size="sm">⋮</Button>
@@ -196,7 +262,7 @@ const Devices = () => {
                 </Select>
               </div>
               <div className="text-sm text-muted-foreground">
-                1 - 0 {t("of")} 0
+                1 - {filteredDevices.length} {t("of")} {devices.length}
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" disabled>‹</Button>
@@ -206,6 +272,95 @@ const Devices = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Device Credentials Dialog */}
+      <Dialog open={credentialsDialogOpen} onOpenChange={setCredentialsDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">{t("deviceCreatedSuccessfully")}</DialogTitle>
+            <DialogDescription className="text-base pt-2">
+              {t("saveCredentialsWarning")}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {newDeviceCredentials && (
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">{t("deviceName")}</Label>
+                <div className="flex items-center gap-2">
+                  <Input 
+                    value={newDeviceCredentials.name} 
+                    readOnly 
+                    className="font-medium"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">{t("deviceId")}</Label>
+                <div className="flex items-center gap-2">
+                  <Input 
+                    value={newDeviceCredentials.deviceId} 
+                    readOnly 
+                    className="font-mono text-sm"
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => copyToClipboard(newDeviceCredentials.deviceId, 'deviceId')}
+                  >
+                    {copiedField === 'deviceId' ? (
+                      <CheckCheck className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">{t("apiKey")}</Label>
+                <div className="flex items-center gap-2">
+                  <Input 
+                    value={newDeviceCredentials.apiKey} 
+                    readOnly 
+                    className="font-mono text-sm"
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => copyToClipboard(newDeviceCredentials.apiKey, 'apiKey')}
+                  >
+                    {copiedField === 'apiKey' ? (
+                      <CheckCheck className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg p-4 mt-4">
+                <p className="text-sm text-amber-800 dark:text-amber-200">
+                  ⚠️ {t("apiKeyWarning")}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-end gap-2">
+            <Button 
+              onClick={() => {
+                setCredentialsDialogOpen(false);
+                setNewDeviceCredentials(null);
+              }}
+              className="bg-[#00BCD4] hover:bg-[#00ACC1]"
+            >
+              {t("iHaveSavedTheCredentials")}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Add Device Sheet */}
       <Sheet open={addPanelOpen} onOpenChange={setAddPanelOpen}>
