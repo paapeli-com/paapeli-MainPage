@@ -82,6 +82,8 @@ const Devices = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<'blank' | null>(null);
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'details'>('list');
+  const [protocolFilter, setProtocolFilter] = useState<string>('all');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   
   // Form state
   const [deviceName, setDeviceName] = useState("");
@@ -246,8 +248,10 @@ const Devices = () => {
 
   const filteredDevices = devices.filter(device => {
     const deviceId = device.deviceId || device.device_id || device.deviceID || device.id || device._id || '';
-    return device.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = device.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       deviceId.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesProtocol = protocolFilter === 'all' || device.protocol === protocolFilter;
+    return matchesSearch && matchesProtocol;
   });
 
   // Pagination
@@ -303,18 +307,25 @@ const Devices = () => {
   };
 
   const handleDeleteSelected = () => {
-    // TODO: Implement delete functionality
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    // TODO: Implement actual delete API call
     toast({
       title: t("deleted") || "Deleted",
-      description: `${selectedDevices.length} ${t("devices") || "devices"} deleted`,
+      description: `${selectedDevices.length} ${t("devices") || "devices"} ${t("deleted") || "deleted"}`,
     });
     setSelectedDevices([]);
+    setDeleteDialogOpen(false);
   };
+
+  // Get unique protocols for filter
+  const uniqueProtocols = Array.from(new Set(devices.map(d => d.protocol)));
 
   return (
     <PanelLayout 
-      pageTitle={t("devices")} 
-      onAddClick={viewMode === 'list' ? () => { setAddPanelOpen(true); resetAddDeviceForm(); } : undefined}
+      pageTitle={t("devices")}
     >
       {isLoadingDevices ? (
         <div className="flex items-center justify-center min-h-[400px]">
@@ -327,8 +338,17 @@ const Devices = () => {
           {/* Main Card with Stats, Search and Table */}
           <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
-            <CardTitle className="text-2xl font-bold">{devices.length} {t("devices")}</CardTitle>
-            <Smartphone className="h-5 w-5 text-muted-foreground" />
+            <div className="flex items-center gap-3">
+              <Smartphone className="h-5 w-5 text-muted-foreground" />
+              <CardTitle className="text-2xl font-bold">{devices.length} {t("devices")}</CardTitle>
+            </div>
+            <Button 
+              onClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}
+              className="bg-[#00BCD4] hover:bg-[#00ACC1]"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              {t("add")}
+            </Button>
           </CardHeader>
           
           <CardContent className="pt-6">
@@ -336,7 +356,7 @@ const Devices = () => {
             <div className="flex items-center justify-between gap-4 mb-6">
               <div className="flex items-center gap-2 flex-1 max-w-md">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Search className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground`} />
                   <Input
                     placeholder={t("search")}
                     value={searchQuery}
@@ -344,45 +364,60 @@ const Devices = () => {
                       setSearchQuery(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="pl-9"
+                    className={`${isRTL ? 'pr-9' : 'pl-9'}`}
                   />
                 </div>
-                <Button variant="outline" size="icon">
-                  <Filter className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="icon">
-                  <LayoutGrid className="h-4 w-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon">
+                      <Filter className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-background z-[100]">
+                    <DropdownMenuItem onClick={() => { setProtocolFilter('all'); setCurrentPage(1); }}>
+                      {t("allProtocols") || "All Protocols"}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {uniqueProtocols.map((protocol) => (
+                      <DropdownMenuItem 
+                        key={protocol} 
+                        onClick={() => { setProtocolFilter(protocol); setCurrentPage(1); }}
+                      >
+                        {protocol}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Button 
                   variant="outline" 
                   size="icon"
                   onClick={() => fetchDevices(true)}
                   disabled={isRefreshing}
                 >
-                  <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  {isRefreshing ? (
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  ) : (
+                    <RefreshCw className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
 
-              {selectedDevices.length > 0 && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="default">
-                      {t("actions") || "Actions"} ({selectedDevices.length})
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>{t("actions") || "Actions"}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      onClick={handleDeleteSelected} 
-                      className="text-destructive focus:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      {t("delete") || "Delete"} ({selectedDevices.length})
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="default" disabled={selectedDevices.length === 0}>
+                    {t("actions") || "Actions"}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-background z-[100]">
+                  <DropdownMenuItem 
+                    onClick={handleDeleteSelected} 
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    {t("delete") || "Delete"}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* Devices Table */}
@@ -428,7 +463,7 @@ const Devices = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[50px]">
+                    <TableHead className={`w-[50px] ${isRTL ? 'text-right' : 'text-left'}`}>
                       <Checkbox 
                         checked={selectedDevices.length === paginatedDevices.length && paginatedDevices.length > 0}
                         onCheckedChange={handleSelectAll}
@@ -809,6 +844,32 @@ const Devices = () => {
           )}
         </SheetContent>
       </Sheet>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{t("confirmDelete") || "Confirm Delete"}</DialogTitle>
+            <DialogDescription>
+              {t("confirmDeleteMessage") || `Are you sure you want to delete ${selectedDevices.length} device(s)? This action cannot be undone.`}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-3 mt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              {t("cancel")}
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={confirmDelete}
+            >
+              {t("delete")}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </PanelLayout>
   );
 };
