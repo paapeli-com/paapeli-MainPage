@@ -81,7 +81,7 @@ const PanelHome = () => {
                 <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
                   <action.icon className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-center">{action.title}</h3>
+                <h3 className="text-base font-semibold text-center">{action.title}</h3>
               </CardContent>
             </Card>
           ))}
@@ -101,7 +101,7 @@ const PanelHome = () => {
                   <BookOpen className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold">{t("helpCenter")}</h3>
+                  <h3 className="text-base font-semibold">{t("helpCenter")}</h3>
                   <p className="text-sm text-muted-foreground">{t("helpCenterDesc")}</p>
                 </div>
               </a>
@@ -120,7 +120,7 @@ const PanelHome = () => {
                   <GraduationCap className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold">{t("tutorials")}</h3>
+                  <h3 className="text-base font-semibold">{t("tutorials")}</h3>
                   <p className="text-sm text-muted-foreground">{t("tutorialsDesc")}</p>
                 </div>
               </a>

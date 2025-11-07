@@ -358,7 +358,7 @@ const Devices = () => {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
             <div className="flex items-center gap-3">
               <Smartphone className="h-5 w-5 text-muted-foreground" />
-              <CardTitle className="text-2xl font-bold">{devices.length} {t("devices")}</CardTitle>
+              <CardTitle className="text-lg font-bold">{devices.length} {t("devices")}</CardTitle>
             </div>
             <Button 
               onClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}
@@ -637,7 +637,7 @@ const Devices = () => {
       <Dialog open={credentialsDialogOpen} onOpenChange={setCredentialsDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle className="text-lg">{t("deviceCreatedSuccessfully")}</DialogTitle>
+            <DialogTitle className="text-base">{t("deviceCreatedSuccessfully")}</DialogTitle>
             <DialogDescription className="text-sm pt-1">
               {t("saveCredentialsWarning")}
             </DialogDescription>
@@ -744,7 +744,7 @@ const Devices = () => {
       <Sheet open={addPanelOpen} onOpenChange={(open) => { setAddPanelOpen(open); if (!open) resetAddDeviceForm(); }}>
         <SheetContent side={isRTL ? 'left' : 'right'} className="w-full sm:max-w-[540px] overflow-y-auto">
           <SheetHeader className={`bg-[#00BCD4] text-white -mx-6 -mt-6 px-6 py-4 mb-6 ${isRTL ? 'text-right' : ''}`}>
-            <SheetTitle className={`text-white text-xl ${isRTL ? 'text-right' : ''}`}>{t("createNewDevice")}</SheetTitle>
+            <SheetTitle className={`text-white text-base ${isRTL ? 'text-right' : ''}`}>{t("createNewDevice")}</SheetTitle>
           </SheetHeader>
           
           {wizardStep === 'template' ? (
@@ -908,9 +908,9 @@ const Devices = () => {
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{t("confirmDelete") || "Confirm Delete"}</DialogTitle>
-            <DialogDescription>
+          <DialogHeader className={isRTL ? 'text-right' : ''}>
+            <DialogTitle className={isRTL ? 'text-right' : ''}>{t("confirmDelete") || "Confirm Delete"}</DialogTitle>
+            <DialogDescription className={isRTL ? 'text-right' : ''}>
               {t("confirmDeleteMessage") || `Are you sure you want to delete ${selectedDevices.length} device(s)? This action cannot be undone.`}
             </DialogDescription>
           </DialogHeader>
