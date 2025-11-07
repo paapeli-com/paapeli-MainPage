@@ -14,7 +14,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [language, setLanguage] = useState<Language>(
     (localStorage.getItem('lang') as Language) || 'en'
   );
-  const isRTL = language === 'ar';
+  const isRTL = language === 'ar' || language === 'fa';
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';

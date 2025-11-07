@@ -6,6 +6,7 @@ import { Language } from "@/i18n/translations";
 const languages = [
   { code: 'en' as Language, name: 'English', nativeName: 'English' },
   { code: 'ar' as Language, name: 'Arabic', nativeName: 'العربية' },
+  { code: 'fa' as Language, name: 'Persian', nativeName: 'فارسی' },
 ];
 
 export const LanguageSwitcher = () => {
