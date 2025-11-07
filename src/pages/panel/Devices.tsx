@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { DeviceDetailsContent } from "@/components/DeviceDetailsContent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,10 +55,9 @@ interface DeviceCredentials {
 }
 
 const Devices = () => {
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const { session } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [addPanelOpen, setAddPanelOpen] = useState(false);
   const [devices, setDevices] = useState<Device[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,6 +71,8 @@ const Devices = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [wizardStep, setWizardStep] = useState<'template' | 'details'>('template');
   const [selectedTemplate, setSelectedTemplate] = useState<'blank' | null>(null);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'list' | 'details'>('list');
   
   // Form state
   const [deviceName, setDeviceName] = useState("");
@@ -266,12 +267,29 @@ const Devices = () => {
     setSelectedTemplate(null);
   };
 
+  const handleDeviceClick = (deviceId: string) => {
+    setSelectedDeviceId(deviceId);
+    setViewMode('details');
+  };
+
+  const handleBackToList = () => {
+    setViewMode('list');
+    setSelectedDeviceId(null);
+  };
+
   return (
-    <PanelLayout pageTitle={t("devices")} onAddClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}>
+    <PanelLayout 
+      pageTitle={viewMode === 'list' ? t("devices") : t("deviceDetails")} 
+      onAddClick={viewMode === 'list' ? () => { setAddPanelOpen(true); resetAddDeviceForm(); } : undefined}
+      showBackButton={viewMode === 'details'}
+      onBackClick={handleBackToList}
+    >
       {isLoadingDevices ? (
         <div className="flex items-center justify-center min-h-[400px]">
           <LoadingSpinner size="lg" />
         </div>
+      ) : viewMode === 'details' && selectedDeviceId ? (
+        <DeviceDetailsContent deviceId={selectedDeviceId} onBack={handleBackToList} />
       ) : (
         <div className="space-y-6">
           {/* Main Card with Stats, Search and Table */}
@@ -378,7 +396,7 @@ const Devices = () => {
                       <TableRow 
                         key={device.id || device._id || deviceId}
                         className="cursor-pointer hover:bg-accent/50"
-                        onClick={() => navigate(`/panel/devices/${deviceId}`)}
+                        onClick={() => handleDeviceClick(deviceId)}
                       >
                         <TableCell onClick={(e) => e.stopPropagation()}>
                           <input type="checkbox" className="rounded border-input" />

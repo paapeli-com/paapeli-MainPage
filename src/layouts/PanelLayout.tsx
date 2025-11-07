@@ -42,9 +42,11 @@ interface PanelLayoutProps {
   children: ReactNode;
   pageTitle?: string;
   onAddClick?: () => void;
+  showBackButton?: boolean;
+  onBackClick?: () => void;
 }
 
-export const PanelLayout = ({ children, pageTitle, onAddClick }: PanelLayoutProps) => {
+export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, onBackClick }: PanelLayoutProps) => {
   const { t, isRTL } = useLanguage();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -208,7 +210,13 @@ export const PanelLayout = ({ children, pageTitle, onAddClick }: PanelLayoutProp
 
           <LanguageSwitcher />
 
-          {onAddClick && (
+          {showBackButton && onBackClick && (
+            <Button onClick={onBackClick} variant="outline" size="sm">
+              {t("back")}
+            </Button>
+          )}
+
+          {onAddClick && !showBackButton && (
             <Button onClick={onAddClick} size="sm">
               <Plus className={`h-4 w-4 ${isRTL ? "ml-2" : "mr-2"}`} />
               {t("add")}
