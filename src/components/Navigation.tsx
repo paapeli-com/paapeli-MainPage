@@ -24,6 +24,9 @@ export const Navigation = () => {
   const { t, isRTL, language } = useLanguage();
   const { isAuthenticated, signOut, user } = useAuth();
   const navigate = useNavigate();
+  const hostname = window.location.hostname;
+  const isPanelDomain = hostname === 'panel.paapeli.com' || hostname.includes('panel-');
+  const isMainDomain = hostname === 'paapeli.com' || hostname === 'www.paapeli.com' || hostname === 'localhost';
 
   const getBlogUrl = () => {
     return language === 'en' 
@@ -32,7 +35,12 @@ export const Navigation = () => {
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    // On main domain, redirect to panel login page
+    if (isMainDomain && !isPanelDomain) {
+      window.location.href = 'https://panel.paapeli.com/login';
+    } else {
+      navigate('/login');
+    }
   };
 
   const handleLogout = () => {
@@ -145,65 +153,73 @@ export const Navigation = () => {
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
 
-            {!isAuthenticated ? (
+            {/* On main domain, always show login button */}
+            {isMainDomain && !isPanelDomain ? (
               <Button onClick={handleLogin} variant="default" size="sm">
                 {t('login')}
               </Button>
             ) : (
-              <div 
-                className="relative group"
-                onMouseEnter={(e) => {
-                  const menu = e.currentTarget.querySelector('[data-menu]') as HTMLElement;
-                  if (menu) {
-                    clearTimeout((menu as any).hideTimeout);
-                    menu.classList.remove('hidden');
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  const menu = e.currentTarget.querySelector('[data-menu]') as HTMLElement;
-                  if (menu) {
-                    (menu as any).hideTimeout = setTimeout(() => {
-                      menu.classList.add('hidden');
-                    }, 200);
-                  }
-                }}
-              >
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Settings className="h-4 w-4" />
-                  <span className="hidden sm:inline">{t('account')}</span>
+              /* On panel domain, show login or account menu */
+              !isAuthenticated ? (
+                <Button onClick={handleLogin} variant="default" size="sm">
+                  {t('login')}
                 </Button>
+              ) : (
                 <div 
-                  data-menu
-                  className="hidden absolute right-0 top-full mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-50"
+                  className="relative group"
                   onMouseEnter={(e) => {
-                    const menu = e.currentTarget as HTMLElement;
-                    clearTimeout((menu as any).hideTimeout);
+                    const menu = e.currentTarget.querySelector('[data-menu]') as HTMLElement;
+                    if (menu) {
+                      clearTimeout((menu as any).hideTimeout);
+                      menu.classList.remove('hidden');
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    const menu = e.currentTarget as HTMLElement;
-                    (menu as any).hideTimeout = setTimeout(() => {
-                      menu.classList.add('hidden');
-                    }, 200);
+                    const menu = e.currentTarget.querySelector('[data-menu]') as HTMLElement;
+                    if (menu) {
+                      (menu as any).hideTimeout = setTimeout(() => {
+                        menu.classList.add('hidden');
+                      }, 200);
+                    }
                   }}
                 >
-                  <div className="py-1">
-                    <button
-                      onClick={handleAccountSettings}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center cursor-pointer"
-                    >
-                      <Settings className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                      {t('accountSettings')}
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center cursor-pointer text-destructive"
-                    >
-                      <LogOut className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                      {t('logout')}
-                    </button>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Settings className="h-4 w-4" />
+                    <span className="hidden sm:inline">{t('account')}</span>
+                  </Button>
+                  <div 
+                    data-menu
+                    className="hidden absolute right-0 top-full mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-50"
+                    onMouseEnter={(e) => {
+                      const menu = e.currentTarget as HTMLElement;
+                      clearTimeout((menu as any).hideTimeout);
+                    }}
+                    onMouseLeave={(e) => {
+                      const menu = e.currentTarget as HTMLElement;
+                      (menu as any).hideTimeout = setTimeout(() => {
+                        menu.classList.add('hidden');
+                      }, 200);
+                    }}
+                  >
+                    <div className="py-1">
+                      <button
+                        onClick={handleAccountSettings}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center cursor-pointer"
+                      >
+                        <Settings className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                        {t('accountSettings')}
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center cursor-pointer text-destructive"
+                      >
+                        <LogOut className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                        {t('logout')}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             )}
           </div>
         </div>
