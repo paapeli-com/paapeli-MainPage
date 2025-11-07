@@ -173,6 +173,14 @@ export const translations = {
     encryptConnectionWithSSL: "Encrypt connection with SSL",
     mqttConnectionCode: "MQTT Connection Code",
     
+    // Device Details
+    deviceDetails: "Device Details",
+    deviceNotFound: "Device not found",
+    backToDevices: "Back to Devices",
+    loading: "Loading",
+    enabled: "Enabled",
+    disabled: "Disabled",
+    
     // 404 Page
     pageNotFound: "Page Not Found",
     pageNotFoundDesc: "The page you're looking for doesn't exist or has been moved.",
@@ -354,6 +362,14 @@ export const translations = {
     addYourFirstDevice: "أضف جهازك الأول",
     encryptConnectionWithSSL: "تشفير الاتصال باستخدام SSL",
     mqttConnectionCode: "كود اتصال MQTT",
+    
+    // Device Details
+    deviceDetails: "تفاصيل الجهاز",
+    deviceNotFound: "الجهاز غير موجود",
+    backToDevices: "العودة إلى الأجهزة",
+    loading: "جاري التحميل",
+    enabled: "مفعّل",
+    disabled: "معطّل",
     
     // 404 Page
     pageNotFound: "الصفحة غير موجودة",

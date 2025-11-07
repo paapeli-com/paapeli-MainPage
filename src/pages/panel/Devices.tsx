@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,7 @@ interface Device {
   id: string;
   name: string;
   deviceId: string;
+  protocol: string;
   lastActivity: string;
   createdAt: string;
 }
@@ -46,6 +48,7 @@ const Devices = () => {
   const { t } = useLanguage();
   const { session } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [addPanelOpen, setAddPanelOpen] = useState(false);
   const [devices, setDevices] = useState<Device[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,7 +74,7 @@ const Devices = () => {
       const accessToken = session?.getAccessToken().getJwtToken();
       if (!accessToken) return;
 
-      const response = await fetch("https://api.paapeli.com/api/v1/devices", {
+      const response = await fetch("https://api.paapeli.com/api/v1/devices/me", {
         headers: {
           "Authorization": `Bearer ${accessToken}`,
         },
@@ -155,6 +158,7 @@ const Devices = () => {
         id: newDevice.id || deviceId,
         name: deviceName,
         deviceId: deviceId,
+        protocol: protocol,
         lastActivity: "-",
         createdAt: new Date().toLocaleDateString(),
       };
@@ -243,6 +247,7 @@ const Devices = () => {
                       </TableHead>
                       <TableHead>{t("name")}</TableHead>
                       <TableHead>{t("deviceId")}</TableHead>
+                      <TableHead>{t("protocol")}</TableHead>
                       <TableHead>{t("lastActivity")}</TableHead>
                       <TableHead>{t("createdAt")} ↓</TableHead>
                       <TableHead className="w-[100px]"></TableHead>
@@ -279,22 +284,28 @@ const Devices = () => {
                     </TableHead>
                     <TableHead>{t("name")}</TableHead>
                     <TableHead>{t("deviceId")}</TableHead>
+                    <TableHead>{t("protocol")}</TableHead>
                     <TableHead>{t("lastActivity")}</TableHead>
                     <TableHead>{t("createdAt")} ↓</TableHead>
                     <TableHead className="w-[100px]"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredDevices.map((device) => (
-                    <TableRow key={device.id}>
-                      <TableCell>
+                {filteredDevices.map((device) => (
+                    <TableRow 
+                      key={device.id}
+                      className="cursor-pointer hover:bg-accent/50"
+                      onClick={() => navigate(`/panel/devices/${device.deviceId}`)}
+                    >
+                      <TableCell onClick={(e) => e.stopPropagation()}>
                         <input type="checkbox" className="rounded border-input" />
                       </TableCell>
                       <TableCell className="font-medium">{device.name}</TableCell>
                       <TableCell className="font-mono text-sm">{device.deviceId}</TableCell>
+                      <TableCell>{device.protocol}</TableCell>
                       <TableCell>{device.lastActivity || "-"}</TableCell>
                       <TableCell>{device.createdAt}</TableCell>
-                      <TableCell>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
                         <Button variant="ghost" size="sm">⋮</Button>
                       </TableCell>
                     </TableRow>

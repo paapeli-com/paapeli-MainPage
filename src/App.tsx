@@ -19,6 +19,7 @@ import PanelNotFound from "./pages/panel/PanelNotFound";
 import PanelHome from "./pages/panel/PanelHome";
 import Dashboard from "./pages/panel/Dashboard";
 import Devices from "./pages/panel/Devices";
+import DeviceDetails from "./pages/panel/DeviceDetails";
 import DeviceGroup from "./pages/panel/DeviceGroup";
 import Gateways from "./pages/panel/Gateways";
 import Alarms from "./pages/panel/Alarms";
@@ -51,6 +52,7 @@ const App = () => (
               <Route path="/panel/home" element={<ProtectedRoute><PanelHome /></ProtectedRoute>} />
               <Route path="/panel/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/panel/devices" element={<ProtectedRoute><Devices /></ProtectedRoute>} />
+              <Route path="/panel/devices/:deviceId" element={<ProtectedRoute><DeviceDetails /></ProtectedRoute>} />
               <Route path="/panel/devices/group" element={<ProtectedRoute><DeviceGroup /></ProtectedRoute>} />
               <Route path="/panel/devices/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
               <Route path="/panel/alarms" element={<ProtectedRoute><Alarms /></ProtectedRoute>} />
