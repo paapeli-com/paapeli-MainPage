@@ -441,10 +441,7 @@ const Devices = () => {
       <Sheet open={addPanelOpen} onOpenChange={setAddPanelOpen}>
         <SheetContent className="w-full sm:max-w-[540px]">
           <SheetHeader className="bg-[#00BCD4] text-white -mx-6 -mt-6 px-6 py-4 mb-6">
-            <div className="flex items-center justify-between">
-              <SheetTitle className="text-white text-xl">{t("createNewDevice")}</SheetTitle>
-              <button onClick={() => setAddPanelOpen(false)} className="text-white">✕</button>
-            </div>
+            <SheetTitle className="text-white text-xl">{t("createNewDevice")}</SheetTitle>
           </SheetHeader>
           
           <div className="space-y-6">

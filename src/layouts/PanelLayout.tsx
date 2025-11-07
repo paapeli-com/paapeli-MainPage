@@ -111,7 +111,7 @@ export const PanelLayout = ({ children, pageTitle, onAddClick }: PanelLayoutProp
                               navigate(child.path);
                               setSidebarOpen(false);
                             }}
-                            className={`w-full text-left p-2 rounded-lg transition-colors ${
+                            className={`w-full ${isRTL ? "text-right" : "text-left"} p-2 rounded-lg transition-colors ${
                               isActive(child.path)
                                 ? "bg-primary text-primary-foreground"
                                 : "hover:bg-accent"
