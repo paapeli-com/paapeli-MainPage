@@ -131,6 +131,40 @@ export const translations = {
     deviceId: "Device ID",
     enterDeviceId: "Enter device ID",
     
+    // Additional Panel Features
+    createDashboard: "Create Dashboard",
+    addNewDevice: "Add New Device",
+    addNewTemplate: "Add New Template",
+    createAlarm: "Create Alarm",
+    helpCenter: "Help Center",
+    helpCenterDesc: "Browse documentation and guides",
+    tutorials: "Tutorials",
+    tutorialsDesc: "Learn how to use Paapeli",
+    
+    // Device Page
+    search: "Search",
+    noDevicesFound: "No devices found",
+    apiLabel: "API Label",
+    lastActivity: "Last Activity",
+    createdAt: "Created At",
+    devicesPerPage: "DEVICES PER PAGE",
+    of: "of",
+    createNewDevice: "Create new device",
+    blankDevice: "Blank Device",
+    blankDeviceDesc: "An empty device to receive data through our Data API.",
+    protocol: "Protocol",
+    label: "Label",
+    enterLabel: "Enter label",
+    adding: "Adding...",
+    
+    // Messages
+    error: "Error",
+    success: "Success",
+    deviceNameRequired: "Device name is required",
+    notAuthenticated: "Not authenticated",
+    failedToAddDevice: "Failed to add device",
+    deviceAddedSuccessfully: "Device added successfully",
+    
     // 404 Page
     pageNotFound: "Page Not Found",
     pageNotFoundDesc: "The page you're looking for doesn't exist or has been moved.",
@@ -270,6 +304,40 @@ export const translations = {
     enterDeviceName: "أدخل اسم الجهاز",
     deviceId: "معرف الجهاز",
     enterDeviceId: "أدخل معرف الجهاز",
+    
+    // Additional Panel Features
+    createDashboard: "إنشاء لوحة تحكم",
+    addNewDevice: "إضافة جهاز جديد",
+    addNewTemplate: "إضافة قالب جديد",
+    createAlarm: "إنشاء تنبيه",
+    helpCenter: "مركز المساعدة",
+    helpCenterDesc: "تصفح الوثائق والأدلة",
+    tutorials: "البرامج التعليمية",
+    tutorialsDesc: "تعلم كيفية استخدام باپيلي",
+    
+    // Device Page
+    search: "بحث",
+    noDevicesFound: "لم يتم العثور على أجهزة",
+    apiLabel: "تسمية API",
+    lastActivity: "آخر نشاط",
+    createdAt: "تاريخ الإنشاء",
+    devicesPerPage: "الأجهزة لكل صفحة",
+    of: "من",
+    createNewDevice: "إنشاء جهاز جديد",
+    blankDevice: "جهاز فارغ",
+    blankDeviceDesc: "جهاز فارغ لاستقبال البيانات من خلال Data API الخاص بنا.",
+    protocol: "البروتوكول",
+    label: "التسمية",
+    enterLabel: "أدخل التسمية",
+    adding: "جاري الإضافة...",
+    
+    // Messages
+    error: "خطأ",
+    success: "نجاح",
+    deviceNameRequired: "اسم الجهاز مطلوب",
+    notAuthenticated: "غير مصادق",
+    failedToAddDevice: "فشل إضافة الجهاز",
+    deviceAddedSuccessfully: "تمت إضافة الجهاز بنجاح",
     
     // 404 Page
     pageNotFound: "الصفحة غير موجودة",

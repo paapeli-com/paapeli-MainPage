@@ -30,6 +30,14 @@ import {
 } from "@/components/ui/collapsible";
 import paapeliLogo from "@/assets/paapeli-logo.svg";
 
+interface MenuItem {
+  title: string;
+  subtitle?: string;
+  icon: any;
+  path?: string;
+  children?: { title: string; path: string }[];
+}
+
 interface PanelLayoutProps {
   children: ReactNode;
   pageTitle?: string;
@@ -58,7 +66,7 @@ export const PanelLayout = ({ children, pageTitle, onAddClick }: PanelLayoutProp
     },
     { title: t("alarms"), icon: Bell, path: "/panel/alarms" },
     { title: t("solutionTemplates"), icon: FileCode, path: "/panel/solution-templates" },
-    { title: t("otaUpdate"), icon: Download, path: "/panel/ota" },
+    { title: "OTA", subtitle: t("otaUpdate"), icon: Download, path: "/panel/ota" },
     { title: t("members"), icon: UserCog, path: "/panel/members" },
     { title: t("devCenter"), icon: Code, path: "/panel/dev-center" },
   ];
@@ -129,7 +137,10 @@ export const PanelLayout = ({ children, pageTitle, onAddClick }: PanelLayoutProp
                   }`}
                 >
                   <item.icon className="h-5 w-5" />
-                  <span>{item.title}</span>
+                  <div className="flex flex-col items-start">
+                    <span>{item.title}</span>
+                    {item.subtitle && <span className="text-xs opacity-70">({item.subtitle})</span>}
+                  </div>
                 </button>
               )}
             </li>
