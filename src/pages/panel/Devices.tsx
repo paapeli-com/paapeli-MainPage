@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -62,6 +63,7 @@ const Devices = () => {
   const [devices, setDevices] = useState<Device[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingDevices, setIsLoadingDevices] = useState(true);
   const [credentialsDialogOpen, setCredentialsDialogOpen] = useState(false);
   const [newDeviceCredentials, setNewDeviceCredentials] = useState<DeviceCredentials | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
@@ -83,6 +85,7 @@ const Devices = () => {
   }, [session]);
 
   const fetchDevices = async () => {
+    setIsLoadingDevices(true);
     try {
       const accessToken = session?.getAccessToken().getJwtToken();
       if (!accessToken) return;
@@ -106,6 +109,8 @@ const Devices = () => {
       }
     } catch (error) {
       console.error("Failed to fetch devices:", error);
+    } finally {
+      setIsLoadingDevices(false);
     }
   };
 
@@ -249,9 +254,14 @@ const Devices = () => {
 
   return (
     <PanelLayout pageTitle={t("devices")} onAddClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}>
-      <div className="space-y-6">
-        {/* Main Card with Stats, Search and Table */}
-        <Card>
+      {isLoadingDevices ? (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <LoadingSpinner size="lg" />
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {/* Main Card with Stats, Search and Table */}
+          <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
             <CardTitle className="text-2xl font-bold">{devices.length} {t("devices")}</CardTitle>
             <Smartphone className="h-5 w-5 text-muted-foreground" />
@@ -352,7 +362,28 @@ const Devices = () => {
                           <input type="checkbox" className="rounded border-input" />
                         </TableCell>
                         <TableCell className="font-medium">{device.name}</TableCell>
-                        <TableCell className="font-mono text-sm">{deviceId || '-'}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <span>{deviceId || '-'}</span>
+                            {deviceId && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  copyToClipboard(deviceId, `device-${deviceId}`);
+                                }}
+                              >
+                                {copiedField === `device-${deviceId}` ? (
+                                  <CheckCheck className="h-3 w-3 text-green-500" />
+                                ) : (
+                                  <Copy className="h-3 w-3" />
+                                )}
+                              </Button>
+                            )}
+                          </div>
+                        </TableCell>
                         <TableCell>{device.protocol}</TableCell>
                         <TableCell>{formattedActivity}</TableCell>
                         <TableCell>{formattedDate}</TableCell>
@@ -411,6 +442,7 @@ const Devices = () => {
           </CardContent>
         </Card>
       </div>
+      )}
 
       {/* Device Credentials Dialog */}
       <Dialog open={credentialsDialogOpen} onOpenChange={setCredentialsDialogOpen}>

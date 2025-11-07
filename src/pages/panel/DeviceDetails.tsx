@@ -6,10 +6,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, HelpCircle, X, Copy, CheckCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 interface DeviceDetails {
   id?: string;
@@ -111,7 +111,7 @@ const DeviceDetails = () => {
     return (
       <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
         <div className="flex items-center justify-center h-screen">
-          <p className="text-muted-foreground">{t("loading")}...</p>
+          <LoadingSpinner size="lg" />
         </div>
       </div>
     );
@@ -139,7 +139,7 @@ const DeviceDetails = () => {
   return (
     <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
       {/* Header */}
-      <div className="bg-[#00897B] text-white">
+      <div className="bg-secondary text-white">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
             <Button
@@ -175,182 +175,204 @@ const DeviceDetails = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full bg-transparent border-b border-white/20 rounded-none h-auto p-0 justify-start gap-0">
-            <TabsTrigger 
-              value="details" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:bg-transparent data-[state=active]:text-white text-white/70 px-6 py-3"
+        <div className="border-b border-white/20">
+          <div className="flex gap-0">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+                activeTab === "details"
+                  ? "border-white text-white"
+                  : "border-transparent text-white/70 hover:text-white/90"
+              }`}
             >
               {t("details")}
-            </TabsTrigger>
-            <TabsTrigger 
-              value="attributes" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:bg-transparent data-[state=active]:text-white text-white/70 px-6 py-3"
+            </button>
+            <button
+              onClick={() => setActiveTab("attributes")}
+              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+                activeTab === "attributes"
+                  ? "border-white text-white"
+                  : "border-transparent text-white/70 hover:text-white/90"
+              }`}
             >
               {t("attributes")}
-            </TabsTrigger>
-            <TabsTrigger 
-              value="telemetry" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:bg-transparent data-[state=active]:text-white text-white/70 px-6 py-3"
+            </button>
+            <button
+              onClick={() => setActiveTab("telemetry")}
+              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+                activeTab === "telemetry"
+                  ? "border-white text-white"
+                  : "border-transparent text-white/70 hover:text-white/90"
+              }`}
             >
               {t("latestTelemetry")}
-            </TabsTrigger>
-            <TabsTrigger 
-              value="calculated" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:bg-transparent data-[state=active]:text-white text-white/70 px-6 py-3"
+            </button>
+            <button
+              onClick={() => setActiveTab("calculated")}
+              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+                activeTab === "calculated"
+                  ? "border-white text-white"
+                  : "border-transparent text-white/70 hover:text-white/90"
+              }`}
             >
               {t("calculatedFields")}
-            </TabsTrigger>
-            <TabsTrigger 
-              value="alarms" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:bg-transparent data-[state=active]:text-white text-white/70 px-6 py-3"
+            </button>
+            <button
+              onClick={() => setActiveTab("alarms")}
+              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+                activeTab === "alarms"
+                  ? "border-white text-white"
+                  : "border-transparent text-white/70 hover:text-white/90"
+              }`}
             >
               {t("alarms")}
-            </TabsTrigger>
-            <TabsTrigger 
-              value="events" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:bg-transparent data-[state=active]:text-white text-white/70 px-6 py-3"
+            </button>
+            <button
+              onClick={() => setActiveTab("events")}
+              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+                activeTab === "events"
+                  ? "border-white text-white"
+                  : "border-transparent text-white/70 hover:text-white/90"
+              }`}
             >
               {t("events")}
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <Tabs value={activeTab} className="w-full">
-          <TabsContent value="details" className="mt-0">
-            <div className="space-y-6">
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3">
-                <Button className="bg-[#00897B] hover:bg-[#00695C] text-white">
-                  {t("openDetailsPage")}
-                </Button>
-                <Button className="bg-[#00897B] hover:bg-[#00695C] text-white">
-                  {t("manageCredentials")}
-                </Button>
-                <Button className="bg-[#00897B] hover:bg-[#00695C] text-white">
-                  {t("manageOwnerAndGroups")}
-                </Button>
-                <Button className="bg-[#00897B] hover:bg-[#00695C] text-white">
-                  {t("checkConnectivity")}
-                </Button>
-              </div>
-              
-              <div>
-                <Button variant="destructive">
-                  {t("deleteDevice")}
-                </Button>
-              </div>
+      <div className="p-6 bg-muted/30">
+        {activeTab === "details" && (
+          <div className="space-y-6">
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-3">
+              <Button className="bg-secondary hover:bg-secondary/90 text-white">
+                {t("openDetailsPage")}
+              </Button>
+              <Button className="bg-secondary hover:bg-secondary/90 text-white">
+                {t("manageCredentials")}
+              </Button>
+              <Button className="bg-secondary hover:bg-secondary/90 text-white">
+                {t("manageOwnerAndGroups")}
+              </Button>
+              <Button className="bg-secondary hover:bg-secondary/90 text-white">
+                {t("checkConnectivity")}
+              </Button>
+            </div>
+            
+            <div>
+              <Button variant="destructive">
+                {t("deleteDevice")}
+              </Button>
+            </div>
 
-              {/* Copy Buttons */}
-              <div className="flex flex-wrap gap-3">
+            {/* Copy Buttons */}
+            <div className="flex flex-wrap gap-3">
+              <Button
+                variant="outline"
+                onClick={() => copyToClipboard(displayDeviceId, 'deviceId')}
+                className="gap-2"
+              >
+                {copiedField === 'deviceId' ? (
+                  <CheckCheck className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+                {t("copyDeviceId")}
+              </Button>
+              {displayApiKey && (
                 <Button
                   variant="outline"
-                  onClick={() => copyToClipboard(displayDeviceId, 'deviceId')}
+                  onClick={() => copyToClipboard(displayApiKey, 'apiKey')}
                   className="gap-2"
                 >
-                  {copiedField === 'deviceId' ? (
+                  {copiedField === 'apiKey' ? (
                     <CheckCheck className="h-4 w-4" />
                   ) : (
                     <Copy className="h-4 w-4" />
                   )}
-                  {t("copyDeviceId")}
+                  {t("copyAccessToken")}
                 </Button>
-                {displayApiKey && (
-                  <Button
-                    variant="outline"
-                    onClick={() => copyToClipboard(displayApiKey, 'apiKey')}
-                    className="gap-2"
-                  >
-                    {copiedField === 'apiKey' ? (
-                      <CheckCheck className="h-4 w-4" />
-                    ) : (
-                      <Copy className="h-4 w-4" />
-                    )}
-                    {t("copyAccessToken")}
-                  </Button>
-                )}
-              </div>
-
-              {/* Device Information */}
-              <Card>
-                <CardContent className="pt-6 space-y-6">
-                  <div>
-                    <Label className="text-muted-foreground">{t("name")}*</Label>
-                    <Input value={device.name} readOnly className="mt-2" />
-                  </div>
-
-                  <div>
-                    <Label className="text-muted-foreground">{t("deviceProfile")}*</Label>
-                    <p className="mt-2 text-[#00897B] font-medium">{displayProfile}</p>
-                  </div>
-
-                  <div>
-                    <Label className="text-muted-foreground">{t("label")}</Label>
-                    <Input value={device.label || ''} readOnly className="mt-2" />
-                  </div>
-
-                  <div>
-                    <Label className="text-muted-foreground">{t("assignedFirmware")}</Label>
-                    <Input value={device.assignedFirmware || device.assigned_firmware || ''} readOnly className="mt-2" />
-                  </div>
-
-                  <div>
-                    <Label className="text-muted-foreground">{t("assignedSoftware")}</Label>
-                    <Input value={device.assignedSoftware || device.assigned_software || ''} readOnly className="mt-2" />
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <Switch checked={displayIsGateway} disabled />
-                    <Label>{t("isGateway")}</Label>
-                  </div>
-                </CardContent>
-              </Card>
+              )}
             </div>
-          </TabsContent>
 
-          <TabsContent value="attributes" className="mt-0">
+            {/* Device Information */}
             <Card>
-              <CardContent className="pt-6">
-                <p className="text-muted-foreground">{t("noAttributesYet")}</p>
+              <CardContent className="pt-6 space-y-6">
+                <div>
+                  <Label className="text-muted-foreground text-sm">{t("name")}*</Label>
+                  <Input value={device.name} readOnly className="mt-2" />
+                </div>
+
+                <div>
+                  <Label className="text-muted-foreground text-sm">{t("deviceProfile")}*</Label>
+                  <p className="mt-2 text-secondary font-medium">{displayProfile}</p>
+                </div>
+
+                <div>
+                  <Label className="text-muted-foreground text-sm">{t("label")}</Label>
+                  <Input value={device.label || ''} readOnly className="mt-2" />
+                </div>
+
+                <div>
+                  <Label className="text-muted-foreground text-sm">{t("assignedFirmware")}</Label>
+                  <Input value={device.assignedFirmware || device.assigned_firmware || ''} readOnly className="mt-2" />
+                </div>
+
+                <div>
+                  <Label className="text-muted-foreground text-sm">{t("assignedSoftware")}</Label>
+                  <Input value={device.assignedSoftware || device.assigned_software || ''} readOnly className="mt-2" />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Switch checked={displayIsGateway} disabled />
+                  <Label className="text-sm">{t("isGateway")}</Label>
+                </div>
               </CardContent>
             </Card>
-          </TabsContent>
+          </div>
+        )}
 
-          <TabsContent value="telemetry" className="mt-0">
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-muted-foreground">{t("noTelemetryYet")}</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+        {activeTab === "attributes" && (
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-muted-foreground">{t("noAttributesYet")}</p>
+            </CardContent>
+          </Card>
+        )}
 
-          <TabsContent value="calculated" className="mt-0">
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-muted-foreground">{t("noCalculatedFieldsYet")}</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+        {activeTab === "telemetry" && (
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-muted-foreground">{t("noTelemetryYet")}</p>
+            </CardContent>
+          </Card>
+        )}
 
-          <TabsContent value="alarms" className="mt-0">
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-muted-foreground">{t("noAlarmsYet")}</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+        {activeTab === "calculated" && (
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-muted-foreground">{t("noCalculatedFieldsYet")}</p>
+            </CardContent>
+          </Card>
+        )}
 
-          <TabsContent value="events" className="mt-0">
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-muted-foreground">{t("noEventsYet")}</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        {activeTab === "alarms" && (
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-muted-foreground">{t("noAlarmsYet")}</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {activeTab === "events" && (
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-muted-foreground">{t("noEventsYet")}</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
