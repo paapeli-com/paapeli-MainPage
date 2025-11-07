@@ -61,32 +61,46 @@ const AuthCallback = () => {
         });
 
         if (!response.ok) {
+          const errorData = await response.text();
+          console.error('Token exchange failed:', errorData);
           throw new Error('Token exchange failed');
         }
 
         const tokens = await response.json();
         
-        // Set the tokens in local storage for Cognito
-        const idTokenKey = `CognitoIdentityServiceProvider.${CLIENT_ID}.LastAuthUser`;
-        const accessTokenKey = `CognitoIdentityServiceProvider.${CLIENT_ID}.${tokens.id_token}.accessToken`;
-        const idTokenStorageKey = `CognitoIdentityServiceProvider.${CLIENT_ID}.${tokens.id_token}.idToken`;
-        const refreshTokenKey = `CognitoIdentityServiceProvider.${CLIENT_ID}.${tokens.id_token}.refreshToken`;
+        // Parse the ID token to get the username
+        const idTokenPayload = JSON.parse(atob(tokens.id_token.split('.')[1]));
+        const username = idTokenPayload['cognito:username'] || idTokenPayload.email;
         
+        // Set the tokens in local storage for Cognito with correct keys
+        const lastAuthUserKey = `CognitoIdentityServiceProvider.${CLIENT_ID}.LastAuthUser`;
+        const idTokenKey = `CognitoIdentityServiceProvider.${CLIENT_ID}.${username}.idToken`;
+        const accessTokenKey = `CognitoIdentityServiceProvider.${CLIENT_ID}.${username}.accessToken`;
+        const refreshTokenKey = `CognitoIdentityServiceProvider.${CLIENT_ID}.${username}.refreshToken`;
+        
+        localStorage.setItem(lastAuthUserKey, username);
         localStorage.setItem(idTokenKey, tokens.id_token);
         localStorage.setItem(accessTokenKey, tokens.access_token);
-        localStorage.setItem(idTokenStorageKey, tokens.id_token);
         localStorage.setItem(refreshTokenKey, tokens.refresh_token);
 
         toast.success('Successfully logged in!');
         
-        // Redirect to home page
+        // Check if on panel domain and redirect accordingly
+        const hostname = window.location.hostname;
+        const isPanelDomain = hostname === 'panel.paapeli.com' || hostname.includes('panel-');
+        
         setTimeout(() => {
-          navigate('/');
+          if (isPanelDomain) {
+            navigate('/panel/home');
+          } else {
+            navigate('/');
+          }
           window.location.reload(); // Reload to ensure auth state is updated
         }, 500);
         
       } catch (err) {
         console.error('Token exchange error:', err);
+        toast.error('Authentication failed');
         setErrorMessage('Authentication failed');
         setTimeout(() => {
           navigate('/login');

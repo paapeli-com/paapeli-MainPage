@@ -209,6 +209,9 @@ export const translations = {
     noCalculatedFieldsYet: "No calculated fields yet",
     noEventsYet: "No events yet",
     copiedToClipboard: "Copied to clipboard",
+    actions: "Actions",
+    delete: "Delete",
+    deleted: "Deleted",
     
     // 404 Page
     pageNotFound: "Page Not Found",
@@ -428,6 +431,9 @@ export const translations = {
     noCalculatedFieldsYet: "لا توجد حقول محسوبة بعد",
     noEventsYet: "لا توجد أحداث بعد",
     copiedToClipboard: "تم النسخ إلى الحافظة",
+    actions: "إجراءات",
+    delete: "حذف",
+    deleted: "تم الحذف",
     
     // 404 Page
     pageNotFound: "الصفحة غير موجودة",

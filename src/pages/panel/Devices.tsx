@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, RefreshCw } from "lucide-react";
+import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/contexts/AuthContext";
@@ -27,6 +27,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Device {
   id?: string;
@@ -65,6 +73,7 @@ const Devices = () => {
   const [isLoadingDevices, setIsLoadingDevices] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [credentialsDialogOpen, setCredentialsDialogOpen] = useState(false);
+  const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [newDeviceCredentials, setNewDeviceCredentials] = useState<DeviceCredentials | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -277,6 +286,31 @@ const Devices = () => {
     setSelectedDeviceId(null);
   };
 
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedDevices(paginatedDevices.map(d => d.deviceId || d.device_id || d.deviceID || d.id || d._id || ''));
+    } else {
+      setSelectedDevices([]);
+    }
+  };
+
+  const handleSelectDevice = (deviceId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedDevices(prev => [...prev, deviceId]);
+    } else {
+      setSelectedDevices(prev => prev.filter(id => id !== deviceId));
+    }
+  };
+
+  const handleDeleteSelected = () => {
+    // TODO: Implement delete functionality
+    toast({
+      title: t("deleted") || "Deleted",
+      description: `${selectedDevices.length} ${t("devices") || "devices"} deleted`,
+    });
+    setSelectedDevices([]);
+  };
+
   return (
     <PanelLayout 
       pageTitle={t("devices")} 
@@ -299,33 +333,56 @@ const Devices = () => {
           
           <CardContent className="pt-6">
             {/* Search and Filter Bar */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder={t("search")}
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="pl-9"
-                />
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <div className="flex items-center gap-2 flex-1 max-w-md">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder={t("search")}
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    className="pl-9"
+                  />
+                </div>
+                <Button variant="outline" size="icon">
+                  <Filter className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="icon">
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => fetchDevices(true)}
+                  disabled={isRefreshing}
+                >
+                  <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                </Button>
               </div>
-              <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon">
-                <LayoutGrid className="h-4 w-4" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => fetchDevices(true)}
-                disabled={isRefreshing}
-              >
-                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </Button>
+
+              {selectedDevices.length > 0 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="default">
+                      {t("actions") || "Actions"} ({selectedDevices.length})
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>{t("actions") || "Actions"}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={handleDeleteSelected} 
+                      className="text-destructive focus:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      {t("delete") || "Delete"} ({selectedDevices.length})
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
 
             {/* Devices Table */}
@@ -372,7 +429,10 @@ const Devices = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[50px]">
-                      <input type="checkbox" className="rounded border-input" />
+                      <Checkbox 
+                        checked={selectedDevices.length === paginatedDevices.length && paginatedDevices.length > 0}
+                        onCheckedChange={handleSelectAll}
+                      />
                     </TableHead>
                     <TableHead>{t("name")}</TableHead>
                     <TableHead>{t("deviceId")}</TableHead>
@@ -397,7 +457,10 @@ const Devices = () => {
                         onClick={() => handleDeviceClick(deviceId)}
                       >
                         <TableCell onClick={(e) => e.stopPropagation()}>
-                          <input type="checkbox" className="rounded border-input" />
+                          <Checkbox 
+                            checked={selectedDevices.includes(deviceId)}
+                            onCheckedChange={(checked) => handleSelectDevice(deviceId, checked as boolean)}
+                          />
                         </TableCell>
                         <TableCell className="font-medium">{device.name}</TableCell>
                         <TableCell>
