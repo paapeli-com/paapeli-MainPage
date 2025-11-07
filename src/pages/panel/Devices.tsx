@@ -150,6 +150,16 @@ const Devices = () => {
       const deviceId = newDevice.deviceId || newDevice.device_id || newDevice.id || "";
       const apiKey = newDevice.apiKey || newDevice.api_key || newDevice.key || "";
       
+      // Add the new device to the list immediately
+      const newDeviceForList: Device = {
+        id: newDevice.id || deviceId,
+        name: deviceName,
+        deviceId: deviceId,
+        lastActivity: "-",
+        createdAt: new Date().toLocaleDateString(),
+      };
+      setDevices(prev => [newDeviceForList, ...prev]);
+      
       // Show credentials dialog with device ID and API key
       setNewDeviceCredentials({
         deviceId: deviceId,
@@ -167,8 +177,8 @@ const Devices = () => {
       setUseSsl(false);
       setAddPanelOpen(false);
       
-      // Refresh devices list
-      await fetchDevices();
+      // Refresh devices list in background
+      fetchDevices();
     } catch (error) {
       console.error("Device registration error:", error);
       toast({
@@ -298,10 +308,10 @@ const Devices = () => {
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">{t("devicesPerPage")}</span>
                 <Select defaultValue="10">
-                  <SelectTrigger className="w-[70px]">
+                  <SelectTrigger className="w-[70px] h-9">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="min-w-[70px]" sideOffset={5}>
                     <SelectItem value="10">10</SelectItem>
                     <SelectItem value="20">20</SelectItem>
                     <SelectItem value="50">50</SelectItem>
@@ -322,10 +332,10 @@ const Devices = () => {
 
       {/* Device Credentials Dialog */}
       <Dialog open={credentialsDialogOpen} onOpenChange={setCredentialsDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle className="text-2xl">{t("deviceCreatedSuccessfully")}</DialogTitle>
-            <DialogDescription className="text-base pt-2">
+            <DialogTitle className="text-lg">{t("deviceCreatedSuccessfully")}</DialogTitle>
+            <DialogDescription className="text-sm pt-1">
               {t("saveCredentialsWarning")}
             </DialogDescription>
           </DialogHeader>
@@ -395,8 +405,8 @@ const Devices = () => {
                     <div>mqtt_server = "mqtt.paapeli.com";</div>
                     <div>mqtt_port = {newDeviceCredentials.useSsl ? "8883" : "1883"};</div>
                     <div>mqtt_client_id = "Your Favoriot name";</div>
-                    <div>const char* mqtt_user = "";</div>
-                    <div>const char* mqtt_pass = "{newDeviceCredentials.apiKey}"</div>
+                    <div>mqtt_user = "";</div>
+                    <div>mqtt_pass = "{newDeviceCredentials.apiKey}"</div>
                     <div>device_id = "{newDeviceCredentials.deviceId}";</div>
                     <div className="pt-2 border-t border-border mt-2">
                       Topic Address: api.paapeli.com/api/v1/telemetry/{newDeviceCredentials.deviceId}
@@ -413,7 +423,7 @@ const Devices = () => {
             </div>
           )}
 
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-center gap-2">
             <Button 
               onClick={() => {
                 setCredentialsDialogOpen(false);
