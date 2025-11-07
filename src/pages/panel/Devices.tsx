@@ -279,10 +279,8 @@ const Devices = () => {
 
   return (
     <PanelLayout 
-      pageTitle={viewMode === 'list' ? t("devices") : t("deviceDetails")} 
+      pageTitle={t("devices")} 
       onAddClick={viewMode === 'list' ? () => { setAddPanelOpen(true); resetAddDeviceForm(); } : undefined}
-      showBackButton={viewMode === 'details'}
-      onBackClick={handleBackToList}
     >
       {isLoadingDevices ? (
         <div className="flex items-center justify-center min-h-[400px]">
