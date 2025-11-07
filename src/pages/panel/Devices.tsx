@@ -356,7 +356,7 @@ const Devices = () => {
             </div>
             <Button 
               onClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}
-              className="bg-[#00BCD4] hover:bg-[#00ACC1] gap-1 px-6"
+              className="bg-[#00BCD4] hover:bg-[#00ACC1] gap-2 px-8 flex items-center justify-center"
             >
               <Plus className="h-4 w-4" />
               {t("add")}
@@ -469,11 +469,11 @@ const Devices = () => {
                       <TableHead className="w-[50px]">
                         <input type="checkbox" className="rounded border-input" />
                       </TableHead>
-                      <TableHead>{t("name")}</TableHead>
-                      <TableHead>{t("deviceId")}</TableHead>
-                      <TableHead>{t("protocol")}</TableHead>
-                      <TableHead>{t("lastActivity")}</TableHead>
-                      <TableHead>{t("createdAt")} ↓</TableHead>
+                      <TableHead className={isRTL ? 'text-center' : ''}>{t("name")}</TableHead>
+                      <TableHead className={isRTL ? 'text-center' : ''}>{t("deviceId")}</TableHead>
+                      <TableHead className={isRTL ? 'text-center' : ''}>{t("protocol")}</TableHead>
+                      <TableHead className={isRTL ? 'text-center' : ''}>{t("lastActivity")}</TableHead>
+                      <TableHead className={isRTL ? 'text-center' : ''}>{t("createdAt")} ↓</TableHead>
                       <TableHead className="w-[100px]"></TableHead>
                     </TableRow>
                   </TableHeader>
@@ -509,11 +509,11 @@ const Devices = () => {
                         onCheckedChange={handleSelectAll}
                       />
                     </TableHead>
-                    <TableHead>{t("name")}</TableHead>
-                    <TableHead>{t("deviceId")}</TableHead>
-                    <TableHead>{t("protocol")}</TableHead>
-                    <TableHead>{t("lastActivity")}</TableHead>
-                    <TableHead>{t("createdAt")} ↓</TableHead>
+                    <TableHead className={isRTL ? 'text-center' : ''}>{t("name")}</TableHead>
+                    <TableHead className={isRTL ? 'text-center' : ''}>{t("deviceId")}</TableHead>
+                    <TableHead className={isRTL ? 'text-center' : ''}>{t("protocol")}</TableHead>
+                    <TableHead className={isRTL ? 'text-center' : ''}>{t("lastActivity")}</TableHead>
+                    <TableHead className={isRTL ? 'text-center' : ''}>{t("createdAt")} ↓</TableHead>
                     <TableHead className="w-[100px]"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -582,7 +582,7 @@ const Devices = () => {
                     <SelectTrigger className="w-[70px] h-9">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="min-w-[70px]" align="start" side="top" avoidCollisions={false}>
+                    <SelectContent className="min-w-[70px]" side="bottom" sideOffset={4} avoidCollisions={false}>
                       <SelectItem value="10">10</SelectItem>
                       <SelectItem value="20">20</SelectItem>
                       <SelectItem value="50">50</SelectItem>
@@ -729,9 +729,9 @@ const Devices = () => {
 
       {/* Add Device Sheet */}
       <Sheet open={addPanelOpen} onOpenChange={(open) => { setAddPanelOpen(open); if (!open) resetAddDeviceForm(); }}>
-        <SheetContent className="w-full sm:max-w-[540px] overflow-y-auto">
-          <SheetHeader className="bg-[#00BCD4] text-white -mx-6 -mt-6 px-6 py-4 mb-6">
-            <SheetTitle className="text-white text-xl">{t("createNewDevice")}</SheetTitle>
+        <SheetContent side={isRTL ? 'left' : 'right'} className="w-full sm:max-w-[540px] overflow-y-auto">
+          <SheetHeader className={`bg-[#00BCD4] text-white -mx-6 -mt-6 px-6 py-4 mb-6 ${isRTL ? 'text-right' : ''}`}>
+            <SheetTitle className={`text-white text-xl ${isRTL ? 'text-right' : ''}`}>{t("createNewDevice")}</SheetTitle>
           </SheetHeader>
           
           {wizardStep === 'template' ? (
@@ -816,7 +816,7 @@ const Devices = () => {
               {/* Device Details Form */}
               <div className="space-y-4">
                 <div>
-                  <Label>{t("name")}:</Label>
+                  <Label className={isRTL ? 'text-right block' : ''}>{t("name")}:</Label>
                   <Input 
                     value={deviceName}
                     onChange={(e) => setDeviceName(e.target.value)}
@@ -825,7 +825,7 @@ const Devices = () => {
                   />
                 </div>
                 <div>
-                  <Label>{t("protocol")}:</Label>
+                  <Label className={isRTL ? 'text-right block' : ''}>{t("protocol")}:</Label>
                   <Select value={protocol} onValueChange={setProtocol}>
                     <SelectTrigger>
                       <SelectValue />
@@ -845,7 +845,7 @@ const Devices = () => {
                   </Select>
                 </div>
                 <div>
-                  <Label>{t("label")}:</Label>
+                  <Label className={isRTL ? 'text-right block' : ''}>{t("label")}:</Label>
                   <Input 
                     value={label}
                     onChange={(e) => setLabel(e.target.value)}
