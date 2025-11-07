@@ -144,10 +144,16 @@ const Devices = () => {
 
       const newDevice = await response.json();
       
+      console.log("API Response:", newDevice); // Debug log
+      
+      // Extract device ID and API key from various possible field names
+      const deviceId = newDevice.deviceId || newDevice.device_id || newDevice.id || "";
+      const apiKey = newDevice.apiKey || newDevice.api_key || newDevice.key || "";
+      
       // Show credentials dialog with device ID and API key
       setNewDeviceCredentials({
-        deviceId: newDevice.deviceId || newDevice.id,
-        apiKey: newDevice.apiKey || newDevice.key,
+        deviceId: deviceId,
+        apiKey: apiKey,
         name: deviceName,
         protocol: protocol,
         useSsl: useSsl,
