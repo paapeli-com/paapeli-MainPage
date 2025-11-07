@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, RefreshCw, Trash2, ArrowUpDown, X } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/contexts/AuthContext";
@@ -27,6 +27,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -84,6 +89,7 @@ const Devices = () => {
   const [viewMode, setViewMode] = useState<'list' | 'details'>('list');
   const [protocolFilter, setProtocolFilter] = useState<string>('all');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [sortPopoverOpen, setSortPopoverOpen] = useState(false);
   
   // Form state
   const [deviceName, setDeviceName] = useState("");
@@ -320,8 +326,14 @@ const Devices = () => {
     setDeleteDialogOpen(false);
   };
 
-  // Get unique protocols for filter
-  const uniqueProtocols = Array.from(new Set(devices.map(d => d.protocol)));
+  // Available protocols for sorting
+  const availableProtocols = ["MQTT", "HTTP", "CoAP", "WebSocket", "LoRaWAN", "BLE", "ZigBee", "OPC-UA", "LTE", "5G"];
+  
+  const handleResetSort = () => {
+    setProtocolFilter('all');
+    setCurrentPage(1);
+    setSortPopoverOpen(false);
+  };
 
   return (
     <PanelLayout 
@@ -344,9 +356,9 @@ const Devices = () => {
             </div>
             <Button 
               onClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}
-              className="bg-[#00BCD4] hover:bg-[#00ACC1]"
+              className="bg-[#00BCD4] hover:bg-[#00ACC1] gap-1"
             >
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-4 w-4" />
               {t("add")}
             </Button>
           </CardHeader>
@@ -367,27 +379,54 @@ const Devices = () => {
                     className={`${isRTL ? 'pr-9' : 'pl-9'}`}
                   />
                 </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <Filter className="h-4 w-4" />
+                <Popover open={sortPopoverOpen} onOpenChange={setSortPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      className={protocolFilter !== 'all' ? 'bg-primary text-primary-foreground' : ''}
+                    >
+                      <ArrowUpDown className="h-4 w-4" />
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-background z-[100]">
-                    <DropdownMenuItem onClick={() => { setProtocolFilter('all'); setCurrentPage(1); }}>
-                      {t("allProtocols") || "All Protocols"}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    {uniqueProtocols.map((protocol) => (
-                      <DropdownMenuItem 
-                        key={protocol} 
-                        onClick={() => { setProtocolFilter(protocol); setCurrentPage(1); }}
-                      >
-                        {protocol}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[280px] p-4" align="start" sideOffset={5}>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <Label className="text-sm font-medium">{t("protocol")}</Label>
+                        <Select 
+                          value={protocolFilter} 
+                          onValueChange={(value) => { 
+                            setProtocolFilter(value); 
+                            setCurrentPage(1); 
+                          }}
+                        >
+                          <SelectTrigger className="w-[160px] h-9">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">{t("allProtocols") || "All Protocols"}</SelectItem>
+                            {availableProtocols.map((protocol) => (
+                              <SelectItem key={protocol} value={protocol}>
+                                {protocol}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      {protocolFilter !== 'all' && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full"
+                          onClick={handleResetSort}
+                        >
+                          <X className="h-4 w-4 mr-2" />
+                          {t("reset") || "Reset"}
+                        </Button>
+                      )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
                 <Button 
                   variant="outline" 
                   size="icon"
@@ -402,7 +441,7 @@ const Devices = () => {
                 </Button>
               </div>
 
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="default" disabled={selectedDevices.length === 0}>
                     {t("actions") || "Actions"}
@@ -542,7 +581,7 @@ const Devices = () => {
                     <SelectTrigger className="w-[70px] h-9">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="min-w-[70px] z-[100]" align="start">
+                    <SelectContent className="min-w-[70px]" align="start" side="top">
                       <SelectItem value="10">10</SelectItem>
                       <SelectItem value="20">20</SelectItem>
                       <SelectItem value="50">50</SelectItem>
@@ -794,6 +833,13 @@ const Devices = () => {
                       <SelectItem value="MQTT">MQTT</SelectItem>
                       <SelectItem value="HTTP">HTTP</SelectItem>
                       <SelectItem value="CoAP">CoAP</SelectItem>
+                      <SelectItem value="WebSocket">WebSocket</SelectItem>
+                      <SelectItem value="LoRaWAN">LoRaWAN</SelectItem>
+                      <SelectItem value="BLE">BLE</SelectItem>
+                      <SelectItem value="ZigBee">ZigBee</SelectItem>
+                      <SelectItem value="OPC-UA">OPC-UA</SelectItem>
+                      <SelectItem value="LTE">LTE</SelectItem>
+                      <SelectItem value="5G">5G</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

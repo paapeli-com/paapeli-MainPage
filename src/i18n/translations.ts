@@ -215,6 +215,7 @@ export const translations = {
     confirmDelete: "Confirm Delete",
     confirmDeleteMessage: "Are you sure you want to delete the selected device(s)? This action cannot be undone.",
     allProtocols: "All Protocols",
+    reset: "Reset",
     
     // 404 Page
     pageNotFound: "Page Not Found",
@@ -440,6 +441,7 @@ export const translations = {
     confirmDelete: "تأكيد الحذف",
     confirmDeleteMessage: "هل أنت متأكد من حذف الأجهزة المحددة؟ لا يمكن التراجع عن هذا الإجراء.",
     allProtocols: "جميع البروتوكولات",
+    reset: "إعادة تعيين",
     
     // 404 Page
     pageNotFound: "الصفحة غير موجودة",
