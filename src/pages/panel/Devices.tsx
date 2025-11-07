@@ -356,7 +356,7 @@ const Devices = () => {
             </div>
             <Button 
               onClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}
-              className="bg-[#00BCD4] hover:bg-[#00ACC1] gap-1"
+              className="bg-[#00BCD4] hover:bg-[#00ACC1] gap-1 px-6"
             >
               <Plus className="h-4 w-4" />
               {t("add")}
@@ -389,7 +389,7 @@ const Devices = () => {
                       <ArrowUpDown className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[280px] p-4" align="start" sideOffset={5}>
+                  <PopoverContent className="w-[280px] p-4" align="start" sideOffset={5} avoidCollisions={false}>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between gap-3">
                         <Label className="text-sm font-medium">{t("protocol")}</Label>
@@ -397,20 +397,21 @@ const Devices = () => {
                           value={protocolFilter} 
                           onValueChange={(value) => { 
                             setProtocolFilter(value); 
-                            setCurrentPage(1); 
+                            setCurrentPage(1);
+                            setSortPopoverOpen(false);
                           }}
                         >
                           <SelectTrigger className="w-[160px] h-9">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">{t("allProtocols") || "All Protocols"}</SelectItem>
-                            {availableProtocols.map((protocol) => (
-                              <SelectItem key={protocol} value={protocol}>
-                                {protocol}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
+                    <SelectContent side="bottom" align="end" sideOffset={4} avoidCollisions={false}>
+                      <SelectItem value="all">{t("allProtocols") || "All Protocols"}</SelectItem>
+                      {availableProtocols.map((protocol) => (
+                        <SelectItem key={protocol} value={protocol}>
+                          {protocol}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                         </Select>
                       </div>
                       {protocolFilter !== 'all' && (
@@ -581,7 +582,7 @@ const Devices = () => {
                     <SelectTrigger className="w-[70px] h-9">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="min-w-[70px]" align="start" side="top">
+                    <SelectContent className="min-w-[70px]" align="start" side="top" avoidCollisions={false}>
                       <SelectItem value="10">10</SelectItem>
                       <SelectItem value="20">20</SelectItem>
                       <SelectItem value="50">50</SelectItem>
