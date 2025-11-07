@@ -170,6 +170,8 @@ export const translations = {
     apiKeyWarning: "This API key will only be shown once. Make sure to copy and save it in a secure location.",
     iHaveSavedTheCredentials: "I Have Saved the Credentials",
     addYourFirstDevice: "Add Your First Device",
+    encryptConnectionWithSSL: "Encrypt connection with SSL",
+    mqttConnectionCode: "MQTT Connection Code",
     
     // 404 Page
     pageNotFound: "Page Not Found",
@@ -350,6 +352,8 @@ export const translations = {
     apiKeyWarning: "سيتم عرض مفتاح API هذا مرة واحدة فقط. تأكد من نسخه وحفظه في مكان آمن.",
     iHaveSavedTheCredentials: "لقد حفظت البيانات",
     addYourFirstDevice: "أضف جهازك الأول",
+    encryptConnectionWithSSL: "تشفير الاتصال باستخدام SSL",
+    mqttConnectionCode: "كود اتصال MQTT",
     
     // 404 Page
     pageNotFound: "الصفحة غير موجودة",

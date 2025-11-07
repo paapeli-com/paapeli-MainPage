@@ -172,3 +172,10 @@ html[lang="en"] body {
   padding-left: 1rem;
   padding-right: 0;
 }
+
+/* Fix dropdown background and z-index */
+[role="listbox"],
+[data-radix-select-content] {
+  background: hsl(var(--background)) !important;
+  z-index: 50 !important;
+}

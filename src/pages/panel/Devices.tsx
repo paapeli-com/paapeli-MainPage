@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -37,6 +38,8 @@ interface DeviceCredentials {
   deviceId: string;
   apiKey: string;
   name: string;
+  protocol: string;
+  useSsl: boolean;
 }
 
 const Devices = () => {
@@ -55,6 +58,7 @@ const Devices = () => {
   const [deviceName, setDeviceName] = useState("");
   const [protocol, setProtocol] = useState("MQTT");
   const [label, setLabel] = useState("");
+  const [useSsl, setUseSsl] = useState(false);
 
   useEffect(() => {
     if (session) {
@@ -129,6 +133,7 @@ const Devices = () => {
           name: deviceName,
           protocol: protocol,
           label: label || undefined,
+          useSsl: useSsl,
         }),
       });
 
@@ -144,6 +149,8 @@ const Devices = () => {
         deviceId: newDevice.deviceId || newDevice.id,
         apiKey: newDevice.apiKey || newDevice.key,
         name: deviceName,
+        protocol: protocol,
+        useSsl: useSsl,
       });
       setCredentialsDialogOpen(true);
 
@@ -151,6 +158,7 @@ const Devices = () => {
       setDeviceName("");
       setProtocol("MQTT");
       setLabel("");
+      setUseSsl(false);
       setAddPanelOpen(false);
       
       // Refresh devices list
@@ -373,6 +381,24 @@ const Devices = () => {
                 </div>
               </div>
 
+              {/* MQTT Connection Code */}
+              {newDeviceCredentials.protocol === "MQTT" && (
+                <div className="space-y-2 mt-4">
+                  <Label className="text-sm font-semibold">{t("mqttConnectionCode")}</Label>
+                  <div className="bg-muted rounded-lg p-4 font-mono text-xs space-y-1 overflow-x-auto">
+                    <div>mqtt_server = "mqtt.paapeli.com";</div>
+                    <div>mqtt_port = {newDeviceCredentials.useSsl ? "8883" : "1883"};</div>
+                    <div>mqtt_client_id = "Your Favoriot name";</div>
+                    <div>const char* mqtt_user = "";</div>
+                    <div>const char* mqtt_pass = "{newDeviceCredentials.apiKey}"</div>
+                    <div>device_id = "{newDeviceCredentials.deviceId}";</div>
+                    <div className="pt-2 border-t border-border mt-2">
+                      Topic Address: api.paapeli.com/api/v1/telemetry/{newDeviceCredentials.deviceId}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg p-4 mt-4">
                 <p className="text-sm text-amber-800 dark:text-amber-200">
                   ⚠️ {t("apiKeyWarning")}
@@ -457,6 +483,16 @@ const Devices = () => {
                       onChange={(e) => setLabel(e.target.value)}
                       placeholder={t("enterLabel")}
                     />
+                  </div>
+                  <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                    <Checkbox 
+                      id="ssl"
+                      checked={useSsl}
+                      onCheckedChange={(checked) => setUseSsl(checked as boolean)}
+                    />
+                    <Label htmlFor="ssl" className="cursor-pointer">
+                      {t("encryptConnectionWithSSL")}
+                    </Label>
                   </div>
                   <Button 
                     className="w-full bg-[#00BCD4] hover:bg-[#00ACC1]" 
