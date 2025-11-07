@@ -9,7 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { getCognitoErrorMessage } from "@/utils/cognitoErrorMessages";
-import paapeliLogo from "@/assets/paapeli-logo.png";
+import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 const Login = () => {
   const { language, isRTL } = useLanguage();

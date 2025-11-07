@@ -1,7 +1,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import paapeliLogo from "@/assets/paapeli-logo.png";
+import paapeliLogo from "@/assets/paapeli-logo.svg";
 import { ArrowLeft, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

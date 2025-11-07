@@ -1,9 +1,31 @@
-<!--?xml version="1.0" encoding="UTF-8"?-->
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- No background; fully transparent -->
-  <circle cx="18" cy="32" r="8" fill="#FF7A00"></circle>
-  <circle cx="46" cy="20" r="8" fill="#0077B6"></circle>
-  <circle cx="46" cy="44" r="8" fill="#0077B6"></circle>
-  <path d="M25 30 L39 22" stroke="#FF7A00" stroke-width="3" stroke-linecap="round"></path>
-  <path d="M25 34 L39 42" stroke="#FF7A00" stroke-width="3" stroke-linecap="round"></path>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="topGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="leftGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EE5A6F;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="rightGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#4FACFE;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00BCD4;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <line x1="256" y1="140" x2="160" y2="340" stroke="url(#leftGrad)" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+  <line x1="256" y1="140" x2="352" y2="340" stroke="url(#rightGrad)" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+  <line x1="160" y1="340" x2="352" y2="340" stroke="url(#rightGrad)" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+  
+  <circle cx="256" cy="140" r="60" fill="url(#topGrad)" filter="url(#glow)"/>
+  <circle cx="160" cy="340" r="60" fill="url(#leftGrad)" filter="url(#glow)"/>
+  <circle cx="352" cy="340" r="60" fill="url(#rightGrad)" filter="url(#glow)"/>
 </svg>

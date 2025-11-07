@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import paapeliLogo from "@/assets/paapeli-logo.png";
+import paapeliLogo from "@/assets/paapeli-logo.svg";
 import { AlertCircle, ArrowLeft } from "lucide-react";
 
 const AuthError = () => {

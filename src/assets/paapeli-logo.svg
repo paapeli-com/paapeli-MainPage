@@ -1,21 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF7A00"></stop>
-      <stop offset="100%" stop-color="#FFB347"></stop>
-    </linearGradient>
-    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0077B6"></stop>
-      <stop offset="100%" stop-color="#00B4D8"></stop>
-    </linearGradient>
+    <radialGradient id="topGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="leftGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EE5A6F;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="rightGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#4FACFE;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00BCD4;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-
-  <!-- Top Left -->
-  <ellipse cx="65" cy="65" rx="40" ry="28" fill="url(#grad-orange)" transform="rotate(-25 65 65)"></ellipse>
-  <!-- Top Right -->
-  <ellipse cx="135" cy="65" rx="40" ry="28" fill="url(#grad-orange)" transform="rotate(25 135 65)"></ellipse>
-  <!-- Bottom Left -->
-  <ellipse cx="65" cy="135" rx="40" ry="28" fill="url(#grad-blue)" transform="rotate(25 65 135)"></ellipse>
-  <!-- Bottom Right -->
-  <ellipse cx="135" cy="135" rx="40" ry="28" fill="url(#grad-orange)" transform="rotate(-25 135 135)"></ellipse>
+  
+  <line x1="256" y1="140" x2="160" y2="340" stroke="url(#leftGradient)" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+  <line x1="256" y1="140" x2="352" y2="340" stroke="url(#rightGradient)" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+  <line x1="160" y1="340" x2="352" y2="340" stroke="url(#rightGradient)" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+  
+  <circle cx="256" cy="140" r="60" fill="url(#topGradient)" filter="url(#glow)"/>
+  <circle cx="160" cy="340" r="60" fill="url(#leftGradient)" filter="url(#glow)"/>
+  <circle cx="352" cy="340" r="60" fill="url(#rightGradient)" filter="url(#glow)"/>
 </svg>

@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getCognitoErrorMessage } from "@/utils/cognitoErrorMessages";
-import paapeliLogo from "@/assets/paapeli-logo.png";
+import paapeliLogo from "@/assets/paapeli-logo.svg";
 
 const ForgotPassword = () => {
   const [email, setEmail] = React.useState("");
