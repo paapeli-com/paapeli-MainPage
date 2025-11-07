@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus } from "lucide-react";
+import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, RefreshCw } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/contexts/AuthContext";
@@ -64,6 +64,7 @@ const Devices = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingDevices, setIsLoadingDevices] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [credentialsDialogOpen, setCredentialsDialogOpen] = useState(false);
   const [newDeviceCredentials, setNewDeviceCredentials] = useState<DeviceCredentials | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
@@ -84,8 +85,13 @@ const Devices = () => {
     }
   }, [session]);
 
-  const fetchDevices = async () => {
-    setIsLoadingDevices(true);
+  const fetchDevices = async (showRefreshToast = false) => {
+    if (showRefreshToast) {
+      setIsRefreshing(true);
+    } else {
+      setIsLoadingDevices(true);
+    }
+    
     try {
       const accessToken = session?.getAccessToken().getJwtToken();
       if (!accessToken) return;
@@ -106,11 +112,19 @@ const Devices = () => {
           return dateB - dateA;
         });
         setDevices(sortedData);
+        
+        if (showRefreshToast) {
+          toast({
+            title: t("success"),
+            description: t("devicesRefreshed"),
+          });
+        }
       }
     } catch (error) {
       console.error("Failed to fetch devices:", error);
     } finally {
       setIsLoadingDevices(false);
+      setIsRefreshing(false);
     }
   };
 
@@ -287,6 +301,14 @@ const Devices = () => {
               </Button>
               <Button variant="outline" size="icon">
                 <LayoutGrid className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => fetchDevices(true)}
+                disabled={isRefreshing}
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
             </div>
 

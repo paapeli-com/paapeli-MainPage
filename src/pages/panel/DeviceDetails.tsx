@@ -109,24 +109,20 @@ const DeviceDetails = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
-        <div className="flex items-center justify-center h-screen">
-          <LoadingSpinner size="lg" />
-        </div>
+      <div className="flex items-center justify-center py-12">
+        <LoadingSpinner size="lg" />
       </div>
     );
   }
 
   if (!device) {
     return (
-      <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
-        <div className="flex flex-col items-center justify-center h-screen gap-4">
-          <p className="text-muted-foreground">{t("deviceNotFound")}</p>
-          <Button onClick={() => navigate("/panel/devices")}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            {t("backToDevices")}
-          </Button>
-        </div>
+      <div className="flex flex-col items-center justify-center py-12 gap-4">
+        <p className="text-muted-foreground">{t("deviceNotFound")}</p>
+        <Button onClick={() => navigate("/panel/devices")}>
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          {t("backToDevices")}
+        </Button>
       </div>
     );
   }
@@ -137,126 +133,106 @@ const DeviceDetails = () => {
   const displayIsGateway = device.isGateway || device.is_gateway || false;
 
   return (
-    <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
-      {/* Header */}
-      <div className="bg-secondary text-white">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/panel/devices")}
-              className="text-white hover:bg-white/20"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="text-2xl font-semibold">{device.name}</h1>
-              <p className="text-sm text-white/80">{t("deviceDetails")}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white hover:bg-white/20"
-            >
-              <HelpCircle className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/panel/devices")}
-              className="text-white hover:bg-white/20"
-            >
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="border-b border-white/20">
-          <div className="flex gap-0">
-            <button
-              onClick={() => setActiveTab("details")}
-              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
-                activeTab === "details"
-                  ? "border-white text-white"
-                  : "border-transparent text-white/70 hover:text-white/90"
-              }`}
-            >
-              {t("details")}
-            </button>
-            <button
-              onClick={() => setActiveTab("attributes")}
-              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
-                activeTab === "attributes"
-                  ? "border-white text-white"
-                  : "border-transparent text-white/70 hover:text-white/90"
-              }`}
-            >
-              {t("attributes")}
-            </button>
-            <button
-              onClick={() => setActiveTab("telemetry")}
-              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
-                activeTab === "telemetry"
-                  ? "border-white text-white"
-                  : "border-transparent text-white/70 hover:text-white/90"
-              }`}
-            >
-              {t("latestTelemetry")}
-            </button>
-            <button
-              onClick={() => setActiveTab("calculated")}
-              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
-                activeTab === "calculated"
-                  ? "border-white text-white"
-                  : "border-transparent text-white/70 hover:text-white/90"
-              }`}
-            >
-              {t("calculatedFields")}
-            </button>
-            <button
-              onClick={() => setActiveTab("alarms")}
-              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
-                activeTab === "alarms"
-                  ? "border-white text-white"
-                  : "border-transparent text-white/70 hover:text-white/90"
-              }`}
-            >
-              {t("alarms")}
-            </button>
-            <button
-              onClick={() => setActiveTab("events")}
-              className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
-                activeTab === "events"
-                  ? "border-white text-white"
-                  : "border-transparent text-white/70 hover:text-white/90"
-              }`}
-            >
-              {t("events")}
-            </button>
+    <div className="space-y-6">
+      {/* Header with Back Button */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => navigate("/panel/devices")}
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-semibold text-foreground">{device.name}</h1>
+            <p className="text-sm text-muted-foreground">{t("deviceDetails")}</p>
           </div>
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="border-b border-border">
+        <div className="flex gap-0">
+          <button
+            onClick={() => setActiveTab("details")}
+            className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+              activeTab === "details"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t("details")}
+          </button>
+          <button
+            onClick={() => setActiveTab("attributes")}
+            className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+              activeTab === "attributes"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t("attributes")}
+          </button>
+          <button
+            onClick={() => setActiveTab("telemetry")}
+            className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+              activeTab === "telemetry"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t("latestTelemetry")}
+          </button>
+          <button
+            onClick={() => setActiveTab("calculated")}
+            className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+              activeTab === "calculated"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t("calculatedFields")}
+          </button>
+          <button
+            onClick={() => setActiveTab("alarms")}
+            className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+              activeTab === "alarms"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t("alarms")}
+          </button>
+          <button
+            onClick={() => setActiveTab("events")}
+            className={`px-6 py-3 text-sm font-medium transition-all border-b-2 ${
+              activeTab === "events"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t("events")}
+          </button>
+        </div>
+      </div>
+
       {/* Content */}
-      <div className="p-6 bg-muted/30">
+      <div className="space-y-6">
         {activeTab === "details" && (
           <div className="space-y-6">
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3">
-              <Button className="bg-secondary hover:bg-secondary/90 text-white">
+              <Button>
                 {t("openDetailsPage")}
               </Button>
-              <Button className="bg-secondary hover:bg-secondary/90 text-white">
+              <Button>
                 {t("manageCredentials")}
               </Button>
-              <Button className="bg-secondary hover:bg-secondary/90 text-white">
+              <Button>
                 {t("manageOwnerAndGroups")}
               </Button>
-              <Button className="bg-secondary hover:bg-secondary/90 text-white">
+              <Button>
                 {t("checkConnectivity")}
               </Button>
             </div>
