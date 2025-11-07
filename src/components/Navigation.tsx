@@ -18,7 +18,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Settings, LogOut } from "lucide-react";
-import paapeliLogo from "@/assets/paapeli-logo.svg";
+import paapeliLogo from "@/assets/paapeli-logo.png";
 
 export const Navigation = () => {
   const { t, isRTL, language } = useLanguage();

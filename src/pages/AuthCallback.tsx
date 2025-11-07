@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { CognitoUserPool, CognitoUser } from 'amazon-cognito-identity-js';
-import paapeliLogo from "@/assets/paapeli-logo.svg";
+import paapeliLogo from "@/assets/paapeli-logo.png";
 import { toast } from "sonner";
 
 const REGION = 'me-central-1';

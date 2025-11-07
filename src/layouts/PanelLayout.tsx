@@ -28,7 +28,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import paapeliLogo from "@/assets/paapeli-logo.svg";
+import paapeliLogo from "@/assets/paapeli-logo.png";
 
 interface MenuItem {
   title: string;
