@@ -30,10 +30,15 @@ import {
 interface Device {
   id: string;
   name: string;
-  deviceId: string;
+  deviceId?: string;
+  device_id?: string;
   protocol: string;
-  lastActivity: string;
-  createdAt: string;
+  lastActivity?: string;
+  last_activity?: string;
+  createdAt?: string;
+  created_at?: string;
+  updatedAt?: string;
+  updated_at?: string;
 }
 
 interface DeviceCredentials {
@@ -56,6 +61,10 @@ const Devices = () => {
   const [credentialsDialogOpen, setCredentialsDialogOpen] = useState(false);
   const [newDeviceCredentials, setNewDeviceCredentials] = useState<DeviceCredentials | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [wizardStep, setWizardStep] = useState<'template' | 'details'>('template');
+  const [selectedTemplate, setSelectedTemplate] = useState<'blank' | null>(null);
   
   // Form state
   const [deviceName, setDeviceName] = useState("");
@@ -82,7 +91,13 @@ const Devices = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setDevices(data);
+        // Sort by creation date, newest first
+        const sortedData = data.sort((a: Device, b: Device) => {
+          const dateA = new Date(a.created_at || a.createdAt || 0).getTime();
+          const dateB = new Date(b.created_at || b.createdAt || 0).getTime();
+          return dateB - dateA;
+        });
+        setDevices(sortedData);
       }
     } catch (error) {
       console.error("Failed to fetch devices:", error);
@@ -195,32 +210,60 @@ const Devices = () => {
     }
   };
 
-  const filteredDevices = devices.filter(device => 
-    device.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    device.deviceId.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredDevices = devices.filter(device => {
+    const deviceId = device.deviceId || device.device_id || '';
+    return device.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      deviceId.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredDevices.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedDevices = filteredDevices.slice(startIndex, endIndex);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const handleItemsPerPageChange = (value: string) => {
+    setItemsPerPage(Number(value));
+    setCurrentPage(1);
+  };
+
+  const resetAddDeviceForm = () => {
+    setDeviceName("");
+    setProtocol("MQTT");
+    setLabel("");
+    setUseSsl(false);
+    setWizardStep('template');
+    setSelectedTemplate(null);
+  };
 
   return (
-    <PanelLayout pageTitle={t("devices")} onAddClick={() => setAddPanelOpen(true)}>
+    <PanelLayout pageTitle={t("devices")} onAddClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}>
       <div className="space-y-6">
-        {/* Stats Card */}
+        {/* Main Card with Stats, Search and Table */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
             <CardTitle className="text-2xl font-bold">{devices.length} {t("devices")}</CardTitle>
             <Smartphone className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
-        </Card>
-
-        {/* Search and Filter Bar */}
-        <Card>
+          
           <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
+            {/* Search and Filter Bar */}
+            <div className="flex items-center gap-4 mb-6">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder={t("search")}
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="pl-9"
                 />
               </div>
@@ -231,12 +274,8 @@ const Devices = () => {
                 <LayoutGrid className="h-4 w-4" />
               </Button>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Devices Table */}
-        <Card>
-          <CardContent className="pt-6">
+            {/* Devices Table */}
             {devices.length === 0 ? (
               <div className="space-y-6">
                 <Table>
@@ -255,11 +294,11 @@ const Devices = () => {
                   </TableHeader>
                   <TableBody>
                     <TableRow>
-                      <TableCell colSpan={6} className="h-32">
+                      <TableCell colSpan={7} className="h-32">
                         <div className="flex flex-col items-center justify-center gap-4">
                           <Smartphone className="h-12 w-12 text-muted-foreground/50" />
                           <Button 
-                            onClick={() => setAddPanelOpen(true)}
+                            onClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}
                             className="bg-[#00BCD4] hover:bg-[#00ACC1]"
                           >
                             <Plus className="h-4 w-4 mr-2" />
@@ -291,52 +330,79 @@ const Devices = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                {filteredDevices.map((device) => (
-                    <TableRow 
-                      key={device.id}
-                      className="cursor-pointer hover:bg-accent/50"
-                      onClick={() => navigate(`/panel/devices/${device.deviceId}`)}
-                    >
-                      <TableCell onClick={(e) => e.stopPropagation()}>
-                        <input type="checkbox" className="rounded border-input" />
-                      </TableCell>
-                      <TableCell className="font-medium">{device.name}</TableCell>
-                      <TableCell className="font-mono text-sm">{device.deviceId}</TableCell>
-                      <TableCell>{device.protocol}</TableCell>
-                      <TableCell>{device.lastActivity || "-"}</TableCell>
-                      <TableCell>{device.createdAt}</TableCell>
-                      <TableCell onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="sm">⋮</Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {paginatedDevices.map((device) => {
+                    const deviceId = device.deviceId || device.device_id || '';
+                    const createdAt = device.created_at || device.createdAt;
+                    const lastActivity = device.last_activity || device.lastActivity;
+                    const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString() : '-';
+                    const formattedActivity = lastActivity ? new Date(lastActivity).toLocaleString() : '-';
+                    
+                    return (
+                      <TableRow 
+                        key={device.id}
+                        className="cursor-pointer hover:bg-accent/50"
+                        onClick={() => navigate(`/panel/devices/${deviceId}`)}
+                      >
+                        <TableCell onClick={(e) => e.stopPropagation()}>
+                          <input type="checkbox" className="rounded border-input" />
+                        </TableCell>
+                        <TableCell className="font-medium">{device.name}</TableCell>
+                        <TableCell className="font-mono text-sm">{deviceId}</TableCell>
+                        <TableCell>{device.protocol}</TableCell>
+                        <TableCell>{formattedActivity}</TableCell>
+                        <TableCell>{formattedDate}</TableCell>
+                        <TableCell onClick={(e) => e.stopPropagation()}>
+                          <Button variant="ghost" size="sm">⋮</Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             )}
             
             {/* Pagination */}
-            <div className="flex items-center justify-between mt-4 pt-4 border-t">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">{t("devicesPerPage")}</span>
-                <Select defaultValue="10">
-                  <SelectTrigger className="w-[70px] h-9">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="min-w-[70px]" sideOffset={5}>
-                    <SelectItem value="10">10</SelectItem>
-                    <SelectItem value="20">20</SelectItem>
-                    <SelectItem value="50">50</SelectItem>
-                  </SelectContent>
-                </Select>
+            {filteredDevices.length > 0 && (
+              <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">{t("devicesPerPage")}</span>
+                  <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
+                    <SelectTrigger className="w-[70px] h-9">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="min-w-[70px]" sideOffset={5}>
+                      <SelectItem value="10">10</SelectItem>
+                      <SelectItem value="20">20</SelectItem>
+                      <SelectItem value="50">50</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {startIndex + 1} - {Math.min(endIndex, filteredDevices.length)} {t("of")} {filteredDevices.length}
+                </div>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    ‹
+                  </Button>
+                  <span className="flex items-center px-3 text-sm">
+                    {currentPage} / {totalPages}
+                  </span>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    ›
+                  </Button>
+                </div>
               </div>
-              <div className="text-sm text-muted-foreground">
-                1 - {filteredDevices.length} {t("of")} {devices.length}
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" disabled>‹</Button>
-                <Button variant="outline" size="sm" disabled>›</Button>
-              </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -449,86 +515,160 @@ const Devices = () => {
       </Dialog>
 
       {/* Add Device Sheet */}
-      <Sheet open={addPanelOpen} onOpenChange={setAddPanelOpen}>
-        <SheetContent className="w-full sm:max-w-[540px]">
+      <Sheet open={addPanelOpen} onOpenChange={(open) => { setAddPanelOpen(open); if (!open) resetAddDeviceForm(); }}>
+        <SheetContent className="w-full sm:max-w-[540px] overflow-y-auto">
           <SheetHeader className="bg-[#00BCD4] text-white -mx-6 -mt-6 px-6 py-4 mb-6">
             <SheetTitle className="text-white text-xl">{t("createNewDevice")}</SheetTitle>
           </SheetHeader>
           
-          <div className="space-y-6">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder={t("search")} className="pl-9" />
-              <Button variant="ghost" size="icon" className="absolute right-0 top-0">
-                <Filter className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Blank Device Card */}
-            <Card className="border-2 border-[#00BCD4]">
-              <CardContent className="pt-6">
-                <div className="flex gap-4">
-                  <div className="h-16 w-16 bg-[#00BCD4] rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Smartphone className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-[#00BCD4] mb-1">{t("blankDevice")}</h3>
-                    <p className="text-sm text-muted-foreground">{t("blankDeviceDesc")}</p>
-                  </div>
-                </div>
+          {wizardStep === 'template' ? (
+            <div className="space-y-6">
+              {/* Template Selection */}
+              <div>
+                <h3 className="text-sm font-semibold mb-3">{t("selectDeviceTemplate")}</h3>
                 
-                <div className="space-y-4 mt-6">
-                  <div>
-                    <Label>{t("name")}:</Label>
-                    <Input 
-                      value={deviceName}
-                      onChange={(e) => setDeviceName(e.target.value)}
-                      placeholder={t("enterDeviceName")}
-                    />
-                  </div>
-                  <div>
-                    <Label>{t("protocol")}:</Label>
-                    <Select value={protocol} onValueChange={setProtocol}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="MQTT">MQTT</SelectItem>
-                        <SelectItem value="HTTP">HTTP</SelectItem>
-                        <SelectItem value="CoAP">CoAP</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>{t("label")}:</Label>
-                    <Input 
-                      value={label}
-                      onChange={(e) => setLabel(e.target.value)}
-                      placeholder={t("enterLabel")}
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                    <Checkbox 
-                      id="ssl"
-                      checked={useSsl}
-                      onCheckedChange={(checked) => setUseSsl(checked as boolean)}
-                    />
-                    <Label htmlFor="ssl" className="cursor-pointer">
-                      {t("encryptConnectionWithSSL")}
-                    </Label>
-                  </div>
-                  <Button 
-                    className="w-full bg-[#00BCD4] hover:bg-[#00ACC1]" 
-                    onClick={handleAddDevice}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? t("adding") : t("add")}
-                  </Button>
+                {/* Blank Device Card */}
+                <Card 
+                  className={`border-2 cursor-pointer transition-all ${selectedTemplate === 'blank' ? 'border-[#00BCD4] bg-[#00BCD4]/5' : 'border-border hover:border-[#00BCD4]/50'}`}
+                  onClick={() => setSelectedTemplate('blank')}
+                >
+                  <CardContent className="pt-6">
+                    <div className="flex gap-4">
+                      <div className="h-16 w-16 bg-[#00BCD4] rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Smartphone className="h-8 w-8 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-lg font-semibold text-[#00BCD4] mb-1">{t("blankDevice")}</h4>
+                        <p className="text-sm text-muted-foreground">{t("blankDeviceDesc")}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Example Devices Section */}
+              <div>
+                <h3 className="text-sm font-semibold mb-3">{t("exampleDevices")}</h3>
+                <div className="space-y-3">
+                  <Card className="border-2 border-border opacity-50 cursor-not-allowed">
+                    <CardContent className="pt-4 pb-4">
+                      <div className="flex gap-3 items-center">
+                        <div className="h-12 w-12 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Smartphone className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">ESP32 Template</p>
+                          <p className="text-xs text-muted-foreground">{t("comingSoon")}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border-2 border-border opacity-50 cursor-not-allowed">
+                    <CardContent className="pt-4 pb-4">
+                      <div className="flex gap-3 items-center">
+                        <div className="h-12 w-12 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Smartphone className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">Arduino Template</p>
+                          <p className="text-xs text-muted-foreground">{t("comingSoon")}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+
+              {/* Navigation Buttons */}
+              <div className="flex gap-3 pt-4">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => { setAddPanelOpen(false); resetAddDeviceForm(); }}
+                >
+                  {t("cancel")}
+                </Button>
+                <Button 
+                  className="flex-1 bg-[#00BCD4] hover:bg-[#00ACC1]"
+                  disabled={!selectedTemplate}
+                  onClick={() => setWizardStep('details')}
+                >
+                  {t("next")}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Device Details Form */}
+              <div className="space-y-4">
+                <div>
+                  <Label>{t("name")}:</Label>
+                  <Input 
+                    value={deviceName}
+                    onChange={(e) => setDeviceName(e.target.value)}
+                    placeholder={t("enterDeviceName")}
+                    autoFocus
+                  />
+                </div>
+                <div>
+                  <Label>{t("protocol")}:</Label>
+                  <Select value={protocol} onValueChange={setProtocol}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="MQTT">MQTT</SelectItem>
+                      <SelectItem value="HTTP">HTTP</SelectItem>
+                      <SelectItem value="CoAP">CoAP</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>{t("label")}:</Label>
+                  <Input 
+                    value={label}
+                    onChange={(e) => setLabel(e.target.value)}
+                    placeholder={t("enterLabel")}
+                  />
+                </div>
+                <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                  <Checkbox 
+                    id="ssl"
+                    checked={useSsl}
+                    onCheckedChange={(checked) => setUseSsl(checked as boolean)}
+                  />
+                  <Label htmlFor="ssl" className="cursor-pointer">
+                    {t("encryptConnectionWithSSL")}
+                  </Label>
+                </div>
+              </div>
+
+              {/* Navigation Buttons */}
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline"
+                  onClick={() => setWizardStep('template')}
+                >
+                  {t("back")}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => { setAddPanelOpen(false); resetAddDeviceForm(); }}
+                >
+                  {t("cancel")}
+                </Button>
+                <Button 
+                  className="flex-1 bg-[#00BCD4] hover:bg-[#00ACC1]" 
+                  onClick={handleAddDevice}
+                  disabled={isLoading}
+                >
+                  {isLoading ? t("adding") : t("add")}
+                </Button>
+              </div>
+            </div>
+          )}
         </SheetContent>
       </Sheet>
     </PanelLayout>
