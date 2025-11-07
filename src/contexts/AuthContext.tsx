@@ -25,6 +25,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   signOut: (stayOnPage?: boolean) => boolean;
   getCurrentSession: () => Promise<CognitoUserSession | null>;
+  refreshAuthState: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -222,6 +223,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return stayOnPage;
   };
 
+  const refreshAuthState = async () => {
+    try {
+      const cognitoUser = userPool.getCurrentUser();
+      if (cognitoUser) {
+        const currentSession = await getCurrentSession();
+        if (currentSession && currentSession.isValid()) {
+          setUser(cognitoUser);
+          setSession(currentSession);
+        }
+      }
+    } catch (error) {
+      console.error('Auth refresh error:', error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -238,6 +254,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signInWithGoogle,
         signOut,
         getCurrentSession,
+        refreshAuthState,
       }}
     >
       {children}

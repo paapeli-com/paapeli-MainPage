@@ -19,7 +19,7 @@ const userPool = new CognitoUserPool({
 const AuthCallback = () => {
   const navigate = useNavigate();
   const { t, isRTL } = useLanguage();
-  const { getCurrentSession } = useAuth();
+  const { refreshAuthState } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
@@ -83,19 +83,28 @@ const AuthCallback = () => {
         localStorage.setItem(accessTokenKey, tokens.access_token);
         localStorage.setItem(refreshTokenKey, tokens.refresh_token);
 
+        // Create a Cognito user session manually to update auth state immediately
+        const cognitoUser = new CognitoUser({
+          Username: username,
+          Pool: userPool,
+        });
+        
+        // Force a session refresh to update the auth context
+        await refreshAuthState();
+        
         toast.success('Successfully logged in!');
         
         // Check if on panel domain and redirect accordingly
         const hostname = window.location.hostname;
         const isPanelDomain = hostname === 'panel.paapeli.com' || hostname.includes('panel-');
         
+        // Navigate without reload - the auth context will update automatically
         setTimeout(() => {
           if (isPanelDomain) {
-            navigate('/panel/home');
+            navigate('/panel/home', { replace: true });
           } else {
-            navigate('/');
+            navigate('/', { replace: true });
           }
-          window.location.reload(); // Reload to ensure auth state is updated
         }, 500);
         
       } catch (err) {
@@ -109,7 +118,7 @@ const AuthCallback = () => {
     };
 
     handleCallback();
-  }, [navigate, t, getCurrentSession]);
+  }, [navigate, t, refreshAuthState]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center" dir={isRTL ? 'rtl' : 'ltr'}>
