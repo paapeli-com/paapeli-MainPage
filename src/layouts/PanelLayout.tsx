@@ -178,7 +178,9 @@ export const PanelLayout = ({ children, pageTitle, onAddClick }: PanelLayoutProp
   return (
     <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block fixed left-0 top-0 h-full w-64 border-r border-border bg-card z-40">
+      <aside className={`hidden lg:block fixed top-0 h-full w-64 bg-card z-40 ${
+        isRTL ? "right-0 border-l" : "left-0 border-r"
+      } border-border`}>
         <SidebarContent />
       </aside>
 
@@ -190,7 +192,7 @@ export const PanelLayout = ({ children, pageTitle, onAddClick }: PanelLayoutProp
       </Sheet>
 
       {/* Main Content */}
-      <div className="lg:ml-64">
+      <div className={isRTL ? "lg:mr-64" : "lg:ml-64"}>
         {/* Top Bar */}
         <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
           <Button

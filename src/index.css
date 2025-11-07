@@ -161,3 +161,14 @@ html[lang="en"] body {
   direction: ltr;
   text-align: left;
 }
+
+/* RTL fixes for padding and margins */
+[dir="rtl"] .rtl\:pr-4 {
+  padding-right: 1rem;
+  padding-left: 0;
+}
+
+[dir="rtl"] .rtl\:pl-4 {
+  padding-left: 1rem;
+  padding-right: 0;
+}

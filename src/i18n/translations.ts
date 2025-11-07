@@ -169,6 +169,7 @@ export const translations = {
     apiKey: "API Key",
     apiKeyWarning: "This API key will only be shown once. Make sure to copy and save it in a secure location.",
     iHaveSavedTheCredentials: "I Have Saved the Credentials",
+    addYourFirstDevice: "Add Your First Device",
     
     // 404 Page
     pageNotFound: "Page Not Found",
@@ -348,6 +349,7 @@ export const translations = {
     apiKey: "مفتاح API",
     apiKeyWarning: "سيتم عرض مفتاح API هذا مرة واحدة فقط. تأكد من نسخه وحفظه في مكان آمن.",
     iHaveSavedTheCredentials: "لقد حفظت البيانات",
+    addYourFirstDevice: "أضف جهازك الأول",
     
     // 404 Page
     pageNotFound: "الصفحة غير موجودة",

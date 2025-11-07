@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck } from "lucide-react";
+import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -209,7 +209,40 @@ const Devices = () => {
         {/* Devices Table */}
         <Card>
           <CardContent className="pt-6">
-            {filteredDevices.length === 0 ? (
+            {devices.length === 0 ? (
+              <div className="space-y-6">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[50px]">
+                        <input type="checkbox" className="rounded border-input" />
+                      </TableHead>
+                      <TableHead>{t("name")}</TableHead>
+                      <TableHead>{t("deviceId")}</TableHead>
+                      <TableHead>{t("lastActivity")}</TableHead>
+                      <TableHead>{t("createdAt")} ↓</TableHead>
+                      <TableHead className="w-[100px]"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell colSpan={6} className="h-32">
+                        <div className="flex flex-col items-center justify-center gap-4">
+                          <Smartphone className="h-12 w-12 text-muted-foreground/50" />
+                          <Button 
+                            onClick={() => setAddPanelOpen(true)}
+                            className="bg-[#00BCD4] hover:bg-[#00ACC1]"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            {t("addYourFirstDevice")}
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+            ) : filteredDevices.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">{t("noDevicesFound")}</p>
               </div>
