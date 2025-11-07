@@ -28,15 +28,19 @@ import {
 } from "@/components/ui/dialog";
 
 interface Device {
-  id: string;
+  id?: string;
+  _id?: string;
   name: string;
   deviceId?: string;
   device_id?: string;
+  deviceID?: string;
   protocol: string;
   lastActivity?: string;
   last_activity?: string;
+  lastSeen?: string;
   createdAt?: string;
   created_at?: string;
+  created?: string;
   updatedAt?: string;
   updated_at?: string;
 }
@@ -91,10 +95,11 @@ const Devices = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("API Response for devices/me:", data); // Debug log
         // Sort by creation date, newest first
         const sortedData = data.sort((a: Device, b: Device) => {
-          const dateA = new Date(a.created_at || a.createdAt || 0).getTime();
-          const dateB = new Date(b.created_at || b.createdAt || 0).getTime();
+          const dateA = new Date(a.created_at || a.createdAt || a.created || 0).getTime();
+          const dateB = new Date(b.created_at || b.createdAt || b.created || 0).getTime();
           return dateB - dateA;
         });
         setDevices(sortedData);
@@ -211,7 +216,7 @@ const Devices = () => {
   };
 
   const filteredDevices = devices.filter(device => {
-    const deviceId = device.deviceId || device.device_id || '';
+    const deviceId = device.deviceId || device.device_id || device.deviceID || device.id || device._id || '';
     return device.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       deviceId.toLowerCase().includes(searchQuery.toLowerCase());
   });
@@ -331,15 +336,15 @@ const Devices = () => {
                 </TableHeader>
                 <TableBody>
                 {paginatedDevices.map((device) => {
-                    const deviceId = device.deviceId || device.device_id || '';
-                    const createdAt = device.created_at || device.createdAt;
-                    const lastActivity = device.last_activity || device.lastActivity;
+                    const deviceId = device.deviceId || device.device_id || device.deviceID || device.id || device._id || '';
+                    const createdAt = device.created_at || device.createdAt || device.created;
+                    const lastActivity = device.last_activity || device.lastActivity || device.lastSeen;
                     const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString() : '-';
                     const formattedActivity = lastActivity ? new Date(lastActivity).toLocaleString() : '-';
                     
                     return (
                       <TableRow 
-                        key={device.id}
+                        key={device.id || device._id || deviceId}
                         className="cursor-pointer hover:bg-accent/50"
                         onClick={() => navigate(`/panel/devices/${deviceId}`)}
                       >
@@ -347,7 +352,7 @@ const Devices = () => {
                           <input type="checkbox" className="rounded border-input" />
                         </TableCell>
                         <TableCell className="font-medium">{device.name}</TableCell>
-                        <TableCell className="font-mono text-sm">{deviceId}</TableCell>
+                        <TableCell className="font-mono text-sm">{deviceId || '-'}</TableCell>
                         <TableCell>{device.protocol}</TableCell>
                         <TableCell>{formattedActivity}</TableCell>
                         <TableCell>{formattedDate}</TableCell>
@@ -370,7 +375,7 @@ const Devices = () => {
                     <SelectTrigger className="w-[70px] h-9">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="min-w-[70px]" sideOffset={5}>
+                    <SelectContent className="min-w-[70px] z-[100]" align="start">
                       <SelectItem value="10">10</SelectItem>
                       <SelectItem value="20">20</SelectItem>
                       <SelectItem value="50">50</SelectItem>

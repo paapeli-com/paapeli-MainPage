@@ -194,7 +194,7 @@ export const PanelLayout = ({ children, pageTitle, onAddClick }: PanelLayoutProp
       {/* Main Content */}
       <div className={isRTL ? "lg:mr-64" : "lg:ml-64"}>
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
+        <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
           <Button
             variant="ghost"
             size="icon"
