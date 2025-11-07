@@ -15,6 +15,7 @@ import AuthError from "./pages/AuthError";
 import AccountSettings from "./pages/AccountSettings";
 import GoogleSignup from "./pages/GoogleSignup";
 import NotFound from "./pages/NotFound";
+import PanelNotFound from "./pages/panel/PanelNotFound";
 import PanelHome from "./pages/panel/PanelHome";
 import Dashboard from "./pages/panel/Dashboard";
 import Devices from "./pages/panel/Devices";
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="/panel/ota" element={<ProtectedRoute><OTA /></ProtectedRoute>} />
               <Route path="/panel/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
               <Route path="/panel/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
+              <Route path="/panel/*" element={<PanelNotFound />} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

@@ -129,7 +129,15 @@ export const translations = {
     deviceName: "Device Name",
     enterDeviceName: "Enter device name",
     deviceId: "Device ID",
-    enterDeviceId: "Enter device ID"
+    enterDeviceId: "Enter device ID",
+    
+    // 404 Page
+    pageNotFound: "Page Not Found",
+    pageNotFoundDesc: "The page you're looking for doesn't exist or has been moved.",
+    backToHome: "Back to Home",
+    goBack: "Go Back",
+    needHelp: "Need help?",
+    contactSupport: "Contact Support"
   },
   ar: {
     // Hero Section
@@ -261,7 +269,15 @@ export const translations = {
     deviceName: "اسم الجهاز",
     enterDeviceName: "أدخل اسم الجهاز",
     deviceId: "معرف الجهاز",
-    enterDeviceId: "أدخل معرف الجهاز"
+    enterDeviceId: "أدخل معرف الجهاز",
+    
+    // 404 Page
+    pageNotFound: "الصفحة غير موجودة",
+    pageNotFoundDesc: "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    backToHome: "العودة إلى الصفحة الرئيسية",
+    goBack: "رجوع",
+    needHelp: "تحتاج مساعدة؟",
+    contactSupport: "اتصل بالدعم"
   },
 };
 
