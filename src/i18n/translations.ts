@@ -84,7 +84,52 @@ export const translations = {
     contact: "Contact",
     connect: "Connect",
     copyright: "© 2025 Paapeli. All rights reserved.",
-    tagline: "AI-Powered Cloud Platform for IoT and Smart Infrastructure"
+    tagline: "AI-Powered Cloud Platform for IoT and Smart Infrastructure",
+    
+    // Panel
+    panel: "Panel",
+    devices: "Devices",
+    group: "Group",
+    gateways: "Gateways",
+    alarms: "Alarms",
+    solutionTemplates: "Solution Templates",
+    otaUpdate: "Over-the-Air Update (OTA)",
+    members: "Members",
+    devCenter: "Dev Center",
+    add: "Add",
+    
+    // Panel Pages
+    welcomeToPanel: "Welcome to Paapeli Panel",
+    homePanelDesc: "Manage your IoT devices, view analytics, and configure settings from this dashboard.",
+    totalDevices: "Total Devices",
+    activeDevices: "Active Devices",
+    alerts: "Alerts",
+    noDevicesYet: "No devices yet. Click the Add button to connect your first device.",
+    noGroupsYet: "No groups yet. Click the Add button to create your first group.",
+    noGatewaysYet: "No gateways yet. Click the Add button to add your first gateway.",
+    noAlarmsYet: "No alarms yet. Click the Add button to create your first alarm.",
+    noTemplatesYet: "No templates yet. Click the Add button to create your first solution template.",
+    noOTAUpdatesYet: "No OTA updates yet. Click the Add button to upload your first firmware.",
+    noMembersYet: "No members yet. Click the Add button to invite team members.",
+    apiDocumentation: "API Documentation",
+    apiDocDesc: "Access comprehensive API documentation to integrate with Paapeli services.",
+    
+    // Add Forms
+    addNew: "Add New",
+    addDevice: "Add Device",
+    addGroup: "Add Group",
+    addGateway: "Add Gateway",
+    addAlarm: "Add Alarm",
+    addTemplate: "Add Template",
+    addOTAUpdate: "Add OTA Update",
+    addMember: "Add Member",
+    name: "Name",
+    enterName: "Enter name",
+    create: "Create",
+    deviceName: "Device Name",
+    enterDeviceName: "Enter device name",
+    deviceId: "Device ID",
+    enterDeviceId: "Enter device ID"
   },
   ar: {
     // Hero Section
@@ -171,7 +216,52 @@ export const translations = {
     contact: "اتصل بنا",
     connect: "تواصل",
     copyright: "© 2025 باپيلي. جميع الحقوق محفوظة.",
-    tagline: "منصة سحابية مدعومة بالذكاء الاصطناعي لإنترنت الأشياء والبنية التحتية الذكية"
+    tagline: "منصة سحابية مدعومة بالذكاء الاصطناعي لإنترنت الأشياء والبنية التحتية الذكية",
+    
+    // Panel
+    panel: "اللوحة",
+    devices: "الأجهزة",
+    group: "المجموعة",
+    gateways: "البوابات",
+    alarms: "التنبيهات",
+    solutionTemplates: "قوالب الحلول",
+    otaUpdate: "التحديث عن بُعد (OTA)",
+    members: "الأعضاء",
+    devCenter: "مركز المطورين",
+    add: "إضافة",
+    
+    // Panel Pages
+    welcomeToPanel: "مرحبًا بك في لوحة باپيلي",
+    homePanelDesc: "إدارة أجهزة إنترنت الأشياء الخاصة بك، وعرض التحليلات، وتكوين الإعدادات من لوحة التحكم هذه.",
+    totalDevices: "إجمالي الأجهزة",
+    activeDevices: "الأجهزة النشطة",
+    alerts: "التنبيهات",
+    noDevicesYet: "لا توجد أجهزة بعد. انقر فوق زر الإضافة لتوصيل جهازك الأول.",
+    noGroupsYet: "لا توجد مجموعات بعد. انقر فوق زر الإضافة لإنشاء مجموعتك الأولى.",
+    noGatewaysYet: "لا توجد بوابات بعد. انقر فوق زر الإضافة لإضافة بوابتك الأولى.",
+    noAlarmsYet: "لا توجد تنبيهات بعد. انقر فوق زر الإضافة لإنشاء تنبيهك الأول.",
+    noTemplatesYet: "لا توجد قوالب بعد. انقر فوق زر الإضافة لإنشاء قالب الحل الأول الخاص بك.",
+    noOTAUpdatesYet: "لا توجد تحديثات OTA بعد. انقر فوق زر الإضافة لتحميل البرنامج الثابت الأول الخاص بك.",
+    noMembersYet: "لا يوجد أعضاء بعد. انقر فوق زر الإضافة لدعوة أعضاء الفريق.",
+    apiDocumentation: "وثائق API",
+    apiDocDesc: "الوصول إلى وثائق API الشاملة للتكامل مع خدمات باپيلي.",
+    
+    // Add Forms
+    addNew: "إضافة جديد",
+    addDevice: "إضافة جهاز",
+    addGroup: "إضافة مجموعة",
+    addGateway: "إضافة بوابة",
+    addAlarm: "إضافة تنبيه",
+    addTemplate: "إضافة قالب",
+    addOTAUpdate: "إضافة تحديث OTA",
+    addMember: "إضافة عضو",
+    name: "الاسم",
+    enterName: "أدخل الاسم",
+    create: "إنشاء",
+    deviceName: "اسم الجهاز",
+    enterDeviceName: "أدخل اسم الجهاز",
+    deviceId: "معرف الجهاز",
+    enterDeviceId: "أدخل معرف الجهاز"
   },
 };
 

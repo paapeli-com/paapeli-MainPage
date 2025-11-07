@@ -45,7 +45,11 @@ const Index = () => {
               {t('heroSubtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6"
+                onClick={() => window.location.href = 'https://panel.paapeli.com'}
+              >
                 {t('getStarted')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
               </Button>
               <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20 text-lg px-8 py-6">
@@ -189,7 +193,11 @@ const Index = () => {
             />
           </div>
           <div className="text-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              onClick={() => window.location.href = 'https://panel.paapeli.com'}
+            >
               {t('seeLiveDemo')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
             </Button>
           </div>
@@ -206,7 +214,11 @@ const Index = () => {
             {t('ctaSubtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8">
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8"
+              onClick={() => window.location.href = 'https://panel.paapeli.com'}
+            >
               {t('tryDashboard')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
             </Button>
             <Button size="lg" variant="outline" className="text-lg px-8 border-2">
