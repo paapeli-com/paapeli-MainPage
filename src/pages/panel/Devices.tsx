@@ -356,10 +356,9 @@ const Devices = () => {
             </div>
             <Button 
               onClick={() => { setAddPanelOpen(true); resetAddDeviceForm(); }}
-              className="bg-[#00BCD4] hover:bg-[#00ACC1] gap-2 px-8 flex items-center justify-center"
+              className="bg-[#00BCD4] hover:bg-[#00ACC1] gap-0 px-10 h-10 text-base font-medium"
             >
-              <Plus className="h-4 w-4" />
-              {t("add")}
+              +{t("add")}
             </Button>
           </CardHeader>
           
@@ -389,7 +388,7 @@ const Devices = () => {
                       <ArrowUpDown className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[280px] p-4" align="start" sideOffset={5} avoidCollisions={false}>
+                  <PopoverContent className="w-[280px] p-4" side="bottom" align="start" sideOffset={5}>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between gap-3">
                         <Label className="text-sm font-medium">{t("protocol")}</Label>
@@ -404,7 +403,7 @@ const Devices = () => {
                           <SelectTrigger className="w-[160px] h-9">
                             <SelectValue />
                           </SelectTrigger>
-                    <SelectContent side="bottom" align="end" sideOffset={4} avoidCollisions={false}>
+                    <SelectContent side="bottom" align="end" sideOffset={4}>
                       <SelectItem value="all">{t("allProtocols") || "All Protocols"}</SelectItem>
                       {availableProtocols.map((protocol) => (
                         <SelectItem key={protocol} value={protocol}>
@@ -582,7 +581,7 @@ const Devices = () => {
                     <SelectTrigger className="w-[70px] h-9">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="min-w-[70px]" side="bottom" sideOffset={4} avoidCollisions={false}>
+                    <SelectContent className="min-w-[70px]" side="top" align="start" sideOffset={4}>
                       <SelectItem value="10">10</SelectItem>
                       <SelectItem value="20">20</SelectItem>
                       <SelectItem value="50">50</SelectItem>

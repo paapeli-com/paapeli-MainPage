@@ -12,11 +12,6 @@ export const DomainRouter = () => {
                         (hostname === "localhost" && location.pathname.startsWith("/panel"));
 
   useEffect(() => {
-    // Skip redirects during auth callback
-    if (location.pathname === '/auth/callback') {
-      return;
-    }
-
     // For panel domain, redirect root to login or panel home
     if (hostname === "panel.paapeli.com" || hostname.includes("panel-")) {
       if (location.pathname === "/" && !isLoading) {
