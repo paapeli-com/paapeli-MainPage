@@ -47,30 +47,35 @@ interface PanelLayoutProps {
 }
 
 export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, onBackClick }: PanelLayoutProps) => {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, language } = useLanguage();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [devicesOpen, setDevicesOpen] = useState(true);
+  
+  // Helper to add language prefix to paths
+  const getLocalizedPath = (path: string) => {
+    return language === 'en' ? path : `/${language}${path}`;
+  };
 
   const menuItems = [
-    { title: t("home"), icon: Home, path: "/panel/home" },
-    { title: t("dashboard"), icon: LayoutDashboard, path: "/panel/dashboard" },
+    { title: t("home"), icon: Home, path: getLocalizedPath("/panel/home") },
+    { title: t("dashboard"), icon: LayoutDashboard, path: getLocalizedPath("/panel/dashboard") },
     {
       title: t("devices"),
       icon: Smartphone,
       children: [
-        { title: t("devices"), path: "/panel/devices" },
-        { title: t("group"), path: "/panel/devices/group" },
-        { title: t("gateways"), path: "/panel/devices/gateways" },
+        { title: t("devices"), path: getLocalizedPath("/panel/devices") },
+        { title: t("group"), path: getLocalizedPath("/panel/devices/group") },
+        { title: t("gateways"), path: getLocalizedPath("/panel/devices/gateways") },
       ],
     },
-    { title: t("alarms"), icon: Bell, path: "/panel/alarms" },
-    { title: t("solutionTemplates"), icon: FileCode, path: "/panel/solution-templates" },
-    { title: "OTA", subtitle: t("otaUpdate"), icon: Download, path: "/panel/ota" },
-    { title: t("members"), icon: UserCog, path: "/panel/members" },
-    { title: t("devCenter"), icon: Code, path: "/panel/dev-center" },
+    { title: t("alarms"), icon: Bell, path: getLocalizedPath("/panel/alarms") },
+    { title: t("solutionTemplates"), icon: FileCode, path: getLocalizedPath("/panel/solution-templates") },
+    { title: "OTA", subtitle: t("otaUpdate"), icon: Download, path: getLocalizedPath("/panel/ota") },
+    { title: t("members"), icon: UserCog, path: getLocalizedPath("/panel/members") },
+    { title: t("devCenter"), icon: Code, path: getLocalizedPath("/panel/dev-center") },
   ];
 
   const handleLogout = async () => {
@@ -78,7 +83,12 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
     navigate("/login");
   };
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    // Remove language prefix from current path for comparison
+    const currentPath = location.pathname.replace(/^\/(en|ar|fa)/, '');
+    const comparePath = path.replace(/^\/(en|ar|fa)/, '');
+    return currentPath === comparePath;
+  };
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
@@ -178,7 +188,7 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
   );
 
   return (
-    <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
+    <div className="min-h-screen bg-background" data-panel-page dir={isRTL ? "rtl" : "ltr"}>
       {/* Desktop Sidebar */}
       <aside className={`hidden lg:block fixed top-0 h-full w-64 bg-card z-40 ${
         isRTL ? "right-0 border-l" : "left-0 border-r"
