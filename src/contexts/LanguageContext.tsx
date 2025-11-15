@@ -39,10 +39,16 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Sync language from URL params when navigating directly
   useEffect(() => {
-    if (params.lang && ['en', 'ar', 'fa'].includes(params.lang) && params.lang !== language) {
-      setLanguageState(params.lang as Language);
+    const urlLang = params.lang as Language | undefined;
+    if (urlLang && ['en', 'ar', 'fa'].includes(urlLang)) {
+      if (urlLang !== language) {
+        setLanguageState(urlLang);
+      }
+    } else if (!urlLang && language !== 'en') {
+      // If no lang in URL, default to English
+      setLanguageState('en');
     }
-  }, [params.lang]);
+  }, [params.lang, location.pathname]);
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';

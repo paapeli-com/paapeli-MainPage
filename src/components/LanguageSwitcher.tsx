@@ -2,7 +2,7 @@ import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Language } from "@/i18n/translations";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const languages = [
   { code: 'en' as Language, name: 'English', nativeName: 'English' },
@@ -61,16 +61,16 @@ export const LanguageSwitcher = () => {
       >
         <div className="py-1">
           {languages.map((lang) => (
-            <a
+            <Link
               key={lang.code}
-              href={getPathForLanguage(lang.code)}
+              to={getPathForLanguage(lang.code)}
               className={`block w-full text-left px-4 py-2 text-sm hover:bg-accent cursor-pointer ${
                 language === lang.code ? 'bg-primary/10 text-primary font-medium' : ''
               }`}
               hrefLang={lang.code}
             >
               {lang.nativeName}
-            </a>
+            </Link>
           ))}
         </div>
       </div>
