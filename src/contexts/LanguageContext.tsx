@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { translations, Language, TranslationKey } from '@/i18n/translations';
 
 interface LanguageContextType {
@@ -11,10 +12,30 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>(
-    (localStorage.getItem('lang') as Language) || 'en'
-  );
+  const params = useParams<{ lang?: string }>();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const getInitialLanguage = (): Language => {
+    if (params.lang && ['en', 'ar', 'fa'].includes(params.lang)) {
+      return params.lang as Language;
+    }
+    return (localStorage.getItem('lang') as Language) || 'en';
+  };
+
+  const [language, setLanguageState] = useState<Language>(getInitialLanguage());
   const isRTL = language === 'ar' || language === 'fa';
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem('lang', lang);
+    
+    // Update URL with language prefix
+    const currentPath = location.pathname;
+    const pathWithoutLang = currentPath.replace(/^\/(en|ar|fa)/, '');
+    const newPath = lang === 'en' ? (pathWithoutLang || '/') : `/${lang}${pathWithoutLang || ''}`;
+    navigate(newPath, { replace: true });
+  };
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
