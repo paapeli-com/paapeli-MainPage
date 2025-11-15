@@ -37,6 +37,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     navigate(newPath, { replace: true });
   };
 
+  // Sync language from URL params when navigating directly
+  useEffect(() => {
+    if (params.lang && ['en', 'ar', 'fa'].includes(params.lang) && params.lang !== language) {
+      setLanguageState(params.lang as Language);
+    }
+  }, [params.lang]);
+
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
