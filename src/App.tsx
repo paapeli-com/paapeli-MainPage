@@ -41,6 +41,7 @@ const App = () => (
             <DomainRouter />
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/:lang" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/auth/callback" element={<AuthCallback />} />

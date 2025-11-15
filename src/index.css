@@ -135,7 +135,7 @@ html[lang="ar"] body {
 [lang="ar"] a,
 [lang="ar"] small,
 [lang="ar"] div {
-  font-size: 0.94rem;
+  font-size: 0.63rem;
   line-height: 1.85;
   word-spacing: 0.06em;
   letter-spacing: 0.02em;
@@ -146,7 +146,7 @@ html[lang="ar"] body {
 [lang="ar"] h3,
 [lang="ar"] h4,
 [lang="ar"] h5 {
-  font-size: 1.74rem;
+  font-size: 1.16rem;
   letter-spacing: normal;
   word-spacing: normal;
   line-height: 1.5;
@@ -175,7 +175,7 @@ html[lang="fa"] body {
 [lang="fa"] a,
 [lang="fa"] small,
 [lang="fa"] div {
-  font-size: 0.94rem;
+  font-size: 0.63rem;
   line-height: 1.85;
   word-spacing: 0.06em;
   letter-spacing: 0.02em;
@@ -186,7 +186,7 @@ html[lang="fa"] body {
 [lang="fa"] h3,
 [lang="fa"] h4,
 [lang="fa"] h5 {
-  font-size: 1.74rem;
+  font-size: 1.16rem;
   letter-spacing: normal;
   word-spacing: normal;
   line-height: 1.5;
