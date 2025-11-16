@@ -48,19 +48,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     const urlLang = params.lang as Language | undefined;
     if (urlLang && ['en', 'ar', 'fa'].includes(urlLang)) {
-      if (urlLang !== language) {
-        setLanguageState(urlLang);
-        localStorage.setItem('lang', urlLang);
-      }
+      // URL has a valid language - always use it
+      setLanguageState(urlLang);
+      localStorage.setItem('lang', urlLang);
     } else if (!urlLang) {
-      // If no lang in URL, check localStorage
-      const savedLang = localStorage.getItem('lang') as Language;
-      if (savedLang && ['en', 'ar', 'fa'].includes(savedLang) && savedLang !== language) {
-        setLanguageState(savedLang);
-      } else if (!savedLang && language !== 'en') {
-        setLanguageState('en');
-        localStorage.setItem('lang', 'en');
-      }
+      // No language in URL - use English as default
+      setLanguageState('en');
+      localStorage.setItem('lang', 'en');
     }
   }, [params.lang, location.pathname]);
 
