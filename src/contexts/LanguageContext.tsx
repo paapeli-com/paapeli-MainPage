@@ -16,11 +16,18 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const navigate = useNavigate();
   const location = useLocation();
   
+  // Always prioritize URL param over localStorage
   const getInitialLanguage = (): Language => {
+    // First check URL
     if (params.lang && ['en', 'ar', 'fa'].includes(params.lang)) {
       return params.lang as Language;
     }
-    return (localStorage.getItem('lang') as Language) || 'en';
+    // Then check if we're on root without lang param - check localStorage
+    const savedLang = localStorage.getItem('lang') as Language;
+    if (!params.lang && savedLang && ['en', 'ar', 'fa'].includes(savedLang)) {
+      return savedLang;
+    }
+    return 'en';
   };
 
   const [language, setLanguageState] = useState<Language>(getInitialLanguage());
@@ -43,10 +50,17 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (urlLang && ['en', 'ar', 'fa'].includes(urlLang)) {
       if (urlLang !== language) {
         setLanguageState(urlLang);
+        localStorage.setItem('lang', urlLang);
       }
-    } else if (!urlLang && language !== 'en') {
-      // If no lang in URL, default to English
-      setLanguageState('en');
+    } else if (!urlLang) {
+      // If no lang in URL, check localStorage
+      const savedLang = localStorage.getItem('lang') as Language;
+      if (savedLang && ['en', 'ar', 'fa'].includes(savedLang) && savedLang !== language) {
+        setLanguageState(savedLang);
+      } else if (!savedLang && language !== 'en') {
+        setLanguageState('en');
+        localStorage.setItem('lang', 'en');
+      }
     }
   }, [params.lang, location.pathname]);
 

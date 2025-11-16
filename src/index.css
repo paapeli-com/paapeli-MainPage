@@ -249,3 +249,23 @@ html[lang="fa"] body {
   background: hsl(var(--background)) !important;
   z-index: 50 !important;
 }
+
+/* Force LTR for code blocks even in RTL mode */
+[dir="rtl"] code,
+[dir="rtl"] pre,
+[dir="rtl"] pre code,
+[dir="rtl"] .code-block,
+body.rtl code,
+body.rtl pre,
+body.rtl pre code,
+body.rtl .code-block,
+[lang="ar"] code,
+[lang="ar"] pre,
+[lang="ar"] pre code,
+[lang="fa"] code,
+[lang="fa"] pre,
+[lang="fa"] pre code {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: embed !important;
+}
