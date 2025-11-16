@@ -11,13 +11,17 @@ const languages = [
 ];
 
 export const LanguageSwitcher = () => {
-  const { language, isRTL } = useLanguage();
+  const { language, setLanguage, isRTL } = useLanguage();
   const location = useLocation();
   
   // Get path without language prefix for constructing new URLs
   const getPathForLanguage = (lang: Language) => {
     const pathWithoutLang = location.pathname.replace(/^\/(en|ar|fa)/, '');
     return lang === 'en' ? (pathWithoutLang || '/') : `/${lang}${pathWithoutLang || ''}`;
+  };
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
   };
 
   return (
@@ -64,6 +68,7 @@ export const LanguageSwitcher = () => {
             <Link
               key={lang.code}
               to={getPathForLanguage(lang.code)}
+              onClick={() => handleLanguageChange(lang.code)}
               className={`block w-full text-left px-4 py-2 text-sm hover:bg-accent cursor-pointer ${
                 language === lang.code ? 'bg-primary/10 text-primary font-medium' : ''
               }`}
