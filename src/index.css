@@ -250,22 +250,43 @@ html[lang="fa"] body {
   z-index: 50 !important;
 }
 
-/* Force LTR for code blocks even in RTL mode */
+/* Force LTR for code blocks even in RTL mode - CRITICAL for docs */
 [dir="rtl"] code,
 [dir="rtl"] pre,
-[dir="rtl"] pre code,
-[dir="rtl"] .code-block,
+[dir="rtl"] pre *,
+[dir="rtl"] code *,
 body.rtl code,
 body.rtl pre,
-body.rtl pre code,
-body.rtl .code-block,
+body.rtl pre *,
+body.rtl code *,
 [lang="ar"] code,
 [lang="ar"] pre,
-[lang="ar"] pre code,
+[lang="ar"] pre *,
+[lang="ar"] code *,
 [lang="fa"] code,
 [lang="fa"] pre,
-[lang="fa"] pre code {
+[lang="fa"] pre *,
+[lang="fa"] code *,
+html[lang="ar"] code,
+html[lang="ar"] pre,
+html[lang="ar"] pre *,
+html[lang="ar"] code *,
+html[lang="fa"] code,
+html[lang="fa"] pre,
+html[lang="fa"] pre *,
+html[lang="fa"] code * {
   direction: ltr !important;
   text-align: left !important;
-  unicode-bidi: embed !important;
+  unicode-bidi: bidi-override !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+/* Ensure code blocks have proper alignment */
+[dir="rtl"] pre,
+body.rtl pre,
+[lang="ar"] pre,
+[lang="fa"] pre,
+html[lang="ar"] pre,
+html[lang="fa"] pre {
+  text-align: left !important;
 }
