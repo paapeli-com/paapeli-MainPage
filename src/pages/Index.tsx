@@ -10,7 +10,9 @@ import {
   Droplet,
   ArrowRight,
   Github,
-  Linkedin
+  Linkedin,
+  Radio,
+  Network
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -69,7 +71,7 @@ const Index = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-foreground">
             {t('keyFeatures')}
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
             <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
               <Link2 className="h-12 w-12 text-primary mb-4" />
               <h3 className="text-2xl font-bold mb-4 text-foreground">{t('deviceManagement')}</h3>
@@ -89,6 +91,22 @@ const Index = () => {
               <h3 className="text-2xl font-bold mb-4 text-foreground">{t('aiInsights')}</h3>
               <p className="text-muted-foreground">
                 {t('aiInsightsDesc')}
+              </p>
+            </Card>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
+              <Radio className="h-12 w-12 text-secondary mb-4" />
+              <h3 className="text-2xl font-bold mb-4 text-foreground">{t('openProtocols')}</h3>
+              <p className="text-muted-foreground">
+                {t('openProtocolsDesc')}
+              </p>
+            </Card>
+            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
+              <Network className="h-12 w-12 text-primary mb-4" />
+              <h3 className="text-2xl font-bold mb-4 text-foreground">{t('gatewaySupport')}</h3>
+              <p className="text-muted-foreground">
+                {t('gatewaySupportDesc')}
               </p>
             </Card>
           </div>
