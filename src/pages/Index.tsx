@@ -20,7 +20,7 @@ import otaUpdate from "@/assets/ota-update.jpg";
 import dashboardPreview from "@/assets/dashboard-preview.jpg";
 
 const Index = () => {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, language } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -48,7 +48,10 @@ const Index = () => {
               <Button 
                 size="lg" 
                 className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6"
-                onClick={() => window.location.href = 'https://panel.paapeli.com'}
+                onClick={() => {
+                  const langPrefix = language !== 'en' ? `/${language}` : '';
+                  window.location.href = `https://panel.paapeli.com${langPrefix}`;
+                }}
               >
                 {t('getStarted')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
               </Button>

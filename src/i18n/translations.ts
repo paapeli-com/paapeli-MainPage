@@ -2,8 +2,8 @@ export const translations = {
   en: {
     // Hero Section
     heroTitle: "Build, Connect, and Manage IoT Infrastructure Intelligently",
-    heroSubtitle: "Paapeli is an AI-powered IoT cloud that helps you connect devices, collect insights, and control your infrastructure from anywhere.",
-    getStarted: "Get Started",
+    heroSubtitle: "Paapeli is an AI-powered IoT cloud (AIoT) that helps you connect devices, collect insights, and control your infrastructure from anywhere.",
+    getStarted: "Start Free",
     learnMore: "Learn More",
     
     // Features
@@ -228,8 +228,8 @@ export const translations = {
   ar: {
     // Hero Section
     heroTitle: "بناء وربط وإدارة البنية التحتية لإنترنت الأشياء، بذكاء",
-    heroSubtitle: "باپيلي هي سحابة إنترنت الأشياء المدعومة بالذكاء الاصطناعي التي تساعدك على ربط الأجهزة وجمع الرؤى والتحكم في البنية التحتية من أي مكان",
-    getStarted: "ابدأ الآن",
+    heroSubtitle: "باپيلي هي سحابة إنترنت الأشياء المدعومة بالذكاء الاصطناعي (AIoT) التي تساعدك على ربط الأجهزة وجمع الرؤى والتحكم في البنية التحتية من أي مكان",
+    getStarted: "ابدأ مجاناً",
     learnMore: "اعرف المزيد",
     
     // Features
@@ -454,8 +454,8 @@ export const translations = {
   fa: {
     // Hero Section
     heroTitle: "ساخت، اتصال و مدیریت هوشمند زیرساخت‌های اینترنت اشیا",
-    heroSubtitle: "پاپلی یک پلتفرم ابری اینترنت اشیا مبتنی بر هوش مصنوعی است که به شما کمک می‌کند دستگاه‌ها را متصل کنید، بینش‌ها را جمع‌آوری کنید و زیرساخت خود را از هر جا کنترل کنید.",
-    getStarted: "شروع کنید",
+    heroSubtitle: "پاپلی یک پلتفرم ابری اینترنت اشیا مبتنی بر هوش مصنوعی است (AIoT) که به شما کمک می‌کند دستگاه‌ها را متصل کنید، بینش‌ها را جمع‌آوری کنید و زیرساخت خود را از هر جا کنترل کنید.",
+    getStarted: "رایگان شروع کنید",
     learnMore: "بیشتر بدانید",
     
     // Features
