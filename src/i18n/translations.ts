@@ -9,11 +9,15 @@ export const translations = {
     // Features
     keyFeatures: "Key Features",
     deviceManagement: "Device Management",
-    deviceManagementDesc: "Connect and monitor thousands of IoT devices with full telemetry and remote control.",
-    cloudNative: "Cloud-Native Architecture",
-    cloudNativeDesc: "Built on scalable, secure cloud infrastructure — ready for industrial and smart city applications.",
+    deviceManagementDesc: "Connect and monitor thousands of IoT devices with full telemetry and remote control. Add devices simply, with auto-discovery, or in bulk. Manage device lifecycles, configure settings remotely, and ensure seamless operation across your entire IoT infrastructure.",
+    cloudNative: "Cloud-Native & On-Premise",
+    cloudNativeDesc: "Built on scalable, secure cloud infrastructure with flexible deployment options. Choose between cloud-hosted or on-premise installation based on your security and compliance requirements. Both options include automatic updates, billing, accounting, and multi-tenancy support.",
     aiInsights: "AI-Powered Insights",
-    aiInsightsDesc: "Detect anomalies, predict trends, and optimize performance using real-time AI analytics.",
+    aiInsightsDesc: "Detect anomalies, predict trends, and optimize performance using real-time AI analytics. Leverage AI prediction modules to forecast equipment failures, analyze trends, and receive intelligent recommendations. Build custom dashboards with drag-and-drop KPI definitions.",
+    openProtocols: "Open IoT Protocols",
+    openProtocolsDesc: "Support for MQTT and HTTP protocols with dozens of implementations for all mainstream languages. Communicate seamlessly with your devices using industry-standard protocols that ensure interoperability and ease of integration.",
+    gatewaySupport: "Gateway Support",
+    gatewaySupportDesc: "Connect devices directly or via IoT gateways depending on your deployment needs. Ideal for sensors with limited computing power, local IoT environments like LoRaWAN or ZigBee, and legacy devices. Flexible connectivity options for any scenario.",
     
     // Data Flow
     dataFlowTitle: "From Sensor to Insight",
@@ -235,11 +239,15 @@ export const translations = {
     // Features
     keyFeatures: "الميزات الرئيسية",
     deviceManagement: "إدارة الأجهزة",
-    deviceManagementDesc: "ربط ومراقبة آلاف أجهزة إنترنت الأشياء مع القياس عن بُعد والتحكم الكامل",
-    cloudNative: "بنية سحابية أصلية",
-    cloudNativeDesc: "مبنية على بنية تحتية سحابية قابلة للتطوير وآمنة — جاهزة للتطبيقات الصناعية والمدن الذكية",
+    deviceManagementDesc: "ربط ومراقبة آلاف أجهزة إنترنت الأشياء مع القياس عن بُعد والتحكم الكامل. أضف الأجهزة بسهولة، مع الاكتشاف التلقائي، أو بشكل مجمع. إدارة دورة حياة الأجهزة، وتكوين الإعدادات عن بُعد، وضمان التشغيل السلس عبر البنية التحتية الكاملة لإنترنت الأشياء.",
+    cloudNative: "سحابي وداخلي",
+    cloudNativeDesc: "مبنية على بنية تحتية سحابية قابلة للتطوير وآمنة مع خيارات نشر مرنة. اختر بين الاستضافة السحابية أو التثبيت الداخلي بناءً على متطلبات الأمان والامتثال. كلا الخيارين يتضمنان التحديثات التلقائية، والفوترة، والمحاسبة، ودعم تعدد المستأجرين.",
     aiInsights: "رؤى مدعومة بالذكاء الاصطناعي",
-    aiInsightsDesc: "كشف الحالات الشاذة والتنبؤ بالاتجاهات وتحسين الأداء باستخدام تحليلات الذكاء الاصطناعي في الوقت الفعلي",
+    aiInsightsDesc: "كشف الحالات الشاذة والتنبؤ بالاتجاهات وتحسين الأداء باستخدام تحليلات الذكاء الاصطناعي في الوقت الفعلي. استفد من وحدات التنبؤ بالذكاء الاصطناعي للتنبؤ بأعطال المعدات، وتحليل الاتجاهات، وتلقي التوصيات الذكية. قم ببناء لوحات معلومات مخصصة مع تعريفات مؤشرات الأداء بالسحب والإفلات.",
+    openProtocols: "بروتوكولات إنترنت الأشياء المفتوحة",
+    openProtocolsDesc: "دعم بروتوكولات MQTT و HTTP مع عشرات التطبيقات لجميع اللغات السائدة. تواصل بسلاسة مع أجهزتك باستخدام البروتوكولات القياسية الصناعية التي تضمن التشغيل البيني وسهولة التكامل.",
+    gatewaySupport: "دعم البوابات",
+    gatewaySupportDesc: "قم بتوصيل الأجهزة مباشرة أو عبر بوابات إنترنت الأشياء حسب احتياجات النشر الخاصة بك. مثالي للمستشعرات ذات القدرة الحاسوبية المحدودة، وبيئات إنترنت الأشياء المحلية مثل LoRaWAN أو ZigBee، والأجهزة القديمة. خيارات اتصال مرنة لأي سيناريو.",
     
     // Data Flow
     dataFlowTitle: "من المستشعر إلى الرؤية — بسلاسة",
@@ -461,11 +469,15 @@ export const translations = {
     // Features
     keyFeatures: "ویژگی‌های کلیدی",
     deviceManagement: "مدیریت دستگاه‌ها",
-    deviceManagementDesc: "اتصال و نظارت بر هزاران دستگاه اینترنت اشیا با تله‌متری کامل و کنترل از راه دور.",
-    cloudNative: "معماری ابری بومی",
-    cloudNativeDesc: "ساخته شده بر روی زیرساخت ابری مقیاس‌پذیر و امن — آماده برای کاربردهای صنعتی و شهرهای هوشمند.",
+    deviceManagementDesc: "اتصال و نظارت بر هزاران دستگاه اینترنت اشیا با تله‌متری کامل و کنترل از راه دور. افزودن دستگاه‌ها به سادگی، با کشف خودکار، یا به صورت دسته‌ای. مدیریت چرخه عمر دستگاه‌ها، پیکربندی تنظیمات از راه دور و اطمینان از عملکرد یکپارچه در کل زیرساخت اینترنت اشیای شما.",
+    cloudNative: "ابری و سازمانی",
+    cloudNativeDesc: "ساخته شده بر روی زیرساخت ابری مقیاس‌پذیر و امن با گزینه‌های استقرار انعطاف‌پذیر. بین میزبانی ابری یا نصب سازمانی بر اساس نیازهای امنیتی و انطباق خود انتخاب کنید. هر دو گزینه شامل به‌روزرسانی‌های خودکار، صورتحساب، حسابداری و پشتیبانی چند مستاجره هستند.",
     aiInsights: "بینش‌های مبتنی بر هوش مصنوعی",
-    aiInsightsDesc: "تشخیص ناهنجاری‌ها، پیش‌بینی روندها و بهینه‌سازی عملکرد با استفاده از تحلیل‌های هوش مصنوعی لحظه‌ای.",
+    aiInsightsDesc: "تشخیص ناهنجاری‌ها، پیش‌بینی روندها و بهینه‌سازی عملکرد با استفاده از تحلیل‌های هوش مصنوعی لحظه‌ای. از ماژول‌های پیش‌بینی هوش مصنوعی برای پیش‌بینی خرابی تجهیزات، تحلیل روندها و دریافت توصیه‌های هوشمند استفاده کنید. داشبوردهای سفارشی با تعریف KPI به روش کشیدن و رها کردن بسازید.",
+    openProtocols: "پروتکل‌های باز اینترنت اشیا",
+    openProtocolsDesc: "پشتیبانی از پروتکل‌های MQTT و HTTP با ده‌ها پیاده‌سازی برای همه زبان‌های رایج. ارتباط یکپارچه با دستگاه‌های خود با استفاده از پروتکل‌های استاندارد صنعتی که قابلیت همکاری و سهولت یکپارچه‌سازی را تضمین می‌کنند.",
+    gatewaySupport: "پشتیبانی از دروازه",
+    gatewaySupportDesc: "اتصال دستگاه‌ها به صورت مستقیم یا از طریق دروازه‌های اینترنت اشیا بسته به نیازهای استقرار شما. ایده‌آل برای سنسورها با قدرت محاسباتی محدود، محیط‌های محلی اینترنت اشیا مانند LoRaWAN یا ZigBee و دستگاه‌های قدیمی. گزینه‌های اتصال انعطاف‌پذیر برای هر سناریو.",
     
     // Data Flow
     dataFlowTitle: "از سنسور تا بینش",
