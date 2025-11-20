@@ -16,17 +16,21 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Always prioritize URL param over localStorage
+  // Determine initial language from URL or localStorage
   const getInitialLanguage = (): Language => {
-    // First check URL
-    if (params.lang && ['en', 'ar', 'fa'].includes(params.lang)) {
-      return params.lang as Language;
+    // Check URL path for language prefix: /en, /ar, /fa
+    const match = location.pathname.match(/^\/(en|ar|fa)(\/|$)/);
+    if (match && ['en', 'ar', 'fa'].includes(match[1])) {
+      return match[1] as Language;
     }
-    // Then check if we're on root without lang param - check localStorage
+
+    // Fallback to saved language in localStorage
     const savedLang = localStorage.getItem('lang') as Language;
-    if (!params.lang && savedLang && ['en', 'ar', 'fa'].includes(savedLang)) {
+    if (savedLang && ['en', 'ar', 'fa'].includes(savedLang)) {
       return savedLang;
     }
+
+    // Default to English
     return 'en';
   };
 
@@ -44,19 +48,19 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     navigate(newPath, { replace: true });
   };
 
-  // Sync language from URL params when navigating directly
+  // Sync language from URL path when navigating directly
   useEffect(() => {
-    const urlLang = params.lang as Language | undefined;
+    const match = location.pathname.match(/^\/(en|ar|fa)(\/|$)/);
+    const urlLang = (match?.[1] as Language) || undefined;
+
     if (urlLang && ['en', 'ar', 'fa'].includes(urlLang)) {
-      // URL has a valid language - always use it
+      // URL has a valid language prefix - keep context in sync
       setLanguageState(urlLang);
       localStorage.setItem('lang', urlLang);
-    } else if (!urlLang) {
-      // No language in URL - use English as default
-      setLanguageState('en');
-      localStorage.setItem('lang', 'en');
     }
-  }, [params.lang, location.pathname]);
+    // If there is no language prefix in the URL, we keep current language
+    // so that selecting a language via the switcher is not immediately overwritten.
+  }, [location.pathname]);
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
