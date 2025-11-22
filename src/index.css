@@ -165,6 +165,19 @@ html[lang="ar"] body {
   font-size: 0.63rem !important;
 }
 
+/* Larger font for sidebar menu items in Arabic */
+[lang="ar"] [data-panel-page] nav li,
+[lang="ar"] [data-panel-page] nav button,
+[lang="ar"] [data-panel-page] nav a,
+[lang="ar"] [data-panel-page] nav span {
+  font-size: 0.8rem !important;
+}
+
+/* Larger font for panel buttons in Arabic */
+[lang="ar"] [data-panel-page] button {
+  font-size: 0.8rem !important;
+}
+
 [lang="ar"] [data-panel-page] h1,
 [lang="ar"] [data-panel-page] h2,
 [lang="ar"] [data-panel-page] h3,
@@ -222,6 +235,19 @@ html[lang="fa"] body {
 [lang="fa"] [data-panel-page] span,
 [lang="fa"] [data-panel-page] button {
   font-size: 0.63rem !important;
+}
+
+/* Larger font for sidebar menu items in Persian */
+[lang="fa"] [data-panel-page] nav li,
+[lang="fa"] [data-panel-page] nav button,
+[lang="fa"] [data-panel-page] nav a,
+[lang="fa"] [data-panel-page] nav span {
+  font-size: 0.8rem !important;
+}
+
+/* Larger font for panel buttons in Persian */
+[lang="fa"] [data-panel-page] button {
+  font-size: 0.8rem !important;
 }
 
 [lang="fa"] [data-panel-page] h1,
@@ -289,4 +315,12 @@ body.rtl pre,
 html[lang="ar"] pre,
 html[lang="fa"] pre {
   text-align: left !important;
+}
+
+/* Larger font for language switcher in Arabic and Persian */
+[lang="ar"] .language-switcher-btn,
+[lang="ar"] .language-switcher-btn span,
+[lang="fa"] .language-switcher-btn,
+[lang="fa"] .language-switcher-btn span {
+  font-size: 0.8rem !important;
 }
