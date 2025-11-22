@@ -43,7 +43,7 @@ export const LanguageSwitcher = () => {
         }
       }}
     >
-      <Button variant="outline" size="sm" className="gap-2 border-white/20 bg-white/10 backdrop-blur-sm text-black hover:bg-white/20 hover:text-[#FF7A00]">
+      <Button variant="outline" size="sm" className="language-switcher-btn gap-2 border-white/20 bg-white/10 backdrop-blur-sm text-black hover:bg-white/20 hover:text-[#FF7A00]">
         <Globe className="h-4 w-4" />
         <span className="hidden sm:inline">
           {languages.find(l => l.code === language)?.nativeName}
