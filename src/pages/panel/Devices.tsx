@@ -84,7 +84,7 @@ const Devices = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [wizardStep, setWizardStep] = useState<'template' | 'details'>('template');
-  const [selectedTemplate, setSelectedTemplate] = useState<'blank' | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<'blank' | null>('blank');
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'details'>('list');
   const [protocolFilter, setProtocolFilter] = useState<string>('all');
@@ -289,7 +289,7 @@ const Devices = () => {
     setLabel("");
     setUseSsl(false);
     setWizardStep('template');
-    setSelectedTemplate(null);
+    setSelectedTemplate('blank');
   };
 
   const handleDeviceClick = (deviceId: string) => {
@@ -394,7 +394,7 @@ const Devices = () => {
                       <ArrowUpDown className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[280px] p-4" side="bottom" sideOffset={5}>
+                  <PopoverContent className="w-[280px] p-4" side="bottom" sideOffset={5} align="start">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between gap-3">
                         <Label className="text-sm font-medium">{t("protocol")}</Label>
@@ -409,7 +409,7 @@ const Devices = () => {
                           <SelectTrigger className="w-[160px] h-9">
                             <SelectValue />
                           </SelectTrigger>
-                    <SelectContent position="popper" side="bottom" sideOffset={4}>
+                    <SelectContent position="popper" side="right" sideOffset={8} align="start">
                       <SelectItem value="all">{t("allProtocols") || "All Protocols"}</SelectItem>
                       {availableProtocols.map((protocol) => (
                         <SelectItem key={protocol} value={protocol}>
@@ -743,7 +743,7 @@ const Devices = () => {
       {/* Add Device Sheet */}
       <Sheet open={addPanelOpen} onOpenChange={(open) => { setAddPanelOpen(open); if (!open) resetAddDeviceForm(); }}>
         <SheetContent side={isRTL ? 'left' : 'right'} className="w-full sm:max-w-[540px] overflow-y-auto">
-          <SheetHeader className={`bg-[#00BCD4] text-white -mx-6 -mt-6 px-6 py-4 mb-6 ${isRTL ? 'text-right' : ''}`}>
+          <SheetHeader className={`bg-[#00BCD4] text-white -mx-6 -mt-6 px-6 py-6 mb-6 ${isRTL ? 'text-right' : ''}`}>
             <SheetTitle className={`text-white text-base ${isRTL ? 'text-right' : ''}`}>{t("createNewDevice")}</SheetTitle>
           </SheetHeader>
           
@@ -755,7 +755,7 @@ const Devices = () => {
                 
                 {/* Blank Device Card */}
                 <Card 
-                  className={`border-2 cursor-pointer transition-all ${selectedTemplate === 'blank' ? 'border-[#00BCD4] bg-[#00BCD4]/5' : 'border-border hover:border-[#00BCD4]/50'}`}
+                  className={`border-2 cursor-pointer transition-all ${selectedTemplate === 'blank' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}
                   onClick={() => setSelectedTemplate('blank')}
                 >
                   <CardContent className="pt-6">
@@ -856,14 +856,6 @@ const Devices = () => {
                       <SelectItem value="5G">5G</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
-                <div>
-                  <Label className={isRTL ? 'text-right block' : ''}>{t("label")}:</Label>
-                  <Input 
-                    value={label}
-                    onChange={(e) => setLabel(e.target.value)}
-                    placeholder={t("enterLabel")}
-                  />
                 </div>
                 <div className="flex items-center space-x-2 rtl:space-x-reverse">
                   <Checkbox 
