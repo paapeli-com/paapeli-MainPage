@@ -60,22 +60,22 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
   };
 
   const menuItems = [
-    { title: t("home"), icon: Home, path: getLocalizedPath("/panel/home") },
-    { title: t("dashboard"), icon: LayoutDashboard, path: getLocalizedPath("/panel/dashboard") },
+    { title: t("home"), icon: Home, path: getLocalizedPath("/home") },
+    { title: t("dashboard"), icon: LayoutDashboard, path: getLocalizedPath("/dashboard") },
     {
       title: t("devices"),
       icon: Smartphone,
       children: [
-        { title: t("devices"), path: getLocalizedPath("/panel/devices") },
-        { title: t("group"), path: getLocalizedPath("/panel/devices/group") },
-        { title: t("gateways"), path: getLocalizedPath("/panel/devices/gateways") },
+        { title: t("devices"), path: getLocalizedPath("/devices") },
+        { title: t("group"), path: getLocalizedPath("/devices/group") },
+        { title: t("gateways"), path: getLocalizedPath("/devices/gateways") },
       ],
     },
-    { title: t("alarms"), icon: Bell, path: getLocalizedPath("/panel/alarms") },
-    { title: t("solutionTemplates"), icon: FileCode, path: getLocalizedPath("/panel/solution-templates") },
-    { title: "OTA", subtitle: t("otaUpdate"), icon: Download, path: getLocalizedPath("/panel/ota") },
-    { title: t("members"), icon: UserCog, path: getLocalizedPath("/panel/members") },
-    { title: t("devCenter"), icon: Code, path: getLocalizedPath("/panel/dev-center") },
+    { title: t("alarms"), icon: Bell, path: getLocalizedPath("/alarms") },
+    { title: t("solutionTemplates"), icon: FileCode, path: getLocalizedPath("/solution-templates") },
+    { title: "OTA", subtitle: t("otaUpdate"), icon: Download, path: getLocalizedPath("/ota") },
+    { title: t("members"), icon: UserCog, path: getLocalizedPath("/members") },
+    { title: t("devCenter"), icon: Code, path: getLocalizedPath("/dev-center") },
   ];
 
   const handleLogout = async () => {

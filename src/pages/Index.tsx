@@ -52,7 +52,7 @@ const Index = () => {
                 className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6"
                 onClick={() => {
                   const langPrefix = language !== 'en' ? `/${language}` : '';
-                  window.location.href = `https://panel.paapeli.com${langPrefix}`;
+                  window.location.href = `https://panel.paapeli.com${langPrefix}/home`;
                 }}
               >
                 {t('getStarted')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />

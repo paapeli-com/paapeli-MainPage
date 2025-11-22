@@ -28,7 +28,7 @@ const PanelNotFound = () => {
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button 
-            onClick={() => navigate("/panel/home")}
+            onClick={() => navigate("/home")}
             className="gap-2"
           >
             <Home className="w-4 h-4" />

@@ -50,30 +50,28 @@ const App = () => (
               <Route path="/google-signup" element={<GoogleSignup />} />
               
               {/* Protected Panel Routes */}
-              <Route path="/panel/home" element={<ProtectedRoute><PanelHome /></ProtectedRoute>} />
-              <Route path="/:lang/panel/home" element={<ProtectedRoute><PanelHome /></ProtectedRoute>} />
-              <Route path="/panel/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/:lang/panel/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/panel/devices" element={<ProtectedRoute><Devices /></ProtectedRoute>} />
-              <Route path="/:lang/panel/devices" element={<ProtectedRoute><Devices /></ProtectedRoute>} />
-              <Route path="/panel/devices/:deviceId" element={<ProtectedRoute><DeviceDetails /></ProtectedRoute>} />
-              <Route path="/:lang/panel/devices/:deviceId" element={<ProtectedRoute><DeviceDetails /></ProtectedRoute>} />
-              <Route path="/panel/devices/group" element={<ProtectedRoute><DeviceGroup /></ProtectedRoute>} />
-              <Route path="/:lang/panel/devices/group" element={<ProtectedRoute><DeviceGroup /></ProtectedRoute>} />
-              <Route path="/panel/devices/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
-              <Route path="/:lang/panel/devices/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
-              <Route path="/panel/alarms" element={<ProtectedRoute><Alarms /></ProtectedRoute>} />
-              <Route path="/:lang/panel/alarms" element={<ProtectedRoute><Alarms /></ProtectedRoute>} />
-              <Route path="/panel/solution-templates" element={<ProtectedRoute><SolutionTemplates /></ProtectedRoute>} />
-              <Route path="/:lang/panel/solution-templates" element={<ProtectedRoute><SolutionTemplates /></ProtectedRoute>} />
-              <Route path="/panel/ota" element={<ProtectedRoute><OTA /></ProtectedRoute>} />
-              <Route path="/:lang/panel/ota" element={<ProtectedRoute><OTA /></ProtectedRoute>} />
-              <Route path="/panel/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
-              <Route path="/:lang/panel/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
-              <Route path="/panel/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
-              <Route path="/:lang/panel/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
-              <Route path="/panel/*" element={<PanelNotFound />} />
-              <Route path="/:lang/panel/*" element={<PanelNotFound />} />
+              <Route path="/home" element={<ProtectedRoute><PanelHome /></ProtectedRoute>} />
+              <Route path="/:lang/home" element={<ProtectedRoute><PanelHome /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/:lang/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/devices" element={<ProtectedRoute><Devices /></ProtectedRoute>} />
+              <Route path="/:lang/devices" element={<ProtectedRoute><Devices /></ProtectedRoute>} />
+              <Route path="/devices/:deviceId" element={<ProtectedRoute><DeviceDetails /></ProtectedRoute>} />
+              <Route path="/:lang/devices/:deviceId" element={<ProtectedRoute><DeviceDetails /></ProtectedRoute>} />
+              <Route path="/devices/group" element={<ProtectedRoute><DeviceGroup /></ProtectedRoute>} />
+              <Route path="/:lang/devices/group" element={<ProtectedRoute><DeviceGroup /></ProtectedRoute>} />
+              <Route path="/devices/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
+              <Route path="/:lang/devices/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
+              <Route path="/alarms" element={<ProtectedRoute><Alarms /></ProtectedRoute>} />
+              <Route path="/:lang/alarms" element={<ProtectedRoute><Alarms /></ProtectedRoute>} />
+              <Route path="/solution-templates" element={<ProtectedRoute><SolutionTemplates /></ProtectedRoute>} />
+              <Route path="/:lang/solution-templates" element={<ProtectedRoute><SolutionTemplates /></ProtectedRoute>} />
+              <Route path="/ota" element={<ProtectedRoute><OTA /></ProtectedRoute>} />
+              <Route path="/:lang/ota" element={<ProtectedRoute><OTA /></ProtectedRoute>} />
+              <Route path="/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
+              <Route path="/:lang/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
+              <Route path="/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
+              <Route path="/:lang/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
