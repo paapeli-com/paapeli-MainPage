@@ -394,7 +394,7 @@ const Devices = () => {
                       <ArrowUpDown className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[280px] p-4" side="bottom" sideOffset={5} align="start">
+                  <PopoverContent className="w-[280px] p-4" side="bottom" sideOffset={5}>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between gap-3">
                         <Label className="text-sm font-medium">{t("protocol")}</Label>
@@ -409,7 +409,7 @@ const Devices = () => {
                           <SelectTrigger className="w-[160px] h-9">
                             <SelectValue />
                           </SelectTrigger>
-                    <SelectContent position="popper" side="right" sideOffset={8} align="start">
+                    <SelectContent position="popper" side="bottom" sideOffset={4}>
                       <SelectItem value="all">{t("allProtocols") || "All Protocols"}</SelectItem>
                       {availableProtocols.map((protocol) => (
                         <SelectItem key={protocol} value={protocol}>
