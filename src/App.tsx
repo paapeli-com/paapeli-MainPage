@@ -27,6 +27,10 @@ import SolutionTemplates from "./pages/panel/SolutionTemplates";
 import OTA from "./pages/panel/OTA";
 import Members from "./pages/panel/Members";
 import DevCenter from "./pages/panel/DevCenter";
+import Pricing from "./pages/Pricing";
+import AIoTPlatform from "./pages/products/AIoTPlatform";
+import DDoSProtection from "./pages/products/DDoSProtection";
+import SmartCities from "./pages/usecases/SmartCities";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +52,12 @@ const App = () => (
               <Route path="/auth/error" element={<AuthError />} />
               <Route path="/account-settings" element={<AccountSettings />} />
               <Route path="/google-signup" element={<GoogleSignup />} />
+              
+              {/* Public Product Pages */}
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/aiot-platform" element={<AIoTPlatform />} />
+              <Route path="/ddos-protection" element={<DDoSProtection />} />
+              <Route path="/smart-cities" element={<SmartCities />} />
               
               {/* Protected Panel Routes */}
               <Route path="/home" element={<ProtectedRoute><PanelHome /></ProtectedRoute>} />
