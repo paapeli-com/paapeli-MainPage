@@ -77,33 +77,46 @@ export const Navigation = () => {
                     <ul className="grid w-[400px] gap-3 p-4 bg-popover">
                       <li>
                         <a
-                          href="#iot-platform"
+                          href="/aiot-platform"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
-                            {t('iotCloudPlatform')}
+                            {t('aiotPlatform')}
                           </div>
                           <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
-                            {t('iotCloudPlatformNavDesc')}
+                            {t('aiotPlatformNavDesc')}
                           </p>
                         </a>
                       </li>
                       <li>
                         <a
-                          href="#ota"
+                          href="/ddos-protection"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
-                            {t('ota')}
+                            {t('ddosProtection')}
                           </div>
                           <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
-                            {t('otaNavDesc')}
+                            {t('ddosProtectionNavDesc')}
                           </p>
                         </a>
                       </li>
                       <li>
                         <a
-                          href="#intelligence"
+                          href="/edge-computing"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('edgeComputing')}
+                          </div>
+                          <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
+                            {t('edgeComputingNavDesc')}
+                          </p>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/intelligence-insight"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -114,26 +127,132 @@ export const Navigation = () => {
                           </p>
                         </a>
                       </li>
+                      <li>
+                        <a
+                          href="/ota"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('ota')}
+                          </div>
+                          <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
+                            {t('otaNavDesc')}
+                          </p>
+                        </a>
+                      </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                {/* Other Menu Items */}
+                {/* Use Cases Menu */}
                 <NavigationMenuItem>
-                  <a
-                    href="#use-cases"
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                  >
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
                     {t('useCases')}
-                  </a>
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 bg-popover">
+                      <li>
+                        <a
+                          href="/makers-developers"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('makersDevelopers')}
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/oil-gas"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('oilGas')}
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/smart-cities"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('smartCities')}
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/smart-agriculture"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('smartAgriculture')}
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/smart-buildings"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('smartBuildings')}
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
                 </NavigationMenuItem>
 
+                {/* Docs Menu */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
+                    {t('docs')}
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[200px] gap-3 p-4 bg-popover">
+                      <li>
+                        <a
+                          href="https://docs.paapeli.com/"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('features')}
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://docs.paapeli.com/"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('apis')}
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://docs.paapeli.com/"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
+                            {t('sdks')}
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                {/* Pricing */}
                 <NavigationMenuItem>
                   <a
-                    href="https://docs.paapeli.com/"
+                    href="/pricing"
                     className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                   >
-                    {t('docs')}
+                    {t('pricing')}
                   </a>
                 </NavigationMenuItem>
 
@@ -153,13 +272,13 @@ export const Navigation = () => {
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
 
-            {/* On main domain, always show login button */}
+            {/* On main domain, always show Dashboard button */}
             {isMainDomain && !isPanelDomain ? (
               <Button onClick={handleLogin} variant="default" size="sm">
                 {t('login')}
               </Button>
             ) : (
-              /* On panel domain, show login or account menu */
+              /* On panel domain, show Dashboard button or account menu */
               !isAuthenticated ? (
                 <Button onClick={handleLogin} variant="default" size="sm">
                   {t('login')}

@@ -141,7 +141,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border">
               <Building2 className="h-10 w-10 text-secondary mb-4" />
-              <h3 className="text-xl font-bold mb-3 text-foreground">{t('smartCities')}</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">{t('smartCitiesTitle')}</h3>
               <p className="text-muted-foreground">
                 {t('smartCitiesDesc')}
               </p>
@@ -155,7 +155,7 @@ const Index = () => {
             </Card>
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border">
               <Sprout className="h-10 w-10 text-secondary mb-4" />
-              <h3 className="text-xl font-bold mb-3 text-foreground">{t('smartAgriculture')}</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">{t('smartAgricultureTitle')}</h3>
               <p className="text-muted-foreground">
                 {t('smartAgricultureDesc')}
               </p>
