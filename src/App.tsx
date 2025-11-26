@@ -30,7 +30,14 @@ import DevCenter from "./pages/panel/DevCenter";
 import Pricing from "./pages/Pricing";
 import AIoTPlatform from "./pages/products/AIoTPlatform";
 import DDoSProtection from "./pages/products/DDoSProtection";
+import EdgeComputing from "./pages/products/EdgeComputing";
+import IntelligenceInsight from "./pages/products/IntelligenceInsight";
+import OTAProduct from "./pages/products/OTA";
 import SmartCities from "./pages/usecases/SmartCities";
+import MakersDevelopers from "./pages/usecases/MakersDevelopers";
+import OilGas from "./pages/usecases/OilGas";
+import SmartAgriculture from "./pages/usecases/SmartAgriculture";
+import SmartBuildings from "./pages/usecases/SmartBuildings";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +64,16 @@ const App = () => (
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/aiot-platform" element={<AIoTPlatform />} />
               <Route path="/ddos-protection" element={<DDoSProtection />} />
+              <Route path="/edge-computing" element={<EdgeComputing />} />
+              <Route path="/intelligence-insight" element={<IntelligenceInsight />} />
+              <Route path="/ota" element={<OTAProduct />} />
+              
+              {/* Use Cases Pages */}
               <Route path="/smart-cities" element={<SmartCities />} />
+              <Route path="/makers-developers" element={<MakersDevelopers />} />
+              <Route path="/oil-gas" element={<OilGas />} />
+              <Route path="/smart-agriculture" element={<SmartAgriculture />} />
+              <Route path="/smart-buildings" element={<SmartBuildings />} />
               
               {/* Protected Panel Routes */}
               <Route path="/home" element={<ProtectedRoute><PanelHome /></ProtectedRoute>} />

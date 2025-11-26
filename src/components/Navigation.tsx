@@ -73,8 +73,8 @@ export const Navigation = () => {
                   <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
                     {t('products')}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 bg-popover">
+                  <NavigationMenuContent className="z-[100]">
+                    <ul className="grid w-[400px] gap-3 p-4 bg-popover z-[100]">
                       <li>
                         <a
                           href="/aiot-platform"
@@ -149,8 +149,8 @@ export const Navigation = () => {
                   <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
                     {t('useCases')}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 bg-popover">
+                  <NavigationMenuContent className="z-[100]">
+                    <ul className="grid w-[400px] gap-3 p-4 bg-popover z-[100]">
                       <li>
                         <a
                           href="/makers-developers"
@@ -210,8 +210,8 @@ export const Navigation = () => {
                   <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
                     {t('docs')}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[200px] gap-3 p-4 bg-popover">
+                  <NavigationMenuContent className="z-[100]">
+                    <ul className="grid w-[200px] gap-3 p-4 bg-popover z-[100]">
                       <li>
                         <a
                           href="https://docs.paapeli.com/"
@@ -275,7 +275,7 @@ export const Navigation = () => {
             {/* On main domain, always show Dashboard button */}
             {isMainDomain && !isPanelDomain ? (
               <Button onClick={handleLogin} variant="default" size="sm">
-                {t('login')}
+                {t('dashboard')}
               </Button>
             ) : (
               /* On panel domain, show Dashboard button or account menu */
