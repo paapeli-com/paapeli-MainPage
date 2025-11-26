@@ -3,9 +3,7 @@ import { Navigation } from "@/components/Navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Check, Zap, Clock, Shield } from "lucide-react";
 
 const Pricing = () => {
   const { t, isRTL } = useLanguage();
@@ -97,24 +95,76 @@ const Pricing = () => {
       
       <section className="pt-32 pb-20 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-foreground">
               {t('pricing')}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12">
               Start free with Pay-as-you-Go pricing, or choose a plan that fits your needs
             </p>
             
+            {/* Free Usage Info Section */}
+            <Card className="max-w-4xl mx-auto p-8 mb-12 bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div className="text-left">
+                  <h3 className="text-2xl font-bold mb-4 text-foreground">Start Free, Scale as You Grow</h3>
+                  <p className="text-muted-foreground mb-6">
+                    With our Pay-as-you-Go model, you only pay for what you use. No upfront costs, no hidden fees. 
+                    Perfect for startups and enterprises alike. Get started immediately with generous free tier limits.
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Zap className="h-5 w-5 text-primary" />
+                      </div>
+                      <span className="text-foreground">Instant activation - no credit card required</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Clock className="h-5 w-5 text-primary" />
+                      </div>
+                      <span className="text-foreground">Free tier: 5 devices, 100MB storage</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Shield className="h-5 w-5 text-primary" />
+                      </div>
+                      <span className="text-foreground">Transparent pricing with real-time monitoring</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  <img 
+                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop" 
+                    alt="Pricing dashboard" 
+                    className="rounded-lg shadow-lg max-w-full h-auto"
+                  />
+                </div>
+              </div>
+            </Card>
+            
             {/* Toggle between Pay-as-you-Go and Plans */}
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <Label htmlFor="pricing-toggle" className="text-lg">
-                {isPayAsYouGo ? "Pay-as-you-Go" : "Monthly Plans"}
-              </Label>
-              <Switch
-                id="pricing-toggle"
-                checked={!isPayAsYouGo}
-                onCheckedChange={() => setIsPayAsYouGo(!isPayAsYouGo)}
-              />
+            <div className="inline-flex items-center gap-2 p-1 bg-muted rounded-full mb-8">
+              <button
+                onClick={() => setIsPayAsYouGo(true)}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                  isPayAsYouGo 
+                    ? 'bg-primary text-primary-foreground shadow-sm' 
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Pay-as-You-Go
+              </button>
+              <button
+                onClick={() => setIsPayAsYouGo(false)}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                  !isPayAsYouGo 
+                    ? 'bg-primary text-primary-foreground shadow-sm' 
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Plans
+              </button>
             </div>
           </div>
 
