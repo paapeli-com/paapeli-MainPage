@@ -208,42 +208,43 @@ export const Navigation = () => {
 
                 {/* Docs Menu */}
                 <NavigationMenuItem>
-                  <div className="relative group">
-                    <button
-                      type="button"
-                      className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none"
-                    >
-                      {t('docs')}
-                    </button>
-                    <div className="hidden group-hover:block absolute top-full mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-[100]">
-                      <ul className="py-2">
-                        <li>
-                          <a
-                            href="https://docs.paapeli.com/"
-                            className="block px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground"
-                          >
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
+                    {t('docs')}
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent className="z-[100]">
+                    <ul className="grid w-[300px] gap-3 p-4 bg-popover z-[100]">
+                      <li>
+                        <a
+                          href="https://docs.paapeli.com/"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
                             {t('features')}
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="https://docs.paapeli.com/"
-                            className="block px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground"
-                          >
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://docs.paapeli.com/"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
                             {t('apis')}
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="https://docs.paapeli.com/"
-                            className="block px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground"
-                          >
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://docs.paapeli.com/"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="!text-sm font-medium leading-none">
                             {t('sdks')}
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
                 </NavigationMenuItem>
 
                 {/* Pricing */}
