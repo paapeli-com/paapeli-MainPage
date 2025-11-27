@@ -18,6 +18,8 @@ export const translations = {
     openProtocolsDesc: "Support for MQTT and HTTP protocols with dozens of implementations for all mainstream languages. Communicate seamlessly with your devices using industry-standard protocols that ensure interoperability and ease of integration.",
     gatewaySupport: "Gateway Support",
     gatewaySupportDesc: "Connect devices directly or via IoT gateways depending on your deployment needs. Ideal for sensors with limited computing power, local IoT environments like LoRaWAN or ZigBee, and legacy devices. Flexible connectivity options for any scenario.",
+    security: "Enterprise Security",
+    securityDesc: "Advanced DDoS protection and end-to-end encryption keep your data safe. Industry-leading security measures protect your infrastructure from threats while ensuring data privacy and compliance with global standards.",
     
     // Data Flow
     dataFlowTitle: "From Sensor to Insight",
@@ -79,6 +81,16 @@ export const translations = {
     apis: "APIs",
     sdks: "SDKs",
     pricing: "Pricing",
+    lang: "en",
+    
+    // Use Case Pages
+    smartCityApplications: "Smart City Applications",
+    smartCityApplicationsDesc: "Transform urban infrastructure with IoT solutions that improve efficiency, sustainability, and quality of life.",
+    readyToTransform: "Ready to Transform Your City?",
+    contactSales: "Contact Sales",
+    agricultureSolutions: "Smart Agriculture Solutions",
+    agricultureSolutionsDesc: "Increase yields, reduce costs, and optimize resources with precision agriculture technology.",
+    transformYourFarm: "Transform Your Farm Today",
     
     // Login Page
     welcomeBack: "Welcome to Paapeli",
@@ -260,6 +272,8 @@ export const translations = {
     openProtocolsDesc: "دعم بروتوكولات MQTT و HTTP مع عشرات التطبيقات لجميع اللغات السائدة. تواصل بسلاسة مع أجهزتك باستخدام البروتوكولات القياسية الصناعية التي تضمن التشغيل البيني وسهولة التكامل.",
     gatewaySupport: "دعم البوابات",
     gatewaySupportDesc: "قم بتوصيل الأجهزة مباشرة أو عبر بوابات إنترنت الأشياء حسب احتياجات النشر الخاصة بك. مثالي للمستشعرات ذات القدرة الحاسوبية المحدودة، وبيئات إنترنت الأشياء المحلية مثل LoRaWAN أو ZigBee، والأجهزة القديمة. خيارات اتصال مرنة لأي سيناريو.",
+    security: "أمان المؤسسات",
+    securityDesc: "حماية متقدمة من هجمات DDoS والتشفير من طرف إلى طرف تحافظ على أمان بياناتك. تدابير أمنية رائدة في الصناعة تحمي بنيتك التحتية من التهديدات مع ضمان خصوصية البيانات والامتثال للمعايير العالمية.",
     
     // Data Flow
     dataFlowTitle: "من المستشعر إلى الرؤية — بسلاسة",
@@ -321,6 +335,16 @@ export const translations = {
     apis: "واجهات برمجة التطبيقات",
     sdks: "مجموعات تطوير البرمجيات",
     pricing: "الأسعار",
+    lang: "ar",
+    
+    // Use Case Pages
+    smartCityApplications: "تطبيقات المدن الذكية",
+    smartCityApplicationsDesc: "تحويل البنية التحتية الحضرية باستخدام حلول إنترنت الأشياء التي تحسن الكفاءة والاستدامة ونوعية الحياة.",
+    readyToTransform: "هل أنت مستعد لتحويل مدينتك؟",
+    contactSales: "اتصل بالمبيعات",
+    agricultureSolutions: "حلول الزراعة الذكية",
+    agricultureSolutionsDesc: "زيادة الإنتاجية وتقليل التكاليف وتحسين الموارد باستخدام تقنية الزراعة الدقيقة.",
+    transformYourFarm: "حوّل مزرعتك اليوم",
     
     // Login Page
     welcomeBack: "مرحباً بك في باپيلي",
@@ -502,6 +526,8 @@ export const translations = {
     openProtocolsDesc: "پشتیبانی از پروتکل‌های MQTT و HTTP با ده‌ها پیاده‌سازی برای همه زبان‌های رایج. ارتباط یکپارچه با دستگاه‌های خود با استفاده از پروتکل‌های استاندارد صنعتی که قابلیت همکاری و سهولت یکپارچه‌سازی را تضمین می‌کنند.",
     gatewaySupport: "پشتیبانی از دروازه",
     gatewaySupportDesc: "اتصال دستگاه‌ها به صورت مستقیم یا از طریق دروازه‌های اینترنت اشیا بسته به نیازهای استقرار شما. ایده‌آل برای سنسورها با قدرت محاسباتی محدود، محیط‌های محلی اینترنت اشیا مانند LoRaWAN یا ZigBee و دستگاه‌های قدیمی. گزینه‌های اتصال انعطاف‌پذیر برای هر سناریو.",
+    security: "امنیت سازمانی",
+    securityDesc: "حفاظت پیشرفته DDoS و رمزگذاری end-to-end داده‌های شما را ایمن نگه می‌دارد. اقدامات امنیتی پیشرو در صنعت، زیرساخت شما را از تهدیدات محافظت می‌کند و حریم خصوصی داده‌ها و انطباق با استانداردهای جهانی را تضمین می‌کند.",
     
     // Data Flow
     dataFlowTitle: "از سنسور تا بینش",
@@ -563,6 +589,16 @@ export const translations = {
     apis: "APIها",
     sdks: "SDKها",
     pricing: "قیمت‌گذاری",
+    lang: "fa",
+    
+    // Use Case Pages
+    smartCityApplications: "کاربردهای شهر هوشمند",
+    smartCityApplicationsDesc: "تحول زیرساخت شهری با راه‌حل‌های اینترنت اشیا که کارایی، پایداری و کیفیت زندگی را بهبود می‌بخشد.",
+    readyToTransform: "آماده تحول شهر خود هستید؟",
+    contactSales: "تماس با فروش",
+    agricultureSolutions: "راه‌حل‌های کشاورزی هوشمند",
+    agricultureSolutionsDesc: "افزایش محصول، کاهش هزینه‌ها و بهینه‌سازی منابع با فناوری کشاورزی دقیق.",
+    transformYourFarm: "مزرعه خود را امروز متحول کنید",
     
     // Login Page
     welcomeBack: "به پاپلی خوش آمدید",
