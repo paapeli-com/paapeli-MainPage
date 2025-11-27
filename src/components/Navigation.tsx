@@ -27,6 +27,7 @@ export const Navigation = () => {
   const hostname = window.location.hostname;
   const isPanelDomain = hostname === 'panel.paapeli.com' || hostname.includes('panel-');
   const isMainDomain = hostname === 'paapeli.com' || hostname === 'www.paapeli.com' || hostname === 'localhost';
+  const langPrefix = language === 'en' ? '' : `/${language}`;
 
   const getBlogUrl = () => {
     return language === 'en' 
@@ -77,7 +78,7 @@ export const Navigation = () => {
                     <ul className="grid w-[400px] gap-3 p-4 bg-popover z-[100]">
                       <li>
                         <a
-                          href="/aiot-platform"
+                          href={`${langPrefix}/aiot-platform`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -90,7 +91,7 @@ export const Navigation = () => {
                       </li>
                       <li>
                         <a
-                          href="/ddos-protection"
+                          href={`${langPrefix}/ddos-protection`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -103,7 +104,7 @@ export const Navigation = () => {
                       </li>
                       <li>
                         <a
-                          href="/edge-computing"
+                          href={`${langPrefix}/edge-computing`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -116,7 +117,7 @@ export const Navigation = () => {
                       </li>
                       <li>
                         <a
-                          href="/intelligence-insight"
+                          href={`${langPrefix}/intelligence-insight`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -129,7 +130,7 @@ export const Navigation = () => {
                       </li>
                       <li>
                         <a
-                          href="/ota"
+                          href={`${langPrefix}/ota`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -153,7 +154,7 @@ export const Navigation = () => {
                     <ul className="grid w-[400px] gap-3 p-4 bg-popover z-[100]">
                       <li>
                         <a
-                          href="/makers-developers"
+                          href={`${langPrefix}/makers-developers`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -163,7 +164,7 @@ export const Navigation = () => {
                       </li>
                       <li>
                         <a
-                          href="/oil-gas"
+                          href={`${langPrefix}/oil-gas`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -173,7 +174,7 @@ export const Navigation = () => {
                       </li>
                       <li>
                         <a
-                          href="/smart-cities"
+                          href={`${langPrefix}/smart-cities`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -183,7 +184,7 @@ export const Navigation = () => {
                       </li>
                       <li>
                         <a
-                          href="/smart-agriculture"
+                          href={`${langPrefix}/smart-agriculture`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -193,7 +194,7 @@ export const Navigation = () => {
                       </li>
                       <li>
                         <a
-                          href="/smart-buildings"
+                          href={`${langPrefix}/smart-buildings`}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="!text-sm font-medium leading-none">
@@ -207,49 +208,48 @@ export const Navigation = () => {
 
                 {/* Docs Menu */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
-                    {t('docs')}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="z-[100]">
-                    <ul className="grid w-[200px] gap-3 p-4 bg-popover z-[100]">
-                      <li>
-                        <a
-                          href="https://docs.paapeli.com/"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
+                  <div className="relative group">
+                    <button
+                      type="button"
+                      className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none"
+                    >
+                      {t('docs')}
+                    </button>
+                    <div className="hidden group-hover:block absolute top-full mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-[100]">
+                      <ul className="py-2">
+                        <li>
+                          <a
+                            href="https://docs.paapeli.com/"
+                            className="block px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground"
+                          >
                             {t('features')}
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="https://docs.paapeli.com/"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="https://docs.paapeli.com/"
+                            className="block px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground"
+                          >
                             {t('apis')}
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="https://docs.paapeli.com/"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="https://docs.paapeli.com/"
+                            className="block px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground"
+                          >
                             {t('sdks')}
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </NavigationMenuContent>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </NavigationMenuItem>
 
                 {/* Pricing */}
                 <NavigationMenuItem>
                   <a
-                    href="/pricing"
+                    href={`${langPrefix}/pricing`}
                     className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                   >
                     {t('pricing')}
