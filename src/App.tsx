@@ -67,6 +67,13 @@ const App = () => (
               <Route path="/edge-computing" element={<EdgeComputing />} />
               <Route path="/intelligence-insight" element={<IntelligenceInsight />} />
               <Route path="/ota" element={<OTAProduct />} />
+              {/* Localized Public Product Pages */}
+              <Route path="/:lang/pricing" element={<Pricing />} />
+              <Route path="/:lang/aiot-platform" element={<AIoTPlatform />} />
+              <Route path="/:lang/ddos-protection" element={<DDoSProtection />} />
+              <Route path="/:lang/edge-computing" element={<EdgeComputing />} />
+              <Route path="/:lang/intelligence-insight" element={<IntelligenceInsight />} />
+              <Route path="/:lang/ota" element={<OTAProduct />} />
               
               {/* Use Cases Pages */}
               <Route path="/smart-cities" element={<SmartCities />} />
@@ -74,6 +81,12 @@ const App = () => (
               <Route path="/oil-gas" element={<OilGas />} />
               <Route path="/smart-agriculture" element={<SmartAgriculture />} />
               <Route path="/smart-buildings" element={<SmartBuildings />} />
+              {/* Localized Use Cases Pages */}
+              <Route path="/:lang/smart-cities" element={<SmartCities />} />
+              <Route path="/:lang/makers-developers" element={<MakersDevelopers />} />
+              <Route path="/:lang/oil-gas" element={<OilGas />} />
+              <Route path="/:lang/smart-agriculture" element={<SmartAgriculture />} />
+              <Route path="/:lang/smart-buildings" element={<SmartBuildings />} />
               
               {/* Protected Panel Routes */}
               <Route path="/home" element={<ProtectedRoute><PanelHome /></ProtectedRoute>} />
