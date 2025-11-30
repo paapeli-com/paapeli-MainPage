@@ -103,60 +103,70 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
       {/* Menu Items */}
       <nav className="flex-1 overflow-y-auto p-4">
         <ul className="space-y-1">
-          {menuItems.map((item, index) => (
-            <li key={index}>
-              {item.children ? (
-                <Collapsible open={devicesOpen} onOpenChange={setDevicesOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-accent transition-colors">
-                    <div className="flex items-center gap-3">
-                      <item.icon className="h-5 w-5" />
+          {menuItems.map((item, index) => {
+            const hasChildren = !!item.children;
+            const isDevicesMenu = hasChildren && item.title === t("devices");
+            const isAiotMenu = hasChildren && item.title === t("aiotMenu");
+            const openState = isDevicesMenu ? devicesOpen : aiotOpen;
+            const setOpenState = isDevicesMenu ? setDevicesOpen : setAiotOpen;
+
+            return (
+              <li key={index}>
+                {hasChildren ? (
+                  <Collapsible open={openState} onOpenChange={setOpenState}>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-accent transition-colors">
+                      <div className="flex items-center gap-3">
+                        <item.icon className="h-5 w-5" />
+                        <span>{item.title}</span>
+                      </div>
+                      <ChevronDown className={`h-4 w-4 transition-transform ${openState ? "rotate-180" : ""}`} />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <ul className={`mt-1 space-y-1 ${isRTL ? "mr-6" : "ml-6"}`}>
+                        {item.children?.map((child, childIndex) => (
+                          <li key={childIndex}>
+                            <button
+                              onClick={() => {
+                                navigate(child.path);
+                                setSidebarOpen(false);
+                              }}
+                              className={`w-full ${isRTL ? "text-right pr-4" : "text-left pl-4"} p-2 rounded-lg transition-colors ${
+                                isActive(child.path)
+                                  ? "bg-primary text-primary-foreground"
+                                  : "hover:bg-accent"
+                              }`}
+                            >
+                              {child.title}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (item.path) {
+                        navigate(item.path);
+                        setSidebarOpen(false);
+                      }
+                    }}
+                    className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${
+                      item.path && isActive(item.path)
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-accent"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <div className="flex flex-col items-start">
                       <span>{item.title}</span>
+                      {item.subtitle && <span className="text-xs opacity-70">({item.subtitle})</span>}
                     </div>
-                    <ChevronDown className={`h-4 w-4 transition-transform ${devicesOpen ? "rotate-180" : ""}`} />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <ul className={`mt-1 space-y-1 ${isRTL ? "mr-6" : "ml-6"}`}>
-                      {item.children.map((child, childIndex) => (
-                        <li key={childIndex}>
-                          <button
-                            onClick={() => {
-                              navigate(child.path);
-                              setSidebarOpen(false);
-                            }}
-                            className={`w-full ${isRTL ? "text-right pr-4" : "text-left pl-4"} p-2 rounded-lg transition-colors ${
-                              isActive(child.path)
-                                ? "bg-primary text-primary-foreground"
-                                : "hover:bg-accent"
-                            }`}
-                          >
-                            {child.title}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </CollapsibleContent>
-                </Collapsible>
-              ) : (
-                <button
-                  onClick={() => {
-                    navigate(item.path);
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${
-                    isActive(item.path)
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-accent"
-                  }`}
-                >
-                  <item.icon className="h-5 w-5" />
-                  <div className="flex flex-col items-start">
-                    <span>{item.title}</span>
-                    {item.subtitle && <span className="text-xs opacity-70">({item.subtitle})</span>}
-                  </div>
-                </button>
-              )}
-            </li>
-          ))}
+                  </button>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
