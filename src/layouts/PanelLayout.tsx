@@ -19,6 +19,7 @@ import {
   LogOut,
   Settings,
   ChevronDown,
+  Brain,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -53,13 +54,14 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [devicesOpen, setDevicesOpen] = useState(true);
+  const [aiotOpen, setAiotOpen] = useState(true);
   
   // Helper to add language prefix to paths
   const getLocalizedPath = (path: string) => {
     return language === 'en' ? path : `/${language}${path}`;
   };
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     { title: t("home"), icon: Home, path: getLocalizedPath("/home") },
     { title: t("dashboard"), icon: LayoutDashboard, path: getLocalizedPath("/dashboard") },
     {
@@ -76,6 +78,17 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
     { title: "OTA", subtitle: t("otaUpdate"), icon: Download, path: getLocalizedPath("/ota") },
     { title: t("members"), icon: UserCog, path: getLocalizedPath("/members") },
     { title: t("devCenter"), icon: Code, path: getLocalizedPath("/dev-center") },
+    {
+      title: "AIoT",
+      icon: Brain,
+      children: [
+        { title: "Forecast Equipment Failures", path: getLocalizedPath("/aiot/forecast-failures") },
+        { title: "Analyze Trends", path: getLocalizedPath("/aiot/analyze-trends") },
+        { title: "Intelligent Recommendations", path: getLocalizedPath("/aiot/intelligent-recommendations") },
+        { title: "Detect Anomalies", path: getLocalizedPath("/aiot/detect-anomalies") },
+        { title: "AI Co-Pilot", path: getLocalizedPath("/aiot/co-pilot") },
+      ],
+    },
   ];
 
   const handleLogout = async () => {
@@ -106,9 +119,9 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
           {menuItems.map((item, index) => {
             const hasChildren = !!item.children;
             const isDevicesMenu = hasChildren && item.title === t("devices");
-            const isAiotMenu = hasChildren && item.title === t("aiotMenu");
-            const openState = isDevicesMenu ? devicesOpen : aiotOpen;
-            const setOpenState = isDevicesMenu ? setDevicesOpen : setAiotOpen;
+            const isAiotMenu = hasChildren && item.title === "AIoT";
+            const openState = isDevicesMenu ? devicesOpen : isAiotMenu ? aiotOpen : devicesOpen;
+            const setOpenState = isDevicesMenu ? setDevicesOpen : isAiotMenu ? setAiotOpen : setDevicesOpen;
 
             return (
               <li key={index}>

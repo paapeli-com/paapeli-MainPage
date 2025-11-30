@@ -1,13 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -67,206 +60,182 @@ export const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className={`hidden md:flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <NavigationMenu>
-              <NavigationMenuList className={isRTL ? 'flex-row-reverse' : ''}>
-                {/* Products Menu */}
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
+            <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              {/* Products Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="group inline-flex h-10 items-center justify-center rounded-md bg-transparent px-4 py-2 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none">
                     {t('products')}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="z-[100]">
-                    <ul className="grid w-[400px] gap-3 p-4 bg-popover z-[100]">
-                      <li>
-                        <a
-                          href={`${langPrefix}/aiot-platform`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('aiotPlatform')}
-                          </div>
-                          <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
-                            {t('aiotPlatformNavDesc')}
-                          </p>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href={`${langPrefix}/ddos-protection`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('ddosProtection')}
-                          </div>
-                          <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
-                            {t('ddosProtectionNavDesc')}
-                          </p>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href={`${langPrefix}/edge-computing`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('edgeComputing')}
-                          </div>
-                          <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
-                            {t('edgeComputingNavDesc')}
-                          </p>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href={`${langPrefix}/intelligence-insight`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('intelligenceInsight')}
-                          </div>
-                          <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
-                            {t('intelligenceInsightNavDesc')}
-                          </p>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href={`${langPrefix}/ota`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('ota')}
-                          </div>
-                          <p className="line-clamp-2 !text-[11px] leading-snug text-muted-foreground">
-                            {t('otaNavDesc')}
-                          </p>
-                        </a>
-                      </li>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align={isRTL ? 'end' : 'start'}
+                  className="w-96 bg-popover border border-border/60 shadow-xl"
+                >
+                  <ul className="grid gap-3 p-2">
+                    <li>
+                      <button
+                        onClick={() => navigate(`${langPrefix}/aiot-platform`)}
+                        className="w-full text-left select-none space-y-1 rounded-md px-3 py-2 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <div className="text-sm font-medium leading-none">
+                          {t('aiotPlatform')}
+                        </div>
+                        <p className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">
+                          {t('aiotPlatformNavDesc')}
+                        </p>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => navigate(`${langPrefix}/ddos-protection`)}
+                        className="w-full text-left select-none space-y-1 rounded-md px-3 py-2 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <div className="text-sm font-medium leading-none">
+                          {t('ddosProtection')}
+                        </div>
+                        <p className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">
+                          {t('ddosProtectionNavDesc')}
+                        </p>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => navigate(`${langPrefix}/edge-computing`)}
+                        className="w-full text-left select-none space-y-1 rounded-md px-3 py-2 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <div className="text-sm font-medium leading-none">
+                          {t('edgeComputing')}
+                        </div>
+                        <p className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">
+                          {t('edgeComputingNavDesc')}
+                        </p>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => navigate(`${langPrefix}/intelligence-insight`)}
+                        className="w-full text-left select-none space-y-1 rounded-md px-3 py-2 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <div className="text-sm font-medium leading-none">
+                          {t('intelligenceInsight')}
+                        </div>
+                        <p className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">
+                          {t('intelligenceInsightNavDesc')}
+                        </p>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => navigate(`${langPrefix}/ota`)}
+                        className="w-full text-left select-none space-y-1 rounded-md px-3 py-2 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <div className="text-sm font-medium leading-none">
+                          {t('ota')}
+                        </div>
+                        <p className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">
+                          {t('otaNavDesc')}
+                        </p>
+                      </button>
+                    </li>
+                  </ul>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-                {/* Use Cases Menu */}
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
+              {/* Use Cases Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="group inline-flex h-10 items-center justify-center rounded-md bg-transparent px-4 py-2 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none">
                     {t('useCases')}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="z-[100]">
-                    <ul className="grid w-[400px] gap-3 p-4 bg-popover z-[100]">
-                      <li>
-                        <a
-                          href={`${langPrefix}/makers-developers`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('makersDevelopers')}
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href={`${langPrefix}/oil-gas`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('oilGas')}
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href={`${langPrefix}/smart-cities`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('smartCities')}
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href={`${langPrefix}/smart-agriculture`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('smartAgriculture')}
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href={`${langPrefix}/smart-buildings`}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('smartBuildings')}
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align={isRTL ? 'end' : 'start'}
+                  className="w-80 bg-popover border border-border/60 shadow-xl"
+                >
+                  <div className="py-2">
+                    <button
+                      onClick={() => navigate(`${langPrefix}/makers-developers`)}
+                      className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t('makersDevelopers')}
+                    </button>
+                    <button
+                      onClick={() => navigate(`${langPrefix}/oil-gas`)}
+                      className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t('oilGas')}
+                    </button>
+                    <button
+                      onClick={() => navigate(`${langPrefix}/smart-cities`)}
+                      className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t('smartCities')}
+                    </button>
+                    <button
+                      onClick={() => navigate(`${langPrefix}/smart-agriculture`)}
+                      className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t('smartAgriculture')}
+                    </button>
+                    <button
+                      onClick={() => navigate(`${langPrefix}/smart-buildings`)}
+                      className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t('smartBuildings')}
+                    </button>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-                {/* Docs Menu */}
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent !text-base">
+              {/* Docs Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="group inline-flex h-10 items-center justify-center rounded-md bg-transparent px-4 py-2 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none">
                     {t('docs')}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="z-[100]">
-                    <ul className="grid w-[300px] gap-3 p-4 bg-popover z-[100]">
-                      <li>
-                        <a
-                          href="https://docs.paapeli.com/"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('features')}
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="https://docs.paapeli.com/"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('apis')}
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="https://docs.paapeli.com/"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="!text-sm font-medium leading-none">
-                            {t('sdks')}
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align={isRTL ? 'end' : 'start'}
+                  className="w-64 bg-popover border border-border/60 shadow-xl"
+                >
+                  <div className="py-2">
+                    <a
+                      href="https://docs.paapeli.com/"
+                      className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t('features')}
+                    </a>
+                    <a
+                      href="https://docs.paapeli.com/"
+                      className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t('apis')}
+                    </a>
+                    <a
+                      href="https://docs.paapeli.com/"
+                      className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t('sdks')}
+                    </a>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-                {/* Pricing */}
-                <NavigationMenuItem>
-                  <a
-                    href={`${langPrefix}/pricing`}
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    {t('pricing')}
-                  </a>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <a
-                    href={getBlogUrl()}
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 !text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    {t('blog')}
-                  </a>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+              {/* Pricing & Blog Links */}
+              <button
+                onClick={() => navigate(`${langPrefix}/pricing`)}
+                className="inline-flex h-10 items-center justify-center rounded-md bg-transparent px-4 py-2 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none"
+              >
+                {t('pricing')}
+              </button>
+              <a
+                href={getBlogUrl()}
+                className="inline-flex h-10 items-center justify-center rounded-md bg-transparent px-4 py-2 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none"
+              >
+                {t('blog')}
+              </a>
+            </div>
           </div>
 
           {/* Right Side - Language Switcher and Auth */}
