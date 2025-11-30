@@ -38,6 +38,11 @@ import MakersDevelopers from "./pages/usecases/MakersDevelopers";
 import OilGas from "./pages/usecases/OilGas";
 import SmartAgriculture from "./pages/usecases/SmartAgriculture";
 import SmartBuildings from "./pages/usecases/SmartBuildings";
+import AIoTForecastFailures from "./pages/panel/AIoTForecastFailures";
+import AIoTAnalyzeTrends from "./pages/panel/AIoTAnalyzeTrends";
+import AIoTRecommendations from "./pages/panel/AIoTRecommendations";
+import AIoTDetectAnomalies from "./pages/panel/AIoTDetectAnomalies";
+import AIoTCoPilot from "./pages/panel/AIoTCoPilot";
 
 const queryClient = new QueryClient();
 
@@ -111,6 +116,18 @@ const App = () => (
               <Route path="/:lang/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
               <Route path="/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
               <Route path="/:lang/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
+              
+              {/* AIoT Routes */}
+              <Route path="/aiot/forecast-failures" element={<ProtectedRoute><AIoTForecastFailures /></ProtectedRoute>} />
+              <Route path="/:lang/aiot/forecast-failures" element={<ProtectedRoute><AIoTForecastFailures /></ProtectedRoute>} />
+              <Route path="/aiot/analyze-trends" element={<ProtectedRoute><AIoTAnalyzeTrends /></ProtectedRoute>} />
+              <Route path="/:lang/aiot/analyze-trends" element={<ProtectedRoute><AIoTAnalyzeTrends /></ProtectedRoute>} />
+              <Route path="/aiot/intelligent-recommendations" element={<ProtectedRoute><AIoTRecommendations /></ProtectedRoute>} />
+              <Route path="/:lang/aiot/intelligent-recommendations" element={<ProtectedRoute><AIoTRecommendations /></ProtectedRoute>} />
+              <Route path="/aiot/detect-anomalies" element={<ProtectedRoute><AIoTDetectAnomalies /></ProtectedRoute>} />
+              <Route path="/:lang/aiot/detect-anomalies" element={<ProtectedRoute><AIoTDetectAnomalies /></ProtectedRoute>} />
+              <Route path="/aiot/co-pilot" element={<ProtectedRoute><AIoTCoPilot /></ProtectedRoute>} />
+              <Route path="/:lang/aiot/co-pilot" element={<ProtectedRoute><AIoTCoPilot /></ProtectedRoute>} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
