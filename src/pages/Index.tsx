@@ -16,14 +16,17 @@ import {
   Shield
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
+import { SensorToInsightDiagram } from "@/components/SensorToInsightDiagram";
 import { useLanguage } from "@/contexts/LanguageContext";
 import heroBg from "@/assets/hero-bg.jpg";
-import architectureDiagram from "@/assets/architecture-diagram.png";
 import otaUpdate from "@/assets/ota-update.jpg";
 import dashboardPreview from "@/assets/dashboard-preview.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const { t, isRTL, language } = useLanguage();
+  const navigate = useNavigate();
+  const langPrefix = language === 'en' ? '' : `/${language}`;
 
   return (
     <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -58,7 +61,12 @@ const Index = () => {
               >
                 {t('getStarted')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
               </Button>
-              <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20 text-lg px-8 py-6">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20 text-lg px-8 py-6"
+                onClick={() => navigate(`${langPrefix}/request-demo`)}
+              >
                 {t('learnMore')}
               </Button>
             </div>
@@ -72,48 +80,46 @@ const Index = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-foreground">
             {t('keyFeatures')}
           </h2>
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20 flex flex-col h-full">
               <Link2 className="h-12 w-12 text-primary mb-4" />
               <h3 className="text-2xl font-bold mb-4 text-foreground">{t('deviceManagement')}</h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground flex-1">
                 {t('deviceManagementDesc')}
               </p>
             </Card>
-            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
+            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20 flex flex-col h-full">
               <Cloud className="h-12 w-12 text-secondary mb-4" />
               <h3 className="text-2xl font-bold mb-4 text-foreground">{t('cloudNative')}</h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground flex-1">
                 {t('cloudNativeDesc')}
               </p>
             </Card>
-            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
+            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20 flex flex-col h-full">
               <Brain className="h-12 w-12 text-primary mb-4" />
               <h3 className="text-2xl font-bold mb-4 text-foreground">{t('aiInsights')}</h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground flex-1">
                 {t('aiInsightsDesc')}
               </p>
             </Card>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
+            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20 flex flex-col h-full">
               <Radio className="h-12 w-12 text-secondary mb-4" />
               <h3 className="text-2xl font-bold mb-4 text-foreground">{t('openProtocols')}</h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground flex-1">
                 {t('openProtocolsDesc')}
               </p>
             </Card>
-            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
+            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20 flex flex-col h-full">
               <Network className="h-12 w-12 text-primary mb-4" />
               <h3 className="text-2xl font-bold mb-4 text-foreground">{t('gatewaySupport')}</h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground flex-1">
                 {t('gatewaySupportDesc')}
               </p>
             </Card>
-            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20">
+            <Card className="p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border bg-gradient-to-b from-card to-muted/20 flex flex-col h-full">
               <Shield className="h-12 w-12 text-secondary mb-4" />
               <h3 className="text-2xl font-bold mb-4 text-foreground">{t('security')}</h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground flex-1">
                 {t('securityDesc')}
               </p>
             </Card>
@@ -121,7 +127,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Architecture Diagram Section */}
+      {/* Sensor to Insight Diagram Section */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-8 text-foreground">
@@ -130,13 +136,7 @@ const Index = () => {
           <p className="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
             {t('dataFlowDesc')}
           </p>
-          <div className="max-w-5xl mx-auto">
-            <img 
-              src={architectureDiagram} 
-              alt="Architecture Diagram" 
-              className="w-full rounded-lg shadow-xl"
-            />
-          </div>
+          <SensorToInsightDiagram />
         </div>
       </section>
 
@@ -250,7 +250,12 @@ const Index = () => {
             >
               {t('tryDashboard')} <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 border-2">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="text-lg px-8 border-2"
+              onClick={() => navigate(`${langPrefix}/request-demo`)}
+            >
               {t('requestDemo')}
             </Button>
           </div>
@@ -270,25 +275,45 @@ const Index = () => {
             <div>
               <h4 className="font-semibold mb-4 text-foreground">{t('product')}</h4>
               <ul className="space-y-2 text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">{t('home')}</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">{t('docs')}</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">{t('pricing')}</a></li>
+                <li>
+                  <button onClick={() => navigate('/')} className="hover:text-primary transition-colors">
+                    {t('home')}
+                  </button>
+                </li>
+                <li>
+                  <a href="https://docs.paapeli.com/" className="hover:text-primary transition-colors">
+                    {t('docs')}
+                  </a>
+                </li>
+                <li>
+                  <button onClick={() => navigate(`${langPrefix}/pricing`)} className="hover:text-primary transition-colors">
+                    {t('pricing')}
+                  </button>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4 text-foreground">{t('resources')}</h4>
               <ul className="space-y-2 text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">{t('status')}</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">{t('contact')}</a></li>
+                <li>
+                  <button onClick={() => navigate(`${langPrefix}/status`)} className="hover:text-primary transition-colors">
+                    {t('status')}
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate(`${langPrefix}/contact`)} className="hover:text-primary transition-colors">
+                    {t('contact')}
+                  </button>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4 text-foreground">{t('connect')}</h4>
               <div className="flex gap-4">
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="https://www.linkedin.com/company/paapeli/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   <Linkedin className="h-6 w-6" />
                 </a>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="https://github.com/paapeli-com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   <Github className="h-6 w-6" />
                 </a>
               </div>
