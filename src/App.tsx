@@ -15,6 +15,9 @@ import AuthError from "./pages/AuthError";
 import AccountSettings from "./pages/AccountSettings";
 import GoogleSignup from "./pages/GoogleSignup";
 import NotFound from "./pages/NotFound";
+import Contact from "./pages/Contact";
+import Status from "./pages/Status";
+import RequestDemo from "./pages/RequestDemo";
 import PanelNotFound from "./pages/panel/PanelNotFound";
 import PanelHome from "./pages/panel/PanelHome";
 import Dashboard from "./pages/panel/Dashboard";
@@ -128,6 +131,14 @@ const App = () => (
               <Route path="/:lang/aiot/detect-anomalies" element={<ProtectedRoute><AIoTDetectAnomalies /></ProtectedRoute>} />
               <Route path="/aiot/co-pilot" element={<ProtectedRoute><AIoTCoPilot /></ProtectedRoute>} />
               <Route path="/:lang/aiot/co-pilot" element={<ProtectedRoute><AIoTCoPilot /></ProtectedRoute>} />
+              
+              {/* New Public Pages */}
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/:lang/contact" element={<Contact />} />
+              <Route path="/status" element={<Status />} />
+              <Route path="/:lang/status" element={<Status />} />
+              <Route path="/request-demo" element={<RequestDemo />} />
+              <Route path="/:lang/request-demo" element={<RequestDemo />} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
