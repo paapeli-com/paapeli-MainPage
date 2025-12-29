@@ -23,7 +23,7 @@ export const translations = {
     
     // Data Flow
     dataFlowTitle: "From Sensor to Insight",
-    dataFlowDesc: "Paapeli securely collects data from your devices, processes it in real time, and delivers actionable insights directly to your dashboard.",
+    dataFlowDesc: "Paapeli empowers SMEs and industrial manufacturers to connect PLCs, sensors, and machinery—securely processing real-time data and delivering AI-powered insights to optimize operations and reduce downtime.",
     
     // Use Cases
     useCasesTitle: "Designed for Every Industry",
@@ -339,8 +339,8 @@ export const translations = {
     securityDesc: "حماية متقدمة من هجمات DDoS والتشفير من طرف إلى طرف تحافظ على أمان بياناتك. تدابير أمنية رائدة في الصناعة تحمي بنيتك التحتية من التهديدات مع ضمان خصوصية البيانات والامتثال للمعايير العالمية.",
     
     // Data Flow
-    dataFlowTitle: "من المستشعر إلى الرؤية — بسلاسة",
-    dataFlowDesc: "تجمع باپيلي البيانات من أجهزتك بشكل آمن، وتعالجها في الوقت الفعلي، وتقدم رؤى قابلة للتنفيذ مباشرة إلى لوحة التحكم الخاصة بك",
+    dataFlowTitle: "من المستشعر إلى الرؤية",
+    dataFlowDesc: "تمكّن باپيلي الشركات الصغيرة والمتوسطة والمصنعين الصناعيين من ربط أجهزة التحكم المنطقية والمستشعرات والآلات - معالجة البيانات في الوقت الفعلي بشكل آمن وتقديم رؤى مدعومة بالذكاء الاصطناعي لتحسين العمليات وتقليل وقت التوقف.",
     
     // Use Cases
     useCasesTitle: "مصممة لكل صناعة",
@@ -659,7 +659,7 @@ export const translations = {
     
     // Data Flow
     dataFlowTitle: "از سنسور تا بینش",
-    dataFlowDesc: "پاپلی به صورت امن داده‌ها را از دستگاه‌های شما جمع‌آوری می‌کند، آنها را در لحظه پردازش می‌کند و بینش‌های قابل اجرا را مستقیماً به داشبورد شما ارائه می‌دهد.",
+    dataFlowDesc: "پاپلی به شرکت‌های کوچک و متوسط و تولیدکنندگان صنعتی امکان می‌دهد PLCها، سنسورها و ماشین‌آلات را متصل کنند—پردازش امن داده‌ها در لحظه و ارائه بینش‌های مبتنی بر هوش مصنوعی برای بهینه‌سازی عملیات و کاهش زمان توقف.",
     
     // Use Cases
     useCasesTitle: "طراحی شده برای هر صنعتی",
