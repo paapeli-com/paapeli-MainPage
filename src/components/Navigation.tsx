@@ -11,8 +11,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Settings, LogOut } from "lucide-react";
-import paapeliLogoLight from "@/assets/paapeli-logo-light.png";
-import paapeliLogoDark from "@/assets/paapeli-logo-dark.png";
+import paapeliLogo from "@/assets/paapeli-logo.png";
 
 export const Navigation = () => {
   const { t, isRTL, language } = useLanguage();
@@ -55,8 +54,7 @@ export const Navigation = () => {
             onClick={() => navigate('/')} 
             className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
           >
-            <img src={paapeliLogoLight} alt="Paapeli Logo" className="h-10 w-auto dark:hidden" />
-            <img src={paapeliLogoDark} alt="Paapeli Logo" className="h-10 w-auto hidden dark:block" />
+            <img src={paapeliLogo} alt="Paapeli Logo" className="h-10 w-auto" />
             <span className="text-2xl font-bold text-primary">Paapeli</span>
           </button>
 

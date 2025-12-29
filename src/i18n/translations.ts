@@ -23,7 +23,7 @@ export const translations = {
     
     // Data Flow
     dataFlowTitle: "From Sensor to Insight",
-    dataFlowDesc: "Paapeli empowers SMEs and industrial manufacturers to connect PLCs, sensors, and machinery—securely processing real-time data and delivering AI-powered insights to optimize operations and reduce downtime.",
+    dataFlowDesc: "Paapeli empowers SMEs and industrial manufacturers to connect PLCs, sensors, and machinery securely processing real-time data and delivering AI-powered insights to optimize operations and reduce downtime.",
     
     // Use Cases
     useCasesTitle: "Designed for Every Industry",
