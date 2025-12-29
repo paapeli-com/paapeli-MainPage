@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Code, Rocket, Cpu, Wrench, BookOpen, Users } from "lucide-react";
+import { PredictiveMaintenanceStats } from "@/components/PredictiveMaintenanceStats";
 
 const MakersDevelopers = () => {
   const { t, isRTL, language } = useLanguage();
@@ -127,6 +128,9 @@ const MakersDevelopers = () => {
           </div>
         </div>
       </section>
+
+      {/* Predictive Maintenance Stats */}
+      <PredictiveMaintenanceStats />
 
       {/* Project Ideas */}
       <section className="py-20 bg-muted/30">

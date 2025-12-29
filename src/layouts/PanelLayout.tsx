@@ -29,8 +29,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import paapeliLogoLight from "@/assets/paapeli-logo-light.png";
-import paapeliLogoDark from "@/assets/paapeli-logo-dark.png";
+import paapeliLogo from "@/assets/paapeli-logo.png";
 
 interface MenuItem {
   title: string;
@@ -109,8 +108,7 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
       {/* Logo */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center gap-2">
-          <img src={paapeliLogoLight} alt="Paapeli" className="h-8 w-auto dark:hidden" />
-          <img src={paapeliLogoDark} alt="Paapeli" className="h-8 w-auto hidden dark:block" />
+          <img src={paapeliLogo} alt="Paapeli" className="h-8 w-auto" />
           <span className="text-xl font-bold text-primary">Paapeli</span>
         </div>
       </div>

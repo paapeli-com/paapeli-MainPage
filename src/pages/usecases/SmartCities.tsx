@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
+import { PredictiveMaintenanceStats } from "@/components/PredictiveMaintenanceStats";
 import { 
   Lightbulb, 
   Car, 
@@ -211,6 +212,9 @@ const SmartCities = () => {
           </RevealOnScroll>
         </div>
       </section>
+
+      {/* Predictive Maintenance Stats */}
+      <PredictiveMaintenanceStats />
 
       {/* Applications Section */}
       <section className="py-20 bg-background">

@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Building2, Lightbulb, Wind, Shield, Zap, TrendingDown } from "lucide-react";
+import { PredictiveMaintenanceStats } from "@/components/PredictiveMaintenanceStats";
 
 const SmartBuildings = () => {
   const { t, isRTL, language } = useLanguage();
@@ -127,6 +128,9 @@ const SmartBuildings = () => {
           </div>
         </div>
       </section>
+
+      {/* Predictive Maintenance Stats */}
+      <PredictiveMaintenanceStats />
 
       {/* Building Types */}
       <section className="py-20 bg-muted/30">

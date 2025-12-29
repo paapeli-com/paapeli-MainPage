@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Droplet, Activity, AlertTriangle, TrendingUp, Shield, Gauge } from "lucide-react";
+import { PredictiveMaintenanceStats } from "@/components/PredictiveMaintenanceStats";
 
 const OilGas = () => {
   const { t, isRTL, language } = useLanguage();
@@ -127,6 +128,9 @@ const OilGas = () => {
           </div>
         </div>
       </section>
+
+      {/* Predictive Maintenance Stats */}
+      <PredictiveMaintenanceStats />
 
       {/* Benefits Section */}
       <section className="py-20 bg-muted/30">
