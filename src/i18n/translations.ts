@@ -2,7 +2,7 @@ export const translations = {
   en: {
     // Hero Section
     heroTitle: "Build, Connect, and Manage IoT Infrastructure Intelligently",
-    heroSubtitle: "Paapeli is an AI-powered IoT cloud (AIoT) that helps you connect devices, collect insights, and control your infrastructure from anywhere.",
+    heroSubtitle: "Paapeli is an AI-powered cloud IoT (AIoT) that helps you connect devices, collect insights, and control your infrastructure from anywhere.",
     getStarted: "Start Free",
     learnMore: "Learn More",
     
