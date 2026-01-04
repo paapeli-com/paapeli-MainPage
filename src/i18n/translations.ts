@@ -307,6 +307,7 @@ export const translations = {
     enterpriseSolutionsDesc: "Custom solutions tailored to your business needs",
     dedicatedSupport: "Dedicated Support",
     dedicatedSupportDesc: "24/7 support from our expert team",
+    selectSegmentAndSize: "Please select business segment and size.",
     
     // AIoT Panel Menu
     aiotMenu: "AIoT",
@@ -626,6 +627,7 @@ export const translations = {
     enterpriseSolutionsDesc: "حلول مخصصة مصممة حسب احتياجات عملك",
     dedicatedSupport: "دعم مخصص",
     dedicatedSupportDesc: "دعم على مدار الساعة طوال أيام الأسبوع من فريق الخبراء لدينا",
+    selectSegmentAndSize: "يرجى اختيار قطاع الأعمال والحجم.",
     
     // AIoT Panel Menu
     aiotMenu: "AIoT",
@@ -945,6 +947,7 @@ export const translations = {
     enterpriseSolutionsDesc: "راهکارهای سفارشی متناسب با نیازهای کسب و کار شما",
     dedicatedSupport: "پشتیبانی اختصاصی",
     dedicatedSupportDesc: "پشتیبانی 24/7 از تیم متخصص ما",
+    selectSegmentAndSize: "لطفاً بخش کسب و کار و اندازه را انتخاب کنید.",
     
     // AIoT Panel Menu
     aiotMenu: "AIoT",

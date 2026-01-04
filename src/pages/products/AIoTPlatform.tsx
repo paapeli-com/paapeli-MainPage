@@ -3,9 +3,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Cloud, Shield, Zap, Database, Network, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AIoTPlatform = () => {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, language } = useLanguage();
+  const navigate = useNavigate();
+  const langPrefix = language === 'en' ? '' : `/${language}`;
 
   const features = [
     {
@@ -55,8 +58,8 @@ const AIoTPlatform = () => {
               {t('aiotPlatformNavDesc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg">Get Started Free</Button>
-              <Button size="lg" variant="outline">Schedule Demo</Button>
+              <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>Get Started Free</Button>
+              <Button size="lg" variant="outline" onClick={() => navigate(`${langPrefix}/request-demo`)}>Schedule Demo</Button>
             </div>
           </div>
         </div>
@@ -93,7 +96,7 @@ const AIoTPlatform = () => {
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands of companies using Paapeli to build and scale their IoT solutions
           </p>
-          <Button size="lg">Start Building Today</Button>
+          <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>Start Building Today</Button>
         </div>
       </section>
     </div>

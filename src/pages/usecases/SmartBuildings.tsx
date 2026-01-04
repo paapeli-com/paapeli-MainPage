@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Building2, Lightbulb, Wind, Shield, Zap, TrendingDown } from "lucide-react";
 import { PredictiveMaintenanceStats } from "@/components/PredictiveMaintenanceStats";
+import { useNavigate } from "react-router-dom";
 
 const SmartBuildings = () => {
   const { t, isRTL, language } = useLanguage();
+  const navigate = useNavigate();
+  const langPrefix = language === 'en' ? '' : `/${language}`;
 
   const features = [
     {
@@ -84,12 +87,12 @@ const SmartBuildings = () => {
               {language === 'ar' && 'تحويل المباني إلى مساحات ذكية وفعالة. قلل تكاليف الطاقة، وعزز الراحة، وحسن الأمان بحلول إنترنت الأشياء المتكاملة.'}
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg">
+              <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>
                 {language === 'en' && 'Learn More'}
                 {language === 'fa' && 'بیشتر بدانید'}
                 {language === 'ar' && 'اعرف المزيد'}
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" onClick={() => navigate(`${langPrefix}/request-demo`)}>
                 {language === 'en' && 'Request Quote'}
                 {language === 'fa' && 'درخواست قیمت'}
                 {language === 'ar' && 'طلب عرض أسعار'}
@@ -246,7 +249,7 @@ const SmartBuildings = () => {
               {language === 'fa' && 'با ما تماس بگیرید تا در مورد پروژه ساختمان هوشمند خود صحبت کنید'}
               {language === 'ar' && 'اتصل بنا لمناقشة مشروع مبناك الذكي'}
             </p>
-            <Button size="lg">
+            <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>
               {language === 'en' && 'Get Started'}
               {language === 'fa' && 'شروع کنید'}
               {language === 'ar' && 'ابدأ'}
