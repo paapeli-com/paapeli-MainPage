@@ -3,9 +3,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Brain, TrendingUp, AlertTriangle, LineChart, Sparkles, MessageSquare, Award } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const IntelligenceInsight = () => {
   const { t, isRTL, language } = useLanguage();
+  const navigate = useNavigate();
+  const langPrefix = language === 'en' ? '' : `/${language}`;
 
   const isFirstOnline = language === 'fa' || language === 'ar';
 
@@ -93,12 +96,12 @@ const IntelligenceInsight = () => {
               {language === 'ar' && 'حوّل بيانات إنترنت الأشياء إلى رؤى قابلة للتنفيذ باستخدام التحليلات المدعومة بالذكاء الاصطناعي. تنبأ بالأعطال، واكتشف الشذوذ، وقم بتحسين العمليات تلقائيًا.'}
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg">
+              <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>
                 {language === 'en' && 'Get Started'}
                 {language === 'fa' && 'شروع کنید'}
                 {language === 'ar' && 'ابدأ الآن'}
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" onClick={() => navigate(`${langPrefix}/request-demo`)}>
                 {language === 'en' && 'Watch Demo'}
                 {language === 'fa' && 'مشاهده دمو'}
                 {language === 'ar' && 'شاهد العرض'}
@@ -152,7 +155,7 @@ const IntelligenceInsight = () => {
               {language === 'fa' && 'همین امروز از هوش مصنوعی برای بهینه‌سازی عملیات IoT خود استفاده کنید'}
               {language === 'ar' && 'ابدأ في استخدام الذكاء الاصطناعي لتحسين عمليات إنترنت الأشياء اليوم'}
             </p>
-            <Button size="lg">
+            <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>
               {language === 'en' && 'Start Free Trial'}
               {language === 'fa' && 'شروع دوره آزمایشی رایگان'}
               {language === 'ar' && 'ابدأ النسخة التجريبية المجانية'}

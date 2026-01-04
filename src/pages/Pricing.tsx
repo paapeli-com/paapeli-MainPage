@@ -4,10 +4,13 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, Zap, Clock, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Pricing = () => {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, language } = useLanguage();
   const [isPayAsYouGo, setIsPayAsYouGo] = useState(true);
+  const navigate = useNavigate();
+  const langPrefix = language === 'en' ? '' : `/${language}`;
 
   const plans = [
     {
@@ -209,6 +212,7 @@ const Pricing = () => {
                 <Button
                   className="w-full"
                   variant={plan.popular ? "default" : "outline"}
+                  onClick={() => navigate(`${langPrefix}/request-demo`)}
                 >
                   {plan.price === "Custom" ? "Contact Sales" : "Get Started"}
                 </Button>

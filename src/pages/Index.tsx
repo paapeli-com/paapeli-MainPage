@@ -301,7 +301,7 @@ const Index = () => {
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate(`${langPrefix}/contact`)} className="hover:text-primary transition-colors">
+                  <button onClick={() => navigate(`${langPrefix}/request-demo`)} className="hover:text-primary transition-colors">
                     {t('contact')}
                   </button>
                 </li>

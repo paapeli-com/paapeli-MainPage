@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Droplet, Activity, AlertTriangle, TrendingUp, Shield, Gauge } from "lucide-react";
 import { PredictiveMaintenanceStats } from "@/components/PredictiveMaintenanceStats";
+import { useNavigate } from "react-router-dom";
 
 const OilGas = () => {
   const { t, isRTL, language } = useLanguage();
+  const navigate = useNavigate();
+  const langPrefix = language === 'en' ? '' : `/${language}`;
 
   const features = [
     {
@@ -84,12 +87,12 @@ const OilGas = () => {
               {language === 'ar' && 'قم بتحسين العمليات وتعزيز السلامة وخفض التكاليف من خلال مراقبة إنترنت الأشياء الصناعية للبنية التحتية للنفط والغاز. راقب الأصول البعيدة ومنع الأعطال المكلفة.'}
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg">
+              <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>
                 {language === 'en' && 'Request Demo'}
                 {language === 'fa' && 'درخواست دمو'}
                 {language === 'ar' && 'طلب عرض توضيحي'}
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" onClick={() => navigate(`${langPrefix}/request-demo`)}>
                 {language === 'en' && 'View Case Studies'}
                 {language === 'fa' && 'مشاهده مطالعات موردی'}
                 {language === 'ar' && 'عرض دراسات الحالة'}
@@ -207,7 +210,7 @@ const OilGas = () => {
               {language === 'fa' && 'با تیم ما تماس بگیرید تا در مورد نیازهای IoT نفت و گاز خود صحبت کنید'}
               {language === 'ar' && 'اتصل بفريقنا لمناقشة متطلبات إنترنت الأشياء للنفط والغاز'}
             </p>
-            <Button size="lg">
+            <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>
               {language === 'en' && 'Contact Sales'}
               {language === 'fa' && 'تماس با فروش'}
               {language === 'ar' && 'اتصل بالمبيعات'}

@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sprout, Droplets, Cloud, ThermometerSun, Wifi, BarChart3 } from "lucide-react";
 import { PredictiveMaintenanceStats } from "@/components/PredictiveMaintenanceStats";
+import { useNavigate } from "react-router-dom";
 
 const SmartAgriculture = () => {
   const { t, isRTL, language } = useLanguage();
+  const navigate = useNavigate();
+  const langPrefix = language === 'en' ? '' : `/${language}`;
 
   const features = [
     {
@@ -84,12 +87,12 @@ const SmartAgriculture = () => {
               {language === 'ar' && 'تحويل الزراعة التقليدية إلى زراعة دقيقة باستخدام إنترنت الأشياء. راقب المحاصيل، وحسّن الري، وزد الإنتاجية بالرؤى المدفوعة بالبيانات.'}
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg">
+              <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>
                 {language === 'en' && 'Start Growing Smart'}
                 {language === 'fa' && 'شروع رشد هوشمند'}
                 {language === 'ar' && 'ابدأ النمو الذكي'}
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" onClick={() => navigate(`${langPrefix}/request-demo`)}>
                 {language === 'en' && 'View Demo'}
                 {language === 'fa' && 'مشاهده دمو'}
                 {language === 'ar' && 'عرض توضيحي'}
@@ -191,7 +194,7 @@ const SmartAgriculture = () => {
               {language === 'fa' && 'به کشاورزان در سراسر جهان بپیوندید که با کشاورزی هوشمند عملکرد را افزایش می‌دهند'}
               {language === 'ar' && 'انضم إلى المزارعين في جميع أنحاء العالم الذين يزيدون الإنتاجية بالزراعة الذكية'}
             </p>
-            <Button size="lg">
+            <Button size="lg" onClick={() => navigate(`${langPrefix}/request-demo`)}>
               {language === 'en' && 'Get Started Today'}
               {language === 'fa' && 'امروز شروع کنید'}
               {language === 'ar' && 'ابدأ اليوم'}
