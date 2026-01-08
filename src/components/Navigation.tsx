@@ -305,14 +305,14 @@ export const Navigation = () => {
                   onMouseEnter={(e) => {
                     const menu = e.currentTarget.querySelector('[data-menu]') as HTMLElement;
                     if (menu) {
-                      clearTimeout((menu as any).hideTimeout);
+                      clearTimeout((menu as HTMLElement & { hideTimeout?: NodeJS.Timeout }).hideTimeout);
                       menu.classList.remove('hidden');
                     }
                   }}
                   onMouseLeave={(e) => {
                     const menu = e.currentTarget.querySelector('[data-menu]') as HTMLElement;
                     if (menu) {
-                      (menu as any).hideTimeout = setTimeout(() => {
+                      (menu as HTMLElement & { hideTimeout?: NodeJS.Timeout }).hideTimeout = setTimeout(() => {
                         menu.classList.add('hidden');
                       }, 200);
                     }

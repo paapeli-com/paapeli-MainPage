@@ -14,7 +14,7 @@ interface ChatMessage {
   content: string;
   timestamp: string;
   hasChart?: boolean;
-  chartData?: any[];
+  chartData?: unknown[];
 }
 
 const AIoTCoPilot = () => {

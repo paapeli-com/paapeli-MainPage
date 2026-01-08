@@ -4,16 +4,36 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
   build-and-push:
     runs-on: ubuntu-latest
     # TODO: Remove after fixing the access issue
     if: false
+    needs: lint
 
     steps:
       - name: Checkout code

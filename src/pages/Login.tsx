@@ -97,9 +97,9 @@ const Login = () => {
         });
         navigate('/');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Authentication error:', error);
-      console.error('Error details:', { code: error?.code, name: error?.name, message: error?.message });
+      console.error('Error details:', { code: (error as { code?: string })?.code, name: (error as { name?: string })?.name, message: (error as { message?: string })?.message });
       const errorMessage = getCognitoErrorMessage(error, language as 'en' | 'ar' | 'fa');
       toast({
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
@@ -129,7 +129,7 @@ const Login = () => {
       setVerificationCode('');
       setFormData({ email: '', password: '' });
       setIsSignUp(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
         description: getCognitoErrorMessage(error, language as 'en' | 'ar' | 'fa'),
@@ -155,7 +155,7 @@ const Login = () => {
           ? 'يرجى التحقق من بريدك الإلكتروني للحصول على رمز التحقق.'
           : 'لطفاً ایمیل خود را برای کد تأیید بررسی کنید.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         variant: "destructive",
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
@@ -169,7 +169,7 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
         description: getCognitoErrorMessage(error, language as 'en' | 'ar' | 'fa'),

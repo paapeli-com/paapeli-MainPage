@@ -30,14 +30,14 @@ export const LanguageSwitcher = () => {
       onMouseEnter={(e) => {
         const menu = e.currentTarget.querySelector('[data-lang-menu]') as HTMLElement;
         if (menu) {
-          clearTimeout((menu as any).hideTimeout);
+          clearTimeout((menu as HTMLElement & { hideTimeout?: NodeJS.Timeout }).hideTimeout);
           menu.classList.remove('hidden');
         }
       }}
       onMouseLeave={(e) => {
         const menu = e.currentTarget.querySelector('[data-lang-menu]') as HTMLElement;
         if (menu) {
-          (menu as any).hideTimeout = setTimeout(() => {
+          (menu as HTMLElement & { hideTimeout?: NodeJS.Timeout }).hideTimeout = setTimeout(() => {
             menu.classList.add('hidden');
           }, 200);
         }
@@ -54,11 +54,11 @@ export const LanguageSwitcher = () => {
         className={`hidden absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 w-40 bg-card border border-border rounded-md shadow-lg z-50`}
         onMouseEnter={(e) => {
           const menu = e.currentTarget as HTMLElement;
-          clearTimeout((menu as any).hideTimeout);
+          clearTimeout((menu as HTMLElement & { hideTimeout?: NodeJS.Timeout }).hideTimeout);
         }}
         onMouseLeave={(e) => {
           const menu = e.currentTarget as HTMLElement;
-          (menu as any).hideTimeout = setTimeout(() => {
+          (menu as HTMLElement & { hideTimeout?: NodeJS.Timeout }).hideTimeout = setTimeout(() => {
             menu.classList.add('hidden');
           }, 200);
         }}

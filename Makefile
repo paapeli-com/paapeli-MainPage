@@ -1,4 +1,4 @@
-.PHONY: build build-docker up up-docker down down-docker clean clean-docker lint
+.PHONY: build build-docker up up-docker down down-docker clean clean-docker lint lint-fix lint-strict
 
 # Build targets
 build:
@@ -31,3 +31,6 @@ clean-docker:
 # Lint
 lint:
 	npm run lint
+
+format:
+	npm run lint -- --fix
