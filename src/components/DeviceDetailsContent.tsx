@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { getApiUrl, createAuthHeaders } from "@/lib/api";
 
 interface DeviceDetails {
   id?: string;
@@ -54,14 +55,7 @@ export const DeviceDetailsContent = ({ deviceId, onBack }: DeviceDetailsContentP
   useEffect(() => {
     const fetchDeviceDetails = async () => {
       try {
-        const accessToken = session?.getAccessToken().getJwtToken();
-        if (!accessToken) return;
-
-        const response = await fetch(`https://api.paapeli.com/api/v1/devices/${deviceId}`, {
-          headers: {
-            "Authorization": `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetch(getApiUrl(`/api/v1/devices/${deviceId}`), createAuthHeaders());
 
         if (response.ok) {
           const data = await response.json();

@@ -8,11 +8,12 @@ export const DomainRouter = () => {
   const { user, isLoading } = useAuth();
   const hostname = window.location.hostname;
   const isPanelDomain = hostname === "panel.paapeli.com" || 
+                        hostname === "panel.paapeli.local" || 
                         hostname.includes("panel-"); // Vercel preview deployments
 
   useEffect(() => {
     // For panel domain, redirect root to login or panel home
-    if (hostname === "panel.paapeli.com" || hostname.includes("panel-")) {
+    if (hostname === "panel.paapeli.com" || hostname === "panel.paapeli.local" || hostname.includes("panel-")) {
       if (location.pathname === "/" && !isLoading) {
         if (user) {
           navigate("/home", { replace: true });

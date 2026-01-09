@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,15 +14,63 @@ import {
   BookOpen, 
   GraduationCap 
 } from "lucide-react";
+import { apiRequest } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
+
+interface DashboardStats {
+  totalDevices: number;
+  activeDevices: number;
+  alerts: number;
+}
 
 const PanelHome = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [stats, setStats] = useState<DashboardStats>({
+    totalDevices: 0,
+    activeDevices: 0,
+    alerts: 0,
+  });
+  const [loading, setLoading] = useState(true);
 
-  const stats = [
-    { title: t("totalDevices"), value: "0", icon: Smartphone },
-    { title: t("activeDevices"), value: "0", icon: Smartphone },
-    { title: t("alerts"), value: "0", icon: Bell },
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchStats = async () => {
+      try {
+        const response = await apiRequest("/api/v1/collectors");
+        const data = response.collectors || [];
+        
+        // Count total and active devices
+        const totalDevices = data.length;
+        const activeDevices = data.filter((item: any) => 
+          item.collector?.status === "active"
+        ).length;
+
+        setStats({
+          totalDevices,
+          activeDevices,
+          alerts: 0, // TODO: Implement alerts API
+        });
+      } catch (error) {
+        console.error("Failed to fetch dashboard stats:", error);
+        // Keep default values on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, [isAuthenticated]);
+
+  const displayStats = [
+    { title: t("totalDevices"), value: loading ? "..." : stats.totalDevices.toString(), icon: Smartphone },
+    { title: t("activeDevices"), value: loading ? "..." : stats.activeDevices.toString(), icon: Smartphone },
+    { title: t("alerts"), value: loading ? "..." : stats.alerts.toString(), icon: Bell },
   ];
 
   const actions = [
@@ -56,7 +105,7 @@ const PanelHome = () => {
       <div className="space-y-6">
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-3">
-          {stats.map((stat, index) => (
+          {displayStats.map((stat, index) => (
             <Card key={index}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>

@@ -6,6 +6,7 @@ import { DeviceDetailsContent } from "@/components/DeviceDetailsContent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getApiUrl, createAuthHeaders } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, RefreshCw, Trash2, ArrowUpDown, X } from "lucide-react";
@@ -69,7 +70,6 @@ interface DeviceCredentials {
 
 const Devices = () => {
   const { t, isRTL } = useLanguage();
-  const { session } = useAuth();
   const { toast } = useToast();
   const [addPanelOpen, setAddPanelOpen] = useState(false);
   const [devices, setDevices] = useState<Device[]>([]);
@@ -106,25 +106,27 @@ const Devices = () => {
     }
     
     try {
-      const accessToken = session?.getAccessToken().getJwtToken();
-      if (!accessToken) return;
-
-      const response = await fetch("https://api.paapeli.com/api/v1/devices/me", {
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-        },
-      });
+      // Since auth is handled by APISIX, no need for tokens
+      const response = await fetch(getApiUrl("/api/v1/collectors"), createAuthHeaders());
 
       if (response.ok) {
         const data = await response.json();
-        console.log("API Response for devices/me:", data); // Debug log
-        // Sort by creation date, newest first
-        const sortedData = data.sort((a: Device, b: Device) => {
-          const dateA = new Date(a.created_at || a.createdAt || a.created || 0).getTime();
-          const dateB = new Date(b.created_at || b.createdAt || b.created || 0).getTime();
-          return dateB - dateA;
+        console.log("API Response for collectors:", data); // Debug log
+        // Transform collectors to device format for display
+        const deviceData = (data.collectors || []).map((item: any) => {
+          const collector = item.collector;
+          return {
+            id: collector.id,
+            name: collector.name,
+            deviceId: collector.id,
+            protocol: collector.config?.protocol || 'MQTT',
+            lastActivity: collector.last_heartbeat ? new Date(collector.last_heartbeat).toLocaleString() : '-',
+            createdAt: collector.created_at,
+            location: collector.location,
+            status: collector.status,
+          };
         });
-        setDevices(sortedData);
+        setDevices(deviceData);
         
         if (showRefreshToast) {
           toast({
@@ -132,6 +134,9 @@ const Devices = () => {
             description: t("devicesRefreshed"),
           });
         }
+      } else if (response.status === 401) {
+        // Redirect to auth if not authenticated
+        window.location.href = getApiUrl("/api/v1/users/me");
       }
     } catch (error) {
       console.error("Failed to fetch devices:", error);
@@ -139,13 +144,11 @@ const Devices = () => {
       setIsLoadingDevices(false);
       setIsRefreshing(false);
     }
-  }, [session, t, toast]);
+  }, [t, toast]);
 
   useEffect(() => {
-    if (session) {
-      fetchDevices();
-    }
-  }, [session, fetchDevices]);
+    fetchDevices();
+  }, [fetchDevices]);
 
   const copyToClipboard = async (text: string, field: string) => {
     try {
@@ -173,52 +176,46 @@ const Devices = () => {
 
     setIsLoading(true);
     try {
-      const accessToken = session?.getAccessToken().getJwtToken();
-      
-      if (!accessToken) {
-        toast({
-          title: t("error"),
-          description: t("notAuthenticated"),
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const response = await fetch("https://api.paapeli.com/api/v1/devices/register", {
+      const response = await fetch(getApiUrl("/api/v1/collectors"), createAuthHeaders({
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           name: deviceName,
-          protocol: protocol,
-          label: label || undefined,
-          useSsl: useSsl,
+          location: label || "Default Location",
+          config: {
+            protocol: protocol,
+            use_ssl: useSsl,
+          },
         }),
-      });
+      }));
 
       if (!response.ok) {
+        if (response.status === 401) {
+          // Redirect to auth
+          window.location.href = getApiUrl("/api/v1/users/me");
+          return;
+        }
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || t("failedToAddDevice"));
+        throw new Error(errorData.detail || t("failedToAddDevice"));
       }
 
       const newDevice = await response.json();
       
       console.log("API Response:", newDevice); // Debug log
       
-      // Extract device ID and API key from various possible field names
-      const deviceId = newDevice.deviceId || newDevice.device_id || newDevice.id || "";
-      const apiKey = newDevice.apiKey || newDevice.api_key || newDevice.key || "";
+      // Extract device ID and API key from collector response
+      const deviceId = newDevice.id;
+      const apiKey = "generated-api-key"; // Backend should return this
       
       // Add the new device to the list immediately
       const newDeviceForList: Device = {
-        id: newDevice.id || deviceId,
+        id: newDevice.id,
         name: deviceName,
         deviceId: deviceId,
         protocol: protocol,
         lastActivity: "-",
-        createdAt: new Date().toLocaleDateString(),
+        createdAt: newDevice.created_at,
+        location: newDevice.location,
+        status: newDevice.status,
       };
       setDevices(prev => [newDeviceForList, ...prev]);
       

@@ -12,7 +12,7 @@ up:
 	npm run dev
 
 up-docker:
-	docker-compose up
+	docker-compose up -d
 
 # Down targets
 down:
