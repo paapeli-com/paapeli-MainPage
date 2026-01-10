@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { DeviceDetailsContent } from "@/components/DeviceDetailsContent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,6 +58,8 @@ interface Device {
   created?: string;
   updatedAt?: string;
   updated_at?: string;
+  location?: string;
+  status?: string;
 }
 
 interface DeviceCredentials {
@@ -68,9 +70,16 @@ interface DeviceCredentials {
   useSsl: boolean;
 }
 
+interface Project {
+  id: string;
+  name: string;
+  description?: string;
+}
+
 const Devices = () => {
   const { t, isRTL } = useLanguage();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [addPanelOpen, setAddPanelOpen] = useState(false);
   const [devices, setDevices] = useState<Device[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,13 +94,20 @@ const Devices = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [wizardStep, setWizardStep] = useState<'template' | 'details'>('template');
   const [selectedTemplate, setSelectedTemplate] = useState<'blank' | null>('blank');
-  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'list' | 'details'>('list');
   const [protocolFilter, setProtocolFilter] = useState<string>('all');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [sortPopoverOpen, setSortPopoverOpen] = useState(false);
   const [sortDirection, setSortDirection] = useState<'desc' | 'asc'>('desc'); // desc = newest first
-  
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
+
+  // Edit modal state
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingDevice, setEditingDevice] = useState<Device | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editProtocol, setEditProtocol] = useState("");
+  const [editProjectId, setEditProjectId] = useState("");
+
   // Form state
   const [deviceName, setDeviceName] = useState("");
   const [protocol, setProtocol] = useState("MQTT");
@@ -107,23 +123,23 @@ const Devices = () => {
     
     try {
       // Since auth is handled by APISIX, no need for tokens
-      const response = await fetch(getApiUrl("/api/v1/collectors"), createAuthHeaders());
+      const response = await fetch(getApiUrl("/api/v1/gateways"), createAuthHeaders());
 
       if (response.ok) {
         const data = await response.json();
-        console.log("API Response for collectors:", data); // Debug log
-        // Transform collectors to device format for display
-        const deviceData = (data.collectors || []).map((item: any) => {
-          const collector = item.collector;
+        console.log("API Response for gateways:", data); // Debug log
+        // Transform gateways to device format for display
+        const deviceData = (data.gateways || []).map((item: any) => {
+          const gateway = item.gateway;
           return {
-            id: collector.id,
-            name: collector.name,
-            deviceId: collector.id,
-            protocol: collector.config?.protocol || 'MQTT',
-            lastActivity: collector.last_heartbeat ? new Date(collector.last_heartbeat).toLocaleString() : '-',
-            createdAt: collector.created_at,
-            location: collector.location,
-            status: collector.status,
+            id: gateway.id,
+            name: gateway.name,
+            deviceId: gateway.id,
+            protocol: gateway.config?.protocol || 'MQTT',
+            lastActivity: gateway.last_heartbeat ? new Date(gateway.last_heartbeat).toLocaleString() : '-',
+            createdAt: gateway.created_at,
+            location: gateway.location,
+            status: gateway.status,
           };
         });
         setDevices(deviceData);
@@ -146,9 +162,36 @@ const Devices = () => {
     }
   }, [t, toast]);
 
+  const fetchProjects = useCallback(async () => {
+    try {
+      const response = await fetch(getApiUrl("/api/v1/projects"), createAuthHeaders());
+      console.log("Projects API Response Status:", response.status);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Projects API Response Data:", data);
+        const projectsData = (data.data || []).map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          description: item.description,
+        }));
+        console.log("Transformed Projects Data:", projectsData);
+        setProjects(projectsData);
+        // Auto-select first project if available
+        if (projectsData.length > 0 && !selectedProjectId) {
+          setSelectedProjectId(projectsData[0].id);
+        }
+      } else {
+        console.error("Projects API Error:", response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error("Failed to fetch projects:", error);
+    }
+  }, [selectedProjectId]);
+
   useEffect(() => {
     fetchDevices();
-  }, [fetchDevices]);
+    fetchProjects();
+  }, [fetchDevices, fetchProjects]);
 
   const copyToClipboard = async (text: string, field: string) => {
     try {
@@ -174,13 +217,23 @@ const Devices = () => {
       return;
     }
 
+    if (!selectedProjectId) {
+      toast({
+        title: t("error"),
+        description: "Please select a project",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
-      const response = await fetch(getApiUrl("/api/v1/collectors"), createAuthHeaders({
+      const response = await fetch(getApiUrl("/api/v1/gateways"), createAuthHeaders({
         method: "POST",
         body: JSON.stringify({
           name: deviceName,
           location: label || "Default Location",
+          project_id: selectedProjectId,
           config: {
             protocol: protocol,
             use_ssl: useSsl,
@@ -198,14 +251,15 @@ const Devices = () => {
         throw new Error(errorData.detail || t("failedToAddDevice"));
       }
 
-      const newDevice = await response.json();
-      
-      console.log("API Response:", newDevice); // Debug log
-      
-      // Extract device ID and API key from collector response
+      const responseData = await response.json();
+      const newDevice = responseData.data; // API returns { data: {...} }
+
+      console.log("API Response:", responseData); // Debug log
+
+      // Extract device ID and API key from gateway response
       const deviceId = newDevice.id;
-      const apiKey = "generated-api-key"; // Backend should return this
-      
+      const apiKey = newDevice.api_key_secret;
+
       // Add the new device to the list immediately
       const newDeviceForList: Device = {
         id: newDevice.id,
@@ -215,10 +269,10 @@ const Devices = () => {
         lastActivity: "-",
         createdAt: newDevice.created_at,
         location: newDevice.location,
-        status: newDevice.status,
+        status: "active",
       };
       setDevices(prev => [newDeviceForList, ...prev]);
-      
+
       // Show credentials dialog with device ID and API key
       setNewDeviceCredentials({
         deviceId: deviceId,
@@ -235,7 +289,7 @@ const Devices = () => {
       setLabel("");
       setUseSsl(false);
       setAddPanelOpen(false);
-      
+
       // Refresh devices list in background
       fetchDevices();
     } catch (error) {
@@ -248,6 +302,76 @@ const Devices = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleUpdateDevice = async () => {
+    if (!editingDevice) return;
+
+    if (!editName.trim()) {
+      toast({
+        title: t("error"),
+        description: t("deviceNameRequired"),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!editProjectId) {
+      toast({
+        title: t("error"),
+        description: "Please select a project",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(getApiUrl(`/api/v1/gateways/${editingDevice.id}`), createAuthHeaders({
+        method: "PUT",
+        body: JSON.stringify({
+          name: editName,
+          project_id: editProjectId,
+          config: {
+            protocol: editProtocol,
+          },
+        }),
+      }));
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = getApiUrl("/api/v1/users/me");
+          return;
+        }
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || "Failed to update device");
+      }
+
+      toast({
+        title: t("success"),
+        description: "Device updated successfully",
+      });
+      fetchDevices();
+      setEditModalOpen(false);
+      setEditingDevice(null);
+    } catch (error) {
+      console.error("Device update error:", error);
+      toast({
+        title: t("error"),
+        description: error instanceof Error ? error.message : "Failed to update device",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRemoveDevice = () => {
+    if (!editingDevice) return;
+    const deviceId = editingDevice.deviceId || editingDevice.device_id || editingDevice.deviceID || editingDevice.id || editingDevice._id || '';
+    setSelectedDevices([deviceId]);
+    setDeleteDialogOpen(true);
+    setEditModalOpen(false);
   };
 
   const filteredDevices = devices.filter(device => {
@@ -289,14 +413,12 @@ const Devices = () => {
     setSelectedTemplate('blank');
   };
 
-  const handleDeviceClick = (deviceId: string) => {
-    setSelectedDeviceId(deviceId);
-    setViewMode('details');
-  };
-
-  const handleBackToList = () => {
-    setViewMode('list');
-    setSelectedDeviceId(null);
+  const handleDeviceClick = (device: Device) => {
+    setEditingDevice(device);
+    setEditName(device.name);
+    setEditProtocol(device.protocol);
+    setEditProjectId(selectedProjectId || (projects.length > 0 ? projects[0].id : ""));
+    setEditModalOpen(true);
   };
 
   const handleSelectAll = (checked: boolean) => {
@@ -319,14 +441,47 @@ const Devices = () => {
     setDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
-    // TODO: Implement actual delete API call
-    toast({
-      title: t("deleted") || "Deleted",
-      description: `${selectedDevices.length} ${t("devices") || "devices"} ${t("deleted") || "deleted"}`,
-    });
-    setSelectedDevices([]);
-    setDeleteDialogOpen(false);
+  const confirmDelete = async () => {
+    setIsLoading(true);
+    try {
+      const deletePromises = selectedDevices.map(deviceId =>
+        fetch(getApiUrl(`/api/v1/gateways/${deviceId}`), createAuthHeaders({
+          method: "DELETE",
+        }))
+      );
+
+      const results = await Promise.allSettled(deletePromises);
+      const successfulDeletes = results.filter(result => result.status === 'fulfilled').length;
+      const failedDeletes = results.length - successfulDeletes;
+
+      if (successfulDeletes > 0) {
+        toast({
+          title: t("success"),
+          description: `${successfulDeletes} ${t("devices") || "devices"} ${t("deleted") || "deleted"}`,
+        });
+        // Refresh devices list
+        fetchDevices();
+      }
+
+      if (failedDeletes > 0) {
+        toast({
+          title: t("error"),
+          description: `Failed to delete ${failedDeletes} device(s)`,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast({
+        title: t("error"),
+        description: "Failed to delete devices",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+      setSelectedDevices([]);
+      setDeleteDialogOpen(false);
+    }
   };
 
   // Available protocols for sorting
@@ -339,15 +494,13 @@ const Devices = () => {
   };
 
   return (
-    <PanelLayout 
+    <PanelLayout
       pageTitle={t("devices")}
     >
       {isLoadingDevices ? (
         <div className="flex items-center justify-center min-h-[400px]">
           <LoadingSpinner size="lg" />
         </div>
-      ) : viewMode === 'details' && selectedDeviceId ? (
-        <DeviceDetailsContent deviceId={selectedDeviceId} onBack={handleBackToList} />
       ) : (
         <div className="space-y-6">
           {/* Main Card with Stats, Search and Table */}
@@ -534,12 +687,12 @@ const Devices = () => {
                     const lastActivity = device.last_activity || device.lastActivity || device.lastSeen;
                     const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString() : '-';
                     const formattedActivity = lastActivity ? new Date(lastActivity).toLocaleString() : '-';
-                    
+
                     return (
-                      <TableRow 
+                      <TableRow
                         key={device.id || device._id || deviceId}
                         className="cursor-pointer hover:bg-accent/50"
-                        onClick={() => handleDeviceClick(deviceId)}
+                        onClick={() => handleDeviceClick(device)}
                       >
                         <TableCell onClick={(e) => e.stopPropagation()}>
                           <Checkbox 
@@ -826,8 +979,23 @@ const Devices = () => {
               {/* Device Details Form */}
               <div className="space-y-4">
                 <div>
+                  <Label className={isRTL ? 'text-right block' : ''}>Project:</Label>
+                  <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Project" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {projects.map((project) => (
+                        <SelectItem key={project.id} value={project.id}>
+                          {project.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
                   <Label className={isRTL ? 'text-right block' : ''}>{t("name")}:</Label>
-                  <Input 
+                  <Input
                     value={deviceName}
                     onChange={(e) => setDeviceName(e.target.value)}
                     placeholder={t("enterDeviceName")}
@@ -916,6 +1084,76 @@ const Devices = () => {
             >
               {t("delete")}
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Device Modal */}
+      <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Edit Device</DialogTitle>
+            <DialogDescription>
+              Update device properties.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>{t("name")}</Label>
+              <Input
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                placeholder={t("enterDeviceName")}
+              />
+            </div>
+            <div>
+              <Label>{t("protocol")}</Label>
+              <Select value={editProtocol} onValueChange={setEditProtocol}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="MQTT">MQTT</SelectItem>
+                  <SelectItem value="HTTP">HTTP</SelectItem>
+                  <SelectItem value="CoAP">CoAP</SelectItem>
+                  <SelectItem value="WebSocket">WebSocket</SelectItem>
+                  <SelectItem value="LoRaWAN">LoRaWAN</SelectItem>
+                  <SelectItem value="BLE">BLE</SelectItem>
+                  <SelectItem value="ZigBee">ZigBee</SelectItem>
+                  <SelectItem value="OPC-UA">OPC-UA</SelectItem>
+                  <SelectItem value="LTE">LTE</SelectItem>
+                  <SelectItem value="5G">5G</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Project</Label>
+              <Select value={editProjectId} onValueChange={setEditProjectId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Project" />
+                </SelectTrigger>
+                <SelectContent>
+                  {projects.map((project) => (
+                    <SelectItem key={project.id} value={project.id}>
+                      {project.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex justify-between gap-3">
+            <Button variant="destructive" onClick={handleRemoveDevice}>
+              Remove
+            </Button>
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => setEditModalOpen(false)}>
+                {t("cancel")}
+              </Button>
+              <Button onClick={handleUpdateDevice} disabled={isLoading} className="bg-[#00BCD4] hover:bg-[#00ACC1]">
+                {isLoading ? "Updating" : "Save"}
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

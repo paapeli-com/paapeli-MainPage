@@ -31,19 +31,30 @@ const Dashboard = () => {
 
     const fetchStats = async () => {
       try {
-        const response = await apiRequest("/api/v1/collectors");
-        const data = response.collectors || [];
-        
+        // Fetch devices
+        const devicesResponse = await apiRequest("/api/v1/gateways");
+        const devicesData = devicesResponse.gateways || [];
+
         // Count total and active devices
-        const totalDevices = data.length;
-        const activeDevices = data.filter((item: any) => 
-          item.collector?.status === "active"
+        const totalDevices = devicesData.length;
+        const activeDevices = devicesData.filter((item: any) =>
+          item.status === "active"
         ).length;
+
+        // Fetch alerts count
+        let alertsCount = 0;
+        try {
+          const alertsResponse = await apiRequest("/api/v1/alerts/count");
+          alertsCount = alertsResponse.total || 0;
+        } catch (alertsError) {
+          console.warn("Failed to fetch alerts count:", alertsError);
+          // Keep alerts as 0 if API fails
+        }
 
         setStats({
           totalDevices,
           activeDevices,
-          alerts: 0, // TODO: Implement alerts API
+          alerts: alertsCount,
         });
       } catch (error) {
         console.error("Failed to fetch dashboard stats:", error);

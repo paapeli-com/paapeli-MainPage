@@ -42,19 +42,19 @@ const PanelHome = () => {
 
     const fetchStats = async () => {
       try {
-        const response = await apiRequest("/api/v1/collectors");
-        const data = response.collectors || [];
+        const response = await apiRequest("/api/v1/gateways");
+        const data = response.gateways || [];
         
         // Count total and active devices
         const totalDevices = data.length;
         const activeDevices = data.filter((item: any) => 
-          item.collector?.status === "active"
+          item.status === "active"
         ).length;
 
         setStats({
           totalDevices,
           activeDevices,
-          alerts: 0, // TODO: Implement alerts API
+          alerts: 0,
         });
       } catch (error) {
         console.error("Failed to fetch dashboard stats:", error);
