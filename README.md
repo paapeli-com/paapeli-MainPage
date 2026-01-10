@@ -28,18 +28,20 @@ A modern React-based frontend for the Paapeli IoT Platform, providing comprehens
 
 - **Frontend**: React 18 with TypeScript
 - **Build Tool**: Vite
+- **Package Manager**: bun (recommended), npm, or yarn
 - **UI Framework**: shadcn/ui components
 - **Styling**: Tailwind CSS
 - **State Management**: React Context API
 - **Routing**: React Router
 - **Testing**: Vitest with React Testing Library
 - **Internationalization**: Custom i18n system
+- **Build Automation**: Makefile for common tasks
 
 ## Getting Started
 
 ### Prerequisites
 - Node.js 18+
-- npm or yarn
+- Package manager: npm, yarn, or [bun](https://bun.sh/) (recommended for faster installs)
 
 ### Installation
 
@@ -50,49 +52,117 @@ A modern React-based frontend for the Paapeli IoT Platform, providing comprehens
    ```
 
 2. Install dependencies:
+
+   **Using bun (recommended):**
+   ```bash
+   bun install
+   ```
+
+   **Using npm:**
    ```bash
    npm install
    ```
 
+   **Using yarn:**
+   ```bash
+   yarn install
+   ```
+
+   > **Note**: If you encounter permission errors with npm, consider using bun or yarn as alternatives.
+
 3. Start the development server:
+
+   **Using bun:**
+   ```bash
+   bun run dev
+   ```
+
+   **Using npm:**
    ```bash
    npm run dev
+   ```
+
+   **Using Makefile:**
+   ```bash
+   make dev
    ```
 
    The application will be available at `http://localhost:5173`.
 
 ### Running Tests
 
+**Using bun:**
 ```bash
-# Run all tests
-npm test
+bun run test          # Run all tests
+bun run test:watch    # Run tests in watch mode
+bun run test:coverage # Run tests with coverage
+```
 
-# Run tests in watch mode
-npm run test:watch
+**Using npm:**
+```bash
+npm test              # Run all tests
+npm run test:watch    # Run tests in watch mode
+npm run test:coverage # Run tests with coverage
+```
 
-# Run tests with coverage
-npm run test:coverage
+**Using Makefile:**
+```bash
+make test             # Run all tests
+make test-watch       # Run tests in watch mode
+make test-coverage    # Run tests with coverage
 ```
 
 ### Building for Production
 
+**Using bun:**
+```bash
+bun run build
+```
+
+**Using npm:**
 ```bash
 npm run build
 ```
 
-## Docker Deployment
-
-### Using Docker Compose (Recommended)
-
+**Using Makefile:**
 ```bash
-docker-compose up --build
+make build
 ```
 
-### Manual Docker Build
+> **Tip**: Use `make clean && make install && make build` for a complete clean build.
+
+## Development Workflow
+
+### Using Make Commands
+
+The project includes a Makefile for common development tasks:
+
+```bash
+make help           # Show all available commands
+make install        # Install dependencies
+make dev            # Start development server
+make build          # Build for production
+make test           # Run all tests
+make test-coverage  # Run tests with coverage
+make lint           # Run linter
+make lint-fix       # Run linter with auto-fix
+make clean          # Remove build artifacts and dependencies
+```
+
+### Docker Deployment
+
+#### Using Docker Compose (Recommended)
+
+```bash
+make docker-up      # Start with Docker Compose
+make docker-down    # Stop Docker containers
+```
+
+#### Manual Docker Build
 
 ```bash
 # Build the image
-docker build -t paapeli-mainpage .
+make docker-build
 
 # Run the container
 docker run -p 8080:8080 paapeli-mainpage
@@ -125,6 +195,38 @@ The frontend integrates with the Paapeli backend API providing:
 - Project and team management
 - Telemetry data processing
 - OTA update management
+
+## Troubleshooting
+
+### Common Issues
+
+**npm permission errors:**
+```bash
+# Option 1: Use bun instead
+curl -fsSL https://bun.sh/install | bash
+bun install
+
+# Option 2: Clear npm cache and reinstall
+npm cache clean --force
+npm install
+
+# Option 3: Use yarn
+yarn install
+```
+
+**Build fails after `make clean`:**
+```bash
+# Always reinstall dependencies after cleaning
+make clean
+make install
+make build
+```
+
+**Port 5173 already in use:**
+```bash
+# Kill process using the port or use a different port
+npm run dev -- --port 3000
+```
 
 ## Contributing
 

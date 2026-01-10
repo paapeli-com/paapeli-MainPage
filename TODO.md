@@ -22,7 +22,9 @@ This file tracks all TODO items for the Paapeli IoT Platform codebase.
   - Effort: 2-3 hours
 
 ## Completed TODOs
-- [x] Implement alerts API for dashboard (2026-01-10)- [x] Add stages configuration for OTA campaigns (2026-01-10)
+- [x] Fix build issues - install dependencies and resolve React version conflicts (2026-01-11)
+- [x] Implement alerts API for dashboard (2026-01-10)
+- [x] Add stages configuration for OTA campaigns (2026-01-10)
 - [x] Implement device status endpoint for OTA updates (2026-01-10)
 - [x] Implement DevCenter page with API health, endpoints, and documentation links (2026-01-10)
 - [x] Implement DeviceGroup management with CRUD operations (2026-01-10)
