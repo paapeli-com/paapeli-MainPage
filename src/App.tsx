@@ -49,6 +49,8 @@ import AIoTCoPilot from "./pages/panel/AIoTCoPilot";
 
 const queryClient = new QueryClient();
 
+const queryClient = new QueryClient();
+
 const App = () => {
   const hostname = window.location.hostname;
   const isPanelDomain = hostname === "panel.paapeli.com" || 
@@ -57,7 +59,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <LanguageProvider>
           <AuthProvider>
             <TooltipProvider>

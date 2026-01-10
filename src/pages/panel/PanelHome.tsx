@@ -14,7 +14,7 @@ import {
   BookOpen, 
   GraduationCap 
 } from "lucide-react";
-import { apiRequest } from "@/lib/api";
+import { apiRequest, alertsAPI } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface DashboardStats {
@@ -42,19 +42,30 @@ const PanelHome = () => {
 
     const fetchStats = async () => {
       try {
-        const response = await apiRequest("/api/v1/gateways");
-        const data = response.gateways || [];
+        // Fetch gateways data
+        const gatewaysResponse = await apiRequest("/api/v1/gateways");
+        const gatewaysData = gatewaysResponse.gateways || [];
         
         // Count total and active devices
-        const totalDevices = data.length;
-        const activeDevices = data.filter((item: any) => 
+        const totalDevices = gatewaysData.length;
+        const activeDevices = gatewaysData.filter((item: any) => 
           item.status === "active"
         ).length;
+
+        // Fetch alerts count
+        let alertsCount = 0;
+        try {
+          const alertsResponse = await alertsAPI.getAlertsCount();
+          alertsCount = alertsResponse.count || 0;
+        } catch (alertsError) {
+          console.warn("Failed to fetch alerts count, using 0:", alertsError);
+          // Keep alertsCount as 0 if API fails
+        }
 
         setStats({
           totalDevices,
           activeDevices,
-          alerts: 0,
+          alerts: alertsCount,
         });
       } catch (error) {
         console.error("Failed to fetch dashboard stats:", error);

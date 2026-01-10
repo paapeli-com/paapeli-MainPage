@@ -38,7 +38,7 @@ describe('DevCenter', () => {
 
   it('renders the DevCenter page', async () => {
     render(
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <DevCenter />
       </BrowserRouter>
     )
@@ -53,7 +53,7 @@ describe('DevCenter', () => {
 
   it('displays API endpoints', async () => {
     render(
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <DevCenter />
       </BrowserRouter>
     )
@@ -70,7 +70,7 @@ describe('DevCenter', () => {
 
   it('displays SDK examples', async () => {
     render(
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <DevCenter />
       </BrowserRouter>
     )

@@ -106,6 +106,7 @@ export const otaAPI = {
 
   // Device firmware status
   getDeviceFirmwareStatus: (deviceId: string) => apiRequest(`/api/v1/ota/devices/${deviceId}/status`),
+  getAllDeviceFirmwareStatuses: () => apiRequest('/api/v1/ota/devices/status'),
   updateDeviceFirmwareStatus: (deviceId: string, data: any) => apiRequest(`/api/v1/ota/devices/${deviceId}/status`, {
     method: 'PUT',
     body: JSON.stringify(data)
@@ -113,4 +114,34 @@ export const otaAPI = {
 
   // Firmware update history
   getFirmwareUpdateHistory: () => apiRequest('/api/v1/ota/history')
+};
+
+/**
+ * Alerts API functions
+ */
+export const alertsAPI = {
+  // Get alerts count for dashboard
+  getAlertsCount: () => apiRequest('/api/v1/alerts/count'),
+  // Get all alerts
+  getAlerts: (params?: any) => apiRequest('/api/v1/alerts', { method: 'GET' }),
+  // Get alert by ID
+  getAlert: (id: string) => apiRequest(`/api/v1/alerts/${id}`),
+  // Create alert
+  createAlert: (data: any) => apiRequest('/api/v1/alerts', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }),
+  // Update alert
+  updateAlert: (id: string, data: any) => apiRequest(`/api/v1/alerts/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  }),
+  // Delete alert
+  deleteAlert: (id: string) => apiRequest(`/api/v1/alerts/${id}`, {
+    method: 'DELETE'
+  }),
+  // Acknowledge alert
+  acknowledgeAlert: (id: string) => apiRequest(`/api/v1/alerts/${id}/acknowledge`, {
+    method: 'POST'
+  })
 };

@@ -116,8 +116,18 @@ const OTA = () => {
   };
 
   const loadDeviceStatuses = async () => {
-    // For now, we'll keep it as a placeholder
-    setDeviceStatuses([]);
+    try {
+      const response = await otaAPI.getAllDeviceFirmwareStatuses();
+      setDeviceStatuses(response.data || []);
+    } catch (error) {
+      console.error('Failed to load device statuses:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load device firmware statuses",
+        variant: "destructive",
+      });
+      setDeviceStatuses([]);
+    }
   };
 
   const handleCreateVersion = async () => {
@@ -131,7 +141,14 @@ const OTA = () => {
     loadFirmwareVersions();
   };
 
-  const handleCreateCampaign = async () => {
+  const handleCreateCampaign = async () => {    if (!validateStages()) {
+      toast({
+        title: "Validation Error",
+        description: "Stages must total 100% and all values must be valid",
+        variant: "destructive",
+      });
+      return;
+    }
     await otaAPI.createUpdateCampaign(campaignForm);
     toast({
       title: "Success",
@@ -141,7 +158,38 @@ const OTA = () => {
     setCampaignForm({ name: '', firmware_id: '', project_id: '', stages: [{ percentage: 25, duration_hours: 24 }] });
     loadCampaigns();
   };
+  const addStage = () => {
+    setCampaignForm({
+      ...campaignForm,
+      stages: [...campaignForm.stages, { percentage: 25, duration_hours: 24 }]
+    });
+  };
 
+  const removeStage = (index: number) => {
+    if (campaignForm.stages.length > 1) {
+      setCampaignForm({
+        ...campaignForm,
+        stages: campaignForm.stages.filter((_, i) => i !== index)
+      });
+    }
+  };
+
+  const updateStage = (index: number, field: 'percentage' | 'duration_hours', value: number) => {
+    const updatedStages = campaignForm.stages.map((stage, i) =>
+      i === index ? { ...stage, [field]: value } : stage
+    );
+    setCampaignForm({
+      ...campaignForm,
+      stages: updatedStages
+    });
+  };
+
+  const validateStages = () => {
+    const totalPercentage = campaignForm.stages.reduce((sum, stage) => sum + stage.percentage, 0);
+    return totalPercentage === 100 && campaignForm.stages.every(stage =>
+      stage.percentage > 0 && stage.percentage <= 100 && stage.duration_hours > 0
+    );
+  };
   const handleCampaignAction = async (campaignId: string, action: 'start' | 'pause' | 'cancel' | 'complete') => {
     const actionMap = {
       start: otaAPI.startCampaign,
@@ -318,6 +366,60 @@ const OTA = () => {
                       </SelectContent>
                     </Select>
                   </div>
+
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <Label>Update Stages</Label>
+                      <Button type="button" variant="outline" size="sm" onClick={addStage}>
+                        <Plus className="w-4 h-4 mr-1" />
+                        Add Stage
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      {campaignForm.stages.map((stage, index) => (
+                        <div key={index} className="flex items-center gap-2 p-3 border rounded-lg">
+                          <div className="flex-1">
+                            <Label htmlFor={`stage-percentage-${index}`} className="text-sm">Percentage (%)</Label>
+                            <Input
+                              id={`stage-percentage-${index}`}
+                              type="number"
+                              min="1"
+                              max="100"
+                              value={stage.percentage}
+                              onChange={(e) => updateStage(index, 'percentage', parseInt(e.target.value) || 0)}
+                              className="mt-1"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <Label htmlFor={`stage-duration-${index}`} className="text-sm">Duration (hours)</Label>
+                            <Input
+                              id={`stage-duration-${index}`}
+                              type="number"
+                              min="1"
+                              value={stage.duration_hours}
+                              onChange={(e) => updateStage(index, 'duration_hours', parseInt(e.target.value) || 0)}
+                              className="mt-1"
+                            />
+                          </div>
+                          {campaignForm.stages.length > 1 && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeStage(index)}
+                              className="mt-6"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-sm text-muted-foreground">
+                      Total: {campaignForm.stages.reduce((sum, stage) => sum + stage.percentage, 0)}% of devices
+                    </div>
+                  </div>
+
                   <Button onClick={handleCreateCampaign} className="w-full">
                     Create Campaign
                   </Button>
