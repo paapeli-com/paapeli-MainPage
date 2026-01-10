@@ -49,8 +49,6 @@ import AIoTCoPilot from "./pages/panel/AIoTCoPilot";
 
 const queryClient = new QueryClient();
 
-const queryClient = new QueryClient();
-
 const App = () => {
   const hostname = window.location.hostname;
   const isPanelDomain = hostname === "panel.paapeli.com" || 

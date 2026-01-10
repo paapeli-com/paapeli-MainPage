@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => ({
       "localhost",
       "127.0.0.1",
     ],
+    hmr: {
+      host: 'localhost',
+      port: 5173,
+    },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
