@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Mic, Send, Plus, Bot, User } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { MessageSquare, Mic, Send, Plus, Bot, User, Loader2 } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { aiAPI } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 interface ChatMessage {
   id: number;
@@ -19,53 +21,104 @@ interface ChatMessage {
 
 const AIoTCoPilot = () => {
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: 1,
+      id: '1',
       role: 'assistant',
       content: 'Hello! I\'m your AI Co-Pilot. I can help you analyze device data, generate reports, predict trends, and answer questions about your IoT infrastructure. How can I assist you today?',
       timestamp: '10:00 AM'
     }
   ]);
+  const [chatHistory, setChatHistory] = useState<any[]>([]);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [quickActions, setQuickActions] = useState<any[]>([]);
 
-  const chatHistory = [
-    { id: 1, title: 'Device Performance Analysis', date: 'Today, 9:30 AM' },
-    { id: 2, title: 'Energy Usage Report', date: 'Yesterday, 4:15 PM' },
-    { id: 3, title: 'Anomaly Investigation', date: 'Jan 14, 2:30 PM' },
-  ];
+  // Load chat sessions and quick actions on component mount
+  useEffect(() => {
+    const loadInitialData = async () => {
+      try {
+        const [sessionsResponse, actionsResponse] = await Promise.all([
+          aiAPI.getSessions(),
+          aiAPI.getQuickActions()
+        ]);
 
-  const sampleChartData = [
-    { time: '00:00', value: 45 },
-    { time: '04:00', value: 42 },
-    { time: '08:00', value: 58 },
-    { time: '12:00', value: 72 },
-    { time: '16:00', value: 51 },
-    { time: '20:00', value: 47 },
-  ];
+        if (sessionsResponse?.data) {
+          setChatHistory(sessionsResponse.data.map((session: any) => ({
+            id: session.id,
+            title: session.title,
+            date: new Date(session.updated_at).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: '2-digit'
+            })
+          })));
+        }
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+        if (actionsResponse?.data) {
+          setQuickActions(actionsResponse.data);
+        }
+      } catch (error) {
+        console.error('Failed to load initial data:', error);
+        // Keep default values on error
+      }
+    };
+
+    loadInitialData();
+  }, []);
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+
+    setIsLoading(true);
+    const userInput = input;
+    setInput('');
 
     const userMessage: ChatMessage = {
-      id: messages.length + 1,
+      id: `user_${Date.now()}`,
       role: 'user',
-      content: input,
+      content: userInput,
       timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
     };
 
-    // Simulate AI response with chart
-    const aiMessage: ChatMessage = {
-      id: messages.length + 2,
-      role: 'assistant',
-      content: 'Based on the analysis of your temperature sensors over the past 24 hours, I\'ve identified a significant spike between 08:00-14:00. Here\'s the visualization:',
-      timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
-      hasChart: true,
-      chartData: sampleChartData
-    };
+    setMessages(prev => [...prev, userMessage]);
 
-    setMessages([...messages, userMessage, aiMessage]);
-    setInput('');
+    try {
+      const response = await aiAPI.sendMessage(userInput, currentSessionId || undefined);
+
+      if (response?.data) {
+        const aiMessage: ChatMessage = {
+          id: response.data.message.id,
+          role: response.data.message.role,
+          content: response.data.message.content,
+          timestamp: new Date(response.data.message.timestamp).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit'
+          }),
+          hasChart: response.data.message.has_chart,
+          chartData: response.data.message.chart_data
+        };
+
+        setMessages(prev => [...prev, aiMessage]);
+        setCurrentSessionId(response.data.session_id);
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive"
+      });
+
+      // Remove the user message if API call failed
+      setMessages(prev => prev.slice(0, -1));
+      setInput(userInput);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -140,20 +193,38 @@ const AIoTCoPilot = () => {
                       {message.hasChart && message.chartData && (
                         <div className="mt-4 p-4 bg-background rounded-lg">
                           <div className="flex items-center justify-between mb-3">
-                            <p className="text-sm font-medium text-foreground">Temperature Analysis - Last 24 Hours</p>
+                            <p className="text-sm font-medium text-foreground">
+                              {message.chartData.type === 'bar' ? 'Energy Usage Analysis' : 'Performance Analysis'} - Last 24 Hours
+                            </p>
                             <Button variant="outline" size="sm">
                               <Plus className="h-3 w-3 mr-1" />
                               Add to Dashboard
                             </Button>
                           </div>
                           <ResponsiveContainer width="100%" height={200}>
-                            <LineChart data={message.chartData}>
-                              <CartesianGrid strokeDasharray="3 3" />
-                              <XAxis dataKey="time" />
-                              <YAxis />
-                              <Tooltip />
-                              <Line type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2} />
-                            </LineChart>
+                            {message.chartData.type === 'bar' ? (
+                              <BarChart data={message.chartData.data?.datasets?.[0]?.data?.map((value: number, index: number) => ({
+                                time: message.chartData.data?.labels?.[index] || `Point ${index}`,
+                                value
+                              })) || []}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="time" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="value" fill="hsl(var(--primary))" />
+                              </BarChart>
+                            ) : (
+                              <LineChart data={message.chartData.data?.datasets?.[0]?.data?.map((value: number, index: number) => ({
+                                time: message.chartData.data?.labels?.[index] || `Point ${index}`,
+                                value
+                              })) || []}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="time" />
+                                <YAxis />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2} />
+                              </LineChart>
+                            )}
                           </ResponsiveContainer>
                         </div>
                       )}
@@ -176,26 +247,29 @@ const AIoTCoPilot = () => {
                   placeholder="Ask me anything about your IoT devices..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                  onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSend()}
                   className="flex-1"
+                  disabled={isLoading}
                 />
-                <Button onClick={handleSend} className="flex-shrink-0">
-                  <Send className="h-4 w-4" />
+                <Button onClick={handleSend} className="flex-shrink-0" disabled={isLoading}>
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
               <div className="flex gap-2 mt-3 flex-wrap">
-                <Badge variant="outline" className="cursor-pointer hover:bg-accent">
-                  Show device performance
-                </Badge>
-                <Badge variant="outline" className="cursor-pointer hover:bg-accent">
-                  Analyze energy usage
-                </Badge>
-                <Badge variant="outline" className="cursor-pointer hover:bg-accent">
-                  Find anomalies
-                </Badge>
-                <Badge variant="outline" className="cursor-pointer hover:bg-accent">
-                  Generate report
-                </Badge>
+                {quickActions.map((action) => (
+                  <Badge
+                    key={action.id}
+                    variant="outline"
+                    className="cursor-pointer hover:bg-accent"
+                    onClick={() => setInput(action.label)}
+                  >
+                    {action.label}
+                  </Badge>
+                ))}
               </div>
             </div>
           </Card>

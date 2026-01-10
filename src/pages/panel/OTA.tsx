@@ -243,6 +243,9 @@ const OTA = () => {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Add Firmware Version</DialogTitle>
+                  <DialogDescription>
+                    Add a new firmware version with version number, file URL, SHA256 hash, and description.
+                  </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
@@ -340,6 +343,9 @@ const OTA = () => {
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>Create Update Campaign</DialogTitle>
+                  <DialogDescription>
+                    Create a new firmware update campaign by selecting a firmware version and defining rollout stages.
+                  </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>

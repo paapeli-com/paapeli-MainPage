@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { apiRequest } from '@/lib/api';
+import { apiRequest, getApiUrl } from '@/lib/api';
 
 interface User {
   id: string;
@@ -12,6 +12,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  authenticateWithToken: (token: string) => Promise<void>;
   signOut: (redirectToLogin?: boolean) => Promise<void>;
 }
 
@@ -51,33 +52,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      // Get JWT token from APISIX on panel domain
-      const tokenUrl = window.location.hostname.includes('panel.paapeli') 
-        ? '/auth/token'
-        : 'http://panel.paapeli.local/auth/token';
-        
-      console.log('Attempting login to:', tokenUrl);
+      console.log('Attempting login...');
       
-      const response = await fetch(tokenUrl, {
-        method: 'GET',  // Changed to GET since APISIX basic-auth uses GET
+      const response = await fetch(getApiUrl('/api/v1/auth/login'), {
+        method: 'POST',
         headers: {
-          'Authorization': 'Basic ' + btoa(email + ':' + password),
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       });
 
-      console.log('Token response status:', response.status);
+      console.log('Login response status:', response.status);
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Token request failed:', errorText);
+        console.error('Login request failed:', errorText);
         throw new Error('Invalid credentials');
       }
 
       const data = await response.json();
-      console.log('Token received successfully');
-      const token = data.access_token;
+      console.log('Login successful, response data:', data);
+      const token = data.data?.access_token;
 
       if (!token) {
+        console.error('Response structure:', data);
         throw new Error('No access token in response');
       }
 
@@ -102,6 +103,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const authenticateWithToken = async (token: string) => {
+    if (!token) {
+      throw new Error('No access token provided');
+    }
+
+    try {
+      localStorage.setItem('auth_token', token);
+      const userData = await apiRequest('/api/v1/users/me', {}, false);
+      setUser({
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+      });
+    } catch (error) {
+      localStorage.removeItem('auth_token');
+      setUser(null);
+      throw error instanceof Error ? error : new Error('Authentication failed');
+    }
+  };
+
   const signOut = async (redirectToLogin: boolean = true) => {
     localStorage.removeItem('auth_token');
     setUser(null);
@@ -115,6 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAuthenticated: !!user,
     isLoading,
     login,
+    authenticateWithToken,
     signOut,
   };
 

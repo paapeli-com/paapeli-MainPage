@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, CheckCheck, ArrowLeft, Smartphone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { copyTextToClipboard } from "@/utils/clipboard";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -104,7 +105,7 @@ export const DeviceDetailsContent = ({ deviceId, onBack }: DeviceDetailsContentP
 
   const copyToClipboard = async (text: string, field: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await copyTextToClipboard(text);
       setCopiedField(field);
       setTimeout(() => setCopiedField(null), 2000);
       toast({

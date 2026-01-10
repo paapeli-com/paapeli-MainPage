@@ -4,8 +4,9 @@
  */
 
 // Get API base URL from environment variables
-// Defaults to production API if not set
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://api.paapeli.local';
+// For production, use the same origin (APISIX will route API calls)
+// For development, use the configured API URL or relative URLs
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 /**
  * Construct full API endpoint URL
@@ -15,7 +16,13 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://api.paa
 export function getApiUrl(path: string): string {
   // Remove leading slash if present to avoid double slashes
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  return `${API_BASE_URL}${cleanPath}`;
+
+  if (API_BASE_URL) {
+    return `${API_BASE_URL}${cleanPath}`;
+  } else {
+    // Use relative URL (same origin)
+    return cleanPath;
+  }
 }
 
 /**
@@ -54,13 +61,29 @@ export async function apiRequest(path: string, options: RequestInit = {}, redire
   const response = await fetch(url, createAuthHeaders(options));
 
   if (response.status === 401 && redirectOnAuth) {
-    // Redirect to auth endpoint if not authenticated
-    window.location.href = getApiUrl("/api/v1/users/me");
+    // Redirect to the SPA login page (not an API endpoint).
+    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    const loginUrl = `/login?redirect=${encodeURIComponent(currentPath)}`;
+    if (!window.location.pathname.startsWith("/login")) {
+      window.location.href = loginUrl;
+    }
     throw new Error("Authentication required");
   }
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    // Try to parse error response
+    try {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || errorData.message || `API request failed: ${response.status} ${response.statusText}`);
+    } catch (parseError) {
+      // If we can't parse the error response, use the status text
+      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    }
+  }
+
+  // Handle responses with no content (e.g., 204 No Content)
+  if (response.status === 204 || response.headers.get('content-length') === '0') {
+    return null;
   }
 
   return response.json();
@@ -144,4 +167,40 @@ export const alertsAPI = {
   acknowledgeAlert: (id: string) => apiRequest(`/api/v1/alerts/${id}/acknowledge`, {
     method: 'POST'
   })
+};
+
+/**
+ * AI Co-Pilot API functions
+ */
+export const aiAPI = {
+  // Send chat message to AI
+  sendMessage: (message: string, sessionId?: string) => apiRequest('/api/v1/ai/chat', {
+    method: 'POST',
+    body: JSON.stringify({
+      message,
+      session_id: sessionId
+    })
+  }),
+
+  // Create new chat session
+  createSession: (title?: string) => apiRequest('/api/v1/ai/sessions', {
+    method: 'POST',
+    body: JSON.stringify({
+      title: title || 'New Chat Session'
+    })
+  }),
+
+  // Get all chat sessions
+  getSessions: () => apiRequest('/api/v1/ai/sessions'),
+
+  // Get specific chat session
+  getSession: (sessionId: string) => apiRequest(`/api/v1/ai/sessions/${sessionId}`),
+
+  // Delete chat session
+  deleteSession: (sessionId: string) => apiRequest(`/api/v1/ai/sessions/${sessionId}`, {
+    method: 'DELETE'
+  }),
+
+  // Get quick actions
+  getQuickActions: () => apiRequest('/api/v1/ai/quick-actions')
 };

@@ -454,6 +454,9 @@ const DeviceGroup = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Device Group</DialogTitle>
+            <DialogDescription>
+              Update the name of the device group.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -499,6 +502,9 @@ const DeviceGroup = () => {
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>Add Devices to {selectedGroup?.name}</DialogTitle>
+            <DialogDescription>
+              Select devices from the list below to add them to this group. You can search and paginate through available devices.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>

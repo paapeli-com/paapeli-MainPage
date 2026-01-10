@@ -14,6 +14,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { copyTextToClipboard } from "@/utils/clipboard";
 import {
   Select,
   SelectContent,
@@ -195,7 +196,7 @@ const Devices = () => {
 
   const copyToClipboard = async (text: string, field: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await copyTextToClipboard(text);
       setCopiedField(field);
       setTimeout(() => setCopiedField(null), 2000);
     } catch (error) {

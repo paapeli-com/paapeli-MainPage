@@ -3,49 +3,53 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { DomainRouter } from "@/components/DomainRouter";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import AuthCallback from "./pages/AuthCallback";
-import AuthError from "./pages/AuthError";
-import AccountSettings from "./pages/AccountSettings";
-import GoogleSignup from "./pages/GoogleSignup";
-import NotFound from "./pages/NotFound";
-import Contact from "./pages/Contact";
-import Status from "./pages/Status";
-import RequestDemo from "./pages/RequestDemo";
-import PanelNotFound from "./pages/panel/PanelNotFound";
-import PanelHome from "./pages/panel/PanelHome";
-import Dashboard from "./pages/panel/Dashboard";
-import Devices from "./pages/panel/Devices";
-import DeviceDetails from "./pages/panel/DeviceDetails";
-import DeviceGroup from "./pages/panel/DeviceGroup";
-import Gateways from "./pages/panel/Gateways";
-import Alarms from "./pages/panel/Alarms";
-import SolutionTemplates from "./pages/panel/SolutionTemplates";
-import OTA from "./pages/panel/OTA";
-import Members from "./pages/panel/Members";
-import DevCenter from "./pages/panel/DevCenter";
-import Pricing from "./pages/Pricing";
-import AIoTPlatform from "./pages/products/AIoTPlatform";
-import DDoSProtection from "./pages/products/DDoSProtection";
-import EdgeComputing from "./pages/products/EdgeComputing";
-import IntelligenceInsight from "./pages/products/IntelligenceInsight";
-import OTAProduct from "./pages/products/OTA";
-import SmartCities from "./pages/usecases/SmartCities";
-import MakersDevelopers from "./pages/usecases/MakersDevelopers";
-import OilGas from "./pages/usecases/OilGas";
-import SmartAgriculture from "./pages/usecases/SmartAgriculture";
-import SmartBuildings from "./pages/usecases/SmartBuildings";
-import AIoTForecastFailures from "./pages/panel/AIoTForecastFailures";
-import AIoTAnalyzeTrends from "./pages/panel/AIoTAnalyzeTrends";
-import AIoTRecommendations from "./pages/panel/AIoTRecommendations";
-import AIoTDetectAnomalies from "./pages/panel/AIoTDetectAnomalies";
-import AIoTCoPilot from "./pages/panel/AIoTCoPilot";
+
+// Lazy-loaded components
+const Index = lazy(() => import("./pages/Index"));
+const Login = lazy(() => import("./pages/Login"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
+const AuthError = lazy(() => import("./pages/AuthError"));
+const AccountSettings = lazy(() => import("./pages/AccountSettings"));
+const GoogleSignup = lazy(() => import("./pages/GoogleSignup"));
+const AcceptInvitation = lazy(() => import("./pages/AcceptInvitation"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Status = lazy(() => import("./pages/Status"));
+const RequestDemo = lazy(() => import("./pages/RequestDemo"));
+const PanelNotFound = lazy(() => import("./pages/panel/PanelNotFound"));
+const PanelHome = lazy(() => import("./pages/panel/PanelHome"));
+const Dashboard = lazy(() => import("./pages/panel/Dashboard"));
+const Devices = lazy(() => import("./pages/panel/Devices"));
+const DeviceDetails = lazy(() => import("./pages/panel/DeviceDetails"));
+const DeviceGroup = lazy(() => import("./pages/panel/DeviceGroup"));
+const Gateways = lazy(() => import("./pages/panel/Gateways"));
+const Alarms = lazy(() => import("./pages/panel/Alarms"));
+const SolutionTemplates = lazy(() => import("./pages/panel/SolutionTemplates"));
+const OTA = lazy(() => import("./pages/panel/OTA"));
+const Members = lazy(() => import("./pages/panel/Members"));
+const DevCenter = lazy(() => import("./pages/panel/DevCenter"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const AIoTPlatform = lazy(() => import("./pages/products/AIoTPlatform"));
+const DDoSProtection = lazy(() => import("./pages/products/DDoSProtection"));
+const EdgeComputing = lazy(() => import("./pages/products/EdgeComputing"));
+const IntelligenceInsight = lazy(() => import("./pages/products/IntelligenceInsight"));
+const OTAProduct = lazy(() => import("./pages/products/OTA"));
+const SmartCities = lazy(() => import("./pages/usecases/SmartCities"));
+const MakersDevelopers = lazy(() => import("./pages/usecases/MakersDevelopers"));
+const OilGas = lazy(() => import("./pages/usecases/OilGas"));
+const SmartAgriculture = lazy(() => import("./pages/usecases/SmartAgriculture"));
+const SmartBuildings = lazy(() => import("./pages/usecases/SmartBuildings"));
+const AIoTForecastFailures = lazy(() => import("./pages/panel/AIoTForecastFailures"));
+const AIoTAnalyzeTrends = lazy(() => import("./pages/panel/AIoTAnalyzeTrends"));
+const AIoTRecommendations = lazy(() => import("./pages/panel/AIoTRecommendations"));
+const AIoTDetectAnomalies = lazy(() => import("./pages/panel/AIoTDetectAnomalies"));
+const AIoTCoPilot = lazy(() => import("./pages/panel/AIoTCoPilot"));
 
 const queryClient = new QueryClient();
 
@@ -64,7 +68,8 @@ const App = () => {
               <Toaster />
               <Sonner />
               <DomainRouter />
-              <Routes>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/:lang" element={<Index />} />
                 <Route path="/login" element={<Login />} />
@@ -157,10 +162,13 @@ const App = () => {
                 <Route path="/:lang/status" element={<Status />} />
                 <Route path="/request-demo" element={<RequestDemo />} />
                 <Route path="/:lang/request-demo" element={<RequestDemo />} />
+                <Route path="/accept-invitation" element={<AcceptInvitation />} />
+                <Route path="/:lang/accept-invitation" element={<AcceptInvitation />} />
                 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              </Suspense>
             </TooltipProvider>
           </AuthProvider>
         </LanguageProvider>
