@@ -77,6 +77,25 @@ interface Project {
   description?: string;
 }
 
+interface GatewayApiItem {
+  gateway: {
+    id: string;
+    name: string;
+    config?: {
+      protocol?: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+interface ProjectApiItem {
+  id: string;
+  name: string;
+  description?: string;
+}
+
 const Devices = () => {
   const { t, isRTL } = useLanguage();
   const { toast } = useToast();
@@ -130,7 +149,7 @@ const Devices = () => {
         const data = await response.json();
         console.log("API Response for gateways:", data); // Debug log
         // Transform gateways to device format for display
-        const deviceData = (data.gateways || []).map((item: any) => {
+        const deviceData = (data.gateways || []).map((item: GatewayApiItem) => {
           const gateway = item.gateway;
           return {
             id: gateway.id,
@@ -170,7 +189,7 @@ const Devices = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Projects API Response Data:", data);
-        const projectsData = (data.data || []).map((item: any) => ({
+        const projectsData = (data.data || []).map((item: ProjectApiItem) => ({
           id: item.id,
           name: item.name,
           description: item.description,

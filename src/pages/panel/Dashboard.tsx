@@ -6,6 +6,13 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { apiRequest } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 
+interface Gateway {
+  id: string;
+  name: string;
+  status: string;
+  [key: string]: unknown;
+}
+
 interface DashboardStats {
   totalDevices: number;
   activeDevices: number;
@@ -37,7 +44,7 @@ const Dashboard = () => {
 
         // Count total and active devices
         const totalDevices = devicesData.length;
-        const activeDevices = devicesData.filter((item: any) =>
+        const activeDevices = devicesData.filter((item: Gateway) =>
           item.status === "active"
         ).length;
 

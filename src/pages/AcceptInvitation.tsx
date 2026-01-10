@@ -10,6 +10,14 @@ import { apiRequest } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle, AlertCircle, Lock } from "lucide-react";
 
+interface InvitationData {
+  id: string;
+  email: string;
+  projectId?: string;
+  projectName?: string;
+  [key: string]: unknown;
+}
+
 const AcceptInvitation = () => {
   const { authenticateWithToken } = useAuth();
   const { toast } = useToast();
@@ -18,7 +26,7 @@ const AcceptInvitation = () => {
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [invitation, setInvitation] = useState<any>(null);
+  const [invitation, setInvitation] = useState<InvitationData | null>(null);
   const [error, setError] = useState<string>("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -40,9 +48,10 @@ const AcceptInvitation = () => {
         }, false);
         setInvitation(response.data);
         setLoading(false);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Failed to validate invitation:", error);
-        setError(error.message || "This invitation link is invalid, expired, or has already been used.");
+        const errorMessage = error instanceof Error ? error.message : "This invitation link is invalid, expired, or has already been used.";
+        setError(errorMessage);
         setLoading(false);
       }
     };
@@ -96,9 +105,10 @@ const AcceptInvitation = () => {
       // Redirect to login page instead of auto-login
       navigate("/login", { replace: true });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to accept invitation:", error);
-      setError(error.message || "Failed to accept invitation. The link may have expired.");
+      const errorMessage = error instanceof Error ? error.message : "Failed to accept invitation. The link may have expired.";
+      setError(errorMessage);
     } finally {
       setSubmitting(false);
     }

@@ -8,6 +8,64 @@
 // For development, use the configured API URL or relative URLs
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
+// API Data Types
+export interface FirmwareVersionData {
+  version: string;
+  description?: string;
+  fileUrl: string;
+  checksum?: string;
+  [key: string]: unknown;
+}
+
+export interface UpdateCampaignData {
+  name: string;
+  firmwareVersionId: string;
+  deviceIds: string[];
+  schedule?: string;
+  [key: string]: unknown;
+}
+
+export interface ProjectData {
+  name: string;
+  description?: string;
+  [key: string]: unknown;
+}
+
+export interface DeviceData {
+  name: string;
+  type: string;
+  projectId: string;
+  [key: string]: unknown;
+}
+
+export interface MemberData {
+  email: string;
+  role: string;
+  projectId?: string;
+  [key: string]: unknown;
+}
+
+export interface DeviceFirmwareStatusData {
+  status: string;
+  firmwareVersionId?: string;
+  [key: string]: unknown;
+}
+
+export interface AlertParams {
+  limit?: number;
+  offset?: number;
+  severity?: string;
+  [key: string]: unknown;
+}
+
+export interface AlertData {
+  title: string;
+  description?: string;
+  severity: string;
+  deviceId?: string;
+  [key: string]: unknown;
+}
+
 /**
  * Construct full API endpoint URL
  * @param path - API endpoint path (e.g., '/api/v1/devices')
@@ -56,7 +114,7 @@ export function createAuthHeaders(options: RequestInit = {}): RequestInit {
  * @param redirectOnAuth - Whether to redirect on 401 (default: true)
  * @returns Promise<Response>
  */
-export async function apiRequest(path: string, options: RequestInit = {}, redirectOnAuth: boolean = true): Promise<any> {
+export async function apiRequest(path: string, options: RequestInit = {}, redirectOnAuth: boolean = true): Promise<Response> {
   const url = getApiUrl(path);
   const response = await fetch(url, createAuthHeaders(options));
 
@@ -95,12 +153,12 @@ export async function apiRequest(path: string, options: RequestInit = {}, redire
 export const otaAPI = {
   // Firmware versions
   getFirmwareVersions: () => apiRequest('/api/v1/ota/firmware'),
-  createFirmwareVersion: (data: any) => apiRequest('/api/v1/ota/firmware', {
+  createFirmwareVersion: (data: FirmwareVersionData) => apiRequest('/api/v1/ota/firmware', {
     method: 'POST',
     body: JSON.stringify(data)
   }),
   getFirmwareVersion: (id: string) => apiRequest(`/api/v1/ota/firmware/${id}`),
-  updateFirmwareVersion: (id: string, data: any) => apiRequest(`/api/v1/ota/firmware/${id}`, {
+  updateFirmwareVersion: (id: string, data: Partial<FirmwareVersionData>) => apiRequest(`/api/v1/ota/firmware/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data)
   }),
@@ -110,12 +168,12 @@ export const otaAPI = {
 
   // Update campaigns
   getUpdateCampaigns: () => apiRequest('/api/v1/ota/campaigns'),
-  createUpdateCampaign: (data: any) => apiRequest('/api/v1/ota/campaigns', {
+  createUpdateCampaign: (data: UpdateCampaignData) => apiRequest('/api/v1/ota/campaigns', {
     method: 'POST',
     body: JSON.stringify(data)
   }),
   getUpdateCampaign: (id: string) => apiRequest(`/api/v1/ota/campaigns/${id}`),
-  updateUpdateCampaign: (id: string, data: any) => apiRequest(`/api/v1/ota/campaigns/${id}`, {
+  updateUpdateCampaign: (id: string, data: Partial<UpdateCampaignData>) => apiRequest(`/api/v1/ota/campaigns/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data)
   }),
@@ -130,7 +188,7 @@ export const otaAPI = {
   // Device firmware status
   getDeviceFirmwareStatus: (deviceId: string) => apiRequest(`/api/v1/ota/devices/${deviceId}/status`),
   getAllDeviceFirmwareStatuses: () => apiRequest('/api/v1/ota/devices/status'),
-  updateDeviceFirmwareStatus: (deviceId: string, data: any) => apiRequest(`/api/v1/ota/devices/${deviceId}/status`, {
+  updateDeviceFirmwareStatus: (deviceId: string, data: DeviceFirmwareStatusData) => apiRequest(`/api/v1/ota/devices/${deviceId}/status`, {
     method: 'PUT',
     body: JSON.stringify(data)
   }),
@@ -146,16 +204,16 @@ export const alertsAPI = {
   // Get alerts count for dashboard
   getAlertsCount: () => apiRequest('/api/v1/alerts/count'),
   // Get all alerts
-  getAlerts: (params?: any) => apiRequest('/api/v1/alerts', { method: 'GET' }),
+  getAlerts: (params?: AlertParams) => apiRequest('/api/v1/alerts', { method: 'GET' }),
   // Get alert by ID
   getAlert: (id: string) => apiRequest(`/api/v1/alerts/${id}`),
   // Create alert
-  createAlert: (data: any) => apiRequest('/api/v1/alerts', {
+  createAlert: (data: AlertData) => apiRequest('/api/v1/alerts', {
     method: 'POST',
     body: JSON.stringify(data)
   }),
   // Update alert
-  updateAlert: (id: string, data: any) => apiRequest(`/api/v1/alerts/${id}`, {
+  updateAlert: (id: string, data: Partial<AlertData>) => apiRequest(`/api/v1/alerts/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data)
   }),

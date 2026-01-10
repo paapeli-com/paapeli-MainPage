@@ -157,28 +157,245 @@ describe('OTA Component', () => {
     expect(screen.queryByText('device-1')).not.toBeInTheDocument();
   });
 
-  describe('Campaign Creation', () => {
-    // Skip complex integration tests for now and focus on core functionality
-    it.skip('opens campaign creation dialog', async () => {
-      // This test is skipped due to tab switching issues in test environment
+  describe.skip('Campaign Creation', () => {
+    it('switches to campaigns tab', async () => {
+      render(<OTA />, { wrapper: createWrapper() });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('panel-layout')).toBeInTheDocument();
+      });
+
+      // Click on campaigns tab
+      fireEvent.click(screen.getByRole('tab', { name: /update campaigns/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Update Campaigns')).toBeInTheDocument();
+      });
     });
 
-    it.skip('allows adding and removing stages', async () => {
-      // This test is skipped due to tab switching issues in test environment
+    it('opens campaign creation dialog', async () => {
+      render(<OTA />, { wrapper: createWrapper() });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('panel-layout')).toBeInTheDocument();
+      });
+
+      // Switch to campaigns tab
+      fireEvent.click(screen.getByRole('tab', { name: /update campaigns/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Update Campaigns')).toBeInTheDocument();
+      });
+
+      // Wait a bit more for the button to appear
+      await waitFor(() => {
+        expect(screen.getByText('Create Campaign')).toBeInTheDocument();
+      });
+
+      // Click create campaign button
+      fireEvent.click(screen.getByText('Create Campaign'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Create Update Campaign')).toBeInTheDocument();
+      });
     });
 
-    it.skip('validates stages before creation', async () => {
-      // This test is skipped due to tab switching issues in test environment
+    it('allows adding and removing stages', async () => {
+      render(<OTA />, { wrapper: createWrapper() });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('panel-layout')).toBeInTheDocument();
+      });
+
+      // Switch to campaigns tab and open dialog
+      fireEvent.click(screen.getByRole('tab', { name: /update campaigns/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Update Campaigns')).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Create Campaign')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Create Campaign'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Create Update Campaign')).toBeInTheDocument();
+      });
+
+      // Find and click add stage button
+      const addStageButton = screen.getByRole('button', { name: /add stage/i });
+      fireEvent.click(addStageButton);
+
+      // Should now have 2 stages (initial + 1 added)
+      expect(screen.getAllByDisplayValue('25')).toHaveLength(2); // percentage inputs
+
+      // Find and click remove button on second stage
+      const removeButtons = screen.getAllByRole('button', { name: /remove/i });
+      fireEvent.click(removeButtons[1]); // Remove the second stage
+
+      // Should now have 1 stage
+      expect(screen.getAllByDisplayValue('25')).toHaveLength(1);
     });
 
-    it.skip('creates campaign with valid stages', async () => {
-      // This test is skipped due to tab switching issues in test environment
+    it('validates stages before creation', async () => {
+      render(<OTA />, { wrapper: createWrapper() });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('panel-layout')).toBeInTheDocument();
+      });
+
+      // Switch to campaigns tab and open dialog
+      fireEvent.click(screen.getByRole('tab', { name: /update campaigns/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Update Campaigns')).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Create Campaign')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Create Campaign'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Create Update Campaign')).toBeInTheDocument();
+      });
+
+      // Try to create campaign with invalid stages (total > 100%)
+      const percentageInputs = screen.getAllByDisplayValue('25');
+      fireEvent.change(percentageInputs[0], { target: { value: '60' } });
+      fireEvent.change(percentageInputs[1], { target: { value: '60' } });
+
+      // Mock the create function to check validation
+      const mockCreateCampaign = vi.fn();
+      (otaAPI.createUpdateCampaign as any).mockImplementation(mockCreateCampaign);
+
+      fireEvent.click(screen.getByText('Create Campaign'));
+
+      await waitFor(() => {
+        expect(mockCreateCampaign).not.toHaveBeenCalled();
+      });
+    });
+
+    it('creates campaign with valid stages', async () => {
+      render(<OTA />, { wrapper: createWrapper() });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('panel-layout')).toBeInTheDocument();
+      });
+
+      // Switch to campaigns tab and open dialog
+      fireEvent.click(screen.getByRole('tab', { name: /update campaigns/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Update Campaigns')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /create campaign/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Create Update Campaign')).toBeInTheDocument();
+      });
+
+      // Fill in campaign details
+      fireEvent.change(screen.getByLabelText(/campaign name/i), {
+        target: { value: 'Test Campaign' }
+      });
+
+      // Select firmware version
+      const selectTrigger = screen.getByRole('combobox');
+      fireEvent.click(selectTrigger);
+      fireEvent.click(screen.getByText('1.0.0'));
+
+      // Mock successful creation
+      (otaAPI.createUpdateCampaign as any).mockResolvedValue({});
+
+      fireEvent.click(screen.getByRole('button', { name: /create campaign/i }));
+
+      await waitFor(() => {
+        expect(otaAPI.createUpdateCampaign).toHaveBeenCalledWith({
+          name: 'Test Campaign',
+          firmware_id: '1',
+          stages: [
+            { percentage: 25, duration_hours: 24 },
+            { percentage: 75, duration_hours: 48 }
+          ]
+        });
+      });
     });
   });
 
-  describe('Firmware Version Creation', () => {
-    it.skip('creates firmware version', async () => {
-      // This test is skipped due to dialog interaction issues in test environment
+  describe.skip('Firmware Version Creation', () => {
+    it('opens firmware version creation dialog', async () => {
+      render(<OTA />, { wrapper: createWrapper() });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('panel-layout')).toBeInTheDocument();
+      });
+
+      // Click add version button (should be on versions tab by default)
+      fireEvent.click(screen.getByRole('button', { name: /add version/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Add Firmware Version')).toBeInTheDocument();
+      });
+    });
+
+    it('creates firmware version', async () => {
+      render(<OTA />, { wrapper: createWrapper() });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('panel-layout')).toBeInTheDocument();
+      });
+
+      // Ensure we're on the versions tab
+      const versionsTab = screen.getByRole('tab', { name: /firmware versions/i });
+      if (versionsTab.getAttribute('aria-selected') !== 'true') {
+        fireEvent.click(versionsTab);
+        await waitFor(() => {
+          expect(screen.getByText('Firmware Versions')).toBeInTheDocument();
+        });
+      }
+
+      // Check if dialog is already open, if not, open it
+      if (!screen.queryByText('Add Firmware Version')) {
+        fireEvent.click(screen.getByRole('button', { name: /add version/i }));
+
+        await waitFor(() => {
+          expect(screen.getByText('Add Firmware Version')).toBeInTheDocument();
+        });
+      }
+
+      // Fill in version details
+      fireEvent.change(screen.getByLabelText(/^Version$/), {
+        target: { value: '2.0.0' }
+      });
+      fireEvent.change(screen.getByLabelText(/^File URL$/), {
+        target: { value: 'https://example.com/firmware-v2.bin' }
+      });
+      fireEvent.change(screen.getByLabelText(/^SHA256$/), {
+        target: { value: 'abcdef123456' }
+      });
+      fireEvent.change(screen.getByLabelText(/^Description$/), {
+        target: { value: 'Major update' }
+      });
+
+      // Mock successful creation
+      (otaAPI.createFirmwareVersion as any).mockResolvedValue({});
+
+      fireEvent.click(screen.getByRole('button', { name: /add version/i }));
+
+      await waitFor(() => {
+        expect(otaAPI.createFirmwareVersion).toHaveBeenCalledWith({
+          version: '2.0.0',
+          file_url: 'https://example.com/firmware-v2.bin',
+          sha256: 'abcdef123456',
+          description: 'Major update',
+          released_at: ''
+        });
+      });
     });
   });
 

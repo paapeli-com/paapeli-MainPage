@@ -23,6 +23,13 @@ interface DashboardStats {
   alerts: number;
 }
 
+interface Gateway {
+  id: string;
+  name: string;
+  status: string;
+  [key: string]: unknown;
+}
+
 const PanelHome = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
@@ -48,7 +55,7 @@ const PanelHome = () => {
         
         // Count total and active devices
         const totalDevices = gatewaysData.length;
-        const activeDevices = gatewaysData.filter((item: any) => 
+        const activeDevices = gatewaysData.filter((item: Gateway) =>
           item.status === "active"
         ).length;
 

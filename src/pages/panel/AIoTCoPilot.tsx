@@ -11,6 +11,28 @@ import { aiAPI } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 interface ChatMessage {
+  id?: string;
+  content: string;
+  timestamp: string;
+  role?: 'user' | 'assistant';
+}
+
+interface ChatSession {
+  id: string;
+  title: string;
+  updated_at: string;
+  [key: string]: unknown;
+}
+
+interface QuickAction {
+  id: string;
+  title: string;
+  description?: string;
+  action: string;
+  [key: string]: unknown;
+}
+
+interface ChatMessage {
   id: number;
   role: 'user' | 'assistant';
   content: string;
@@ -31,10 +53,10 @@ const AIoTCoPilot = () => {
       timestamp: '10:00 AM'
     }
   ]);
-  const [chatHistory, setChatHistory] = useState<any[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatSession[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [quickActions, setQuickActions] = useState<any[]>([]);
+  const [quickActions, setQuickActions] = useState<QuickAction[]>([]);
 
   // Load chat sessions and quick actions on component mount
   useEffect(() => {
@@ -46,7 +68,7 @@ const AIoTCoPilot = () => {
         ]);
 
         if (sessionsResponse?.data) {
-          setChatHistory(sessionsResponse.data.map((session: any) => ({
+          setChatHistory(sessionsResponse.data.map((session: ChatSession) => ({
             id: session.id,
             title: session.title,
             date: new Date(session.updated_at).toLocaleDateString('en-US', {
