@@ -6,7 +6,6 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Lock files (dependencies will be installed in container)
-bun.lockb
 package-lock.json
 
 # Version control
