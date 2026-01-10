@@ -36,7 +36,7 @@ test-watch:
 	@npm test
 
 test-coverage:
-	@npm test -- --coverage
+	@npm test -- --coverage --run
 
 build:
 	@npm run build
