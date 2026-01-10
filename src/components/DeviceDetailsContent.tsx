@@ -40,6 +40,7 @@ interface DeviceDetails {
 
 interface DeviceDetailsContentProps {
   deviceId: string;
+  device?: DeviceDetails | null;
   onBack: () => void;
 }
 
@@ -60,7 +61,23 @@ export const DeviceDetailsContent = ({ deviceId, onBack }: DeviceDetailsContentP
         if (response.ok) {
           const data = await response.json();
           console.log("Device details API response:", data);
-          setDevice(data);
+          const deviceData = data.data;
+          const mappedDevice = {
+            id: deviceData.id,
+            name: deviceData.name,
+            deviceId: deviceData.id,
+            protocol: deviceData.config?.protocol || 'MQTT',
+            label: deviceData.location,
+            deviceProfile: deviceData.config?.device_profile || 'default',
+            useSsl: deviceData.config?.use_ssl || false,
+            lastActivity: deviceData.last_heartbeat ? new Date(deviceData.last_heartbeat).toLocaleString() : '-',
+            createdAt: deviceData.created_at,
+            apiKey: deviceData.api_key || '-',
+            assignedFirmware: deviceData.config?.firmware,
+            assignedSoftware: deviceData.config?.software,
+            isGateway: deviceData.config?.is_gateway || false,
+          };
+          setDevice(mappedDevice);
         } else {
           toast({
             title: t("error"),

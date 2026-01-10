@@ -326,9 +326,9 @@ export const Navigation = () => {
                     data-menu
                     className="absolute right-0 top-full mt-2 w-48 rounded-md border border-border bg-popover py-1 shadow-lg hidden z-50"
                   >
-                    {user?.getUsername() && (
+                    {user?.email && (
                       <div className="px-3 py-2 border-b border-border">
-                        <p className="text-xs text-muted-foreground truncate">{user.getUsername()}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                       </div>
                     )}
                     <button

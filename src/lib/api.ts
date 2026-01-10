@@ -65,3 +65,52 @@ export async function apiRequest(path: string, options: RequestInit = {}, redire
 
   return response.json();
 }
+
+/**
+ * OTA API functions
+ */
+export const otaAPI = {
+  // Firmware versions
+  getFirmwareVersions: () => apiRequest('/api/v1/ota/firmware'),
+  createFirmwareVersion: (data: any) => apiRequest('/api/v1/ota/firmware', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }),
+  getFirmwareVersion: (id: string) => apiRequest(`/api/v1/ota/firmware/${id}`),
+  updateFirmwareVersion: (id: string, data: any) => apiRequest(`/api/v1/ota/firmware/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  }),
+  deleteFirmwareVersion: (id: string) => apiRequest(`/api/v1/ota/firmware/${id}`, {
+    method: 'DELETE'
+  }),
+
+  // Update campaigns
+  getUpdateCampaigns: () => apiRequest('/api/v1/ota/campaigns'),
+  createUpdateCampaign: (data: any) => apiRequest('/api/v1/ota/campaigns', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }),
+  getUpdateCampaign: (id: string) => apiRequest(`/api/v1/ota/campaigns/${id}`),
+  updateUpdateCampaign: (id: string, data: any) => apiRequest(`/api/v1/ota/campaigns/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  }),
+  deleteUpdateCampaign: (id: string) => apiRequest(`/api/v1/ota/campaigns/${id}`, {
+    method: 'DELETE'
+  }),
+  startCampaign: (id: string) => apiRequest(`/api/v1/ota/campaigns/${id}/start`, { method: 'POST' }),
+  pauseCampaign: (id: string) => apiRequest(`/api/v1/ota/campaigns/${id}/pause`, { method: 'POST' }),
+  cancelCampaign: (id: string) => apiRequest(`/api/v1/ota/campaigns/${id}/cancel`, { method: 'POST' }),
+  completeCampaign: (id: string) => apiRequest(`/api/v1/ota/campaigns/${id}/complete`, { method: 'POST' }),
+
+  // Device firmware status
+  getDeviceFirmwareStatus: (deviceId: string) => apiRequest(`/api/v1/ota/devices/${deviceId}/status`),
+  updateDeviceFirmwareStatus: (deviceId: string, data: any) => apiRequest(`/api/v1/ota/devices/${deviceId}/status`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  }),
+
+  // Firmware update history
+  getFirmwareUpdateHistory: () => apiRequest('/api/v1/ota/history')
+};
