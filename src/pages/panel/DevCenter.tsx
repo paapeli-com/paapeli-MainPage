@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { apiRequest, getApiUrl } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { ExternalLink, Code, Book, Activity, Zap, Database, Shield, Globe } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
@@ -20,12 +21,32 @@ interface Project {
   description?: string;
 }
 
+interface DeviceGroup {
+  id: string;
+  name: string;
+  device_count: number;
+}
+
+interface Gateway {
+  id: string;
+  name: string;
+  status: string;
+}
+
 const DevCenter = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
+  const { toast } = useToast();
   const [health, setHealth] = useState<ApiHealth | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [deviceGroups, setDeviceGroups] = useState<DeviceGroup[]>([]);
+  const [gateways, setGateways] = useState<Gateway[]>([]);
   const [loading, setLoading] = useState(true);
+  const [apiErrors, setApiErrors] = useState({
+    projects: false,
+    deviceGroups: false,
+    gateways: false,
+  });
 
   useEffect(() => {
     const fetchDevData = async () => {
@@ -38,9 +59,55 @@ const DevCenter = () => {
         }
 
         // Fetch user's projects
-        const projectsResponse = await apiRequest("/api/v1/projects");
-        const projectsData = projectsResponse.projects || [];
-        setProjects(projectsData);
+        try {
+          const projectsResponse = await apiRequest("/api/v1/projects");
+          const projectsData = projectsResponse.data || [];
+          setProjects(projectsData);
+          setApiErrors(prev => ({ ...prev, projects: false }));
+        } catch (error) {
+          console.error("Failed to fetch projects:", error);
+          setProjects([]);
+          setApiErrors(prev => ({ ...prev, projects: true }));
+          toast({
+            title: "Service Unavailable",
+            description: "Unable to load projects data. Projects service may not be running.",
+            variant: "destructive",
+          });
+        }
+
+        // Fetch device groups
+        try {
+          const groupsResponse = await apiRequest("/api/v1/device-groups");
+          const groupsData = groupsResponse.data || [];
+          setDeviceGroups(groupsData);
+          setApiErrors(prev => ({ ...prev, deviceGroups: false }));
+        } catch (error) {
+          console.error("Failed to fetch device groups:", error);
+          setDeviceGroups([]);
+          setApiErrors(prev => ({ ...prev, deviceGroups: true }));
+          toast({
+            title: "Service Unavailable",
+            description: "Unable to load device groups data. Device Groups service may not be running.",
+            variant: "destructive",
+          });
+        }
+
+        // Fetch gateways
+        try {
+          const gatewaysResponse = await apiRequest("/api/v1/gateways");
+          const gatewaysData = gatewaysResponse.data || [];
+          setGateways(gatewaysData);
+          setApiErrors(prev => ({ ...prev, gateways: false }));
+        } catch (error) {
+          console.error("Failed to fetch gateways:", error);
+          setGateways([]);
+          setApiErrors(prev => ({ ...prev, gateways: true }));
+          toast({
+            title: "Service Unavailable",
+            description: "Unable to load gateways data. Gateways service may not be running.",
+            variant: "destructive",
+          });
+        }
       } catch (error) {
         console.error("Failed to fetch dev center data:", error);
       } finally {
@@ -56,9 +123,16 @@ const DevCenter = () => {
     { name: "User Profile", path: "/api/v1/users/me", method: "GET", description: "Get current user info" },
     { name: "List Projects", path: "/api/v1/projects", method: "GET", description: "Get user's projects" },
     { name: "List Gateways", path: "/api/v1/gateways", method: "GET", description: "Get IoT gateways" },
+    { name: "Device Groups", path: "/api/v1/device-groups", method: "GET", description: "List device groups" },
+    { name: "Create Device Group", path: "/api/v1/device-groups", method: "POST", description: "Create new device group" },
+    { name: "Group Devices", path: "/api/v1/device-groups/{id}/devices", method: "GET", description: "List devices in group" },
+    { name: "Add to Group", path: "/api/v1/device-groups/{id}/devices", method: "POST", description: "Add device to group" },
+    { name: "Remove from Group", path: "/api/v1/device-groups/{id}/devices/{deviceId}", method: "DELETE", description: "Remove device from group" },
     { name: "Device Telemetry", path: "/api/v1/devices/{id}/telemetry", method: "GET", description: "Get device sensor data" },
     { name: "Submit Telemetry", path: "/api/v1/telemetry/{deviceId}", method: "POST", description: "Send sensor readings" },
     { name: "List Alerts", path: "/api/v1/alerts", method: "GET", description: "Get system alerts" },
+    { name: "Alert Details", path: "/api/v1/alerts/{id}", method: "GET", description: "Get specific alert details" },
+    { name: "Acknowledge Alert", path: "/api/v1/alerts/{id}/acknowledge", method: "POST", description: "Acknowledge an alert" },
   ];
 
   const documentationLinks = [
@@ -66,6 +140,49 @@ const DevCenter = () => {
     { title: "Interactive API", url: "http://docs.paapeli.local/swagger/index.html", icon: Code },
     { title: "Architecture Guide", url: "http://docs.paapeli.local/architecture.html", icon: Database },
     { title: "Security Guide", url: "http://docs.paapeli.local/security.html", icon: Shield },
+  ];
+
+  const sdkExamples = [
+    {
+      title: "Python Gateway",
+      code: `import requests
+
+# Send telemetry data
+response = requests.post(
+    'http://api.paapeli.local/api/v1/telemetry/device-001',
+    headers={'X-API-Key': 'your-api-key'},
+    json={
+        'timestamp': '2026-01-10T12:00:00Z',
+        'sensor_type': 'temperature',
+        'value': 23.5,
+        'unit': 'celsius'
+    }
+)`
+    },
+    {
+      title: "cURL Command",
+      code: `curl -X POST http://api.paapeli.local/api/v1/telemetry/device-001 \\
+  -H "X-API-Key: your-api-key" \\
+  -H "Content-Type: application/json" \\
+  -d '{"sensor_type":"temperature","value":23.5,"unit":"celsius"}'`
+    },
+    {
+      title: "Device Group Management",
+      code: `import requests
+
+# Add device to group
+response = requests.post(
+    'http://api.paapeli.local/api/v1/device-groups/group-001/devices',
+    headers={'Authorization': 'Bearer your-jwt-token'},
+    json={'device_id': 'gateway-uuid'}
+)
+
+# List devices in group
+devices = requests.get(
+    'http://api.paapeli.local/api/v1/device-groups/group-001/devices',
+    headers={'Authorization': 'Bearer your-jwt-token'}
+)`
+    }
   ];
 
   return (
@@ -98,34 +215,58 @@ const DevCenter = () => {
         </Card>
 
         {/* Quick Stats */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          <Card className={apiErrors.projects ? "border-destructive/50 bg-destructive/5" : ""}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Projects</CardTitle>
-              <Database className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                Projects
+                {apiErrors.projects && <span className="text-xs text-destructive">⚠️</span>}
+              </CardTitle>
+              <Database className={`h-4 w-4 ${apiErrors.projects ? "text-destructive" : "text-muted-foreground"}`} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{projects.length}</div>
+              <div className={`text-2xl font-bold ${apiErrors.projects ? "text-destructive" : ""}`}>
+                {apiErrors.projects ? "!" : projects.length}
+              </div>
+              {apiErrors.projects && (
+                <p className="text-xs text-destructive mt-1">Service unavailable</p>
+              )}
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className={apiErrors.deviceGroups ? "border-destructive/50 bg-destructive/5" : ""}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">API Endpoints</CardTitle>
-              <Globe className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                Device Groups
+                {apiErrors.deviceGroups && <span className="text-xs text-destructive">⚠️</span>}
+              </CardTitle>
+              <Shield className={`h-4 w-4 ${apiErrors.deviceGroups ? "text-destructive" : "text-muted-foreground"}`} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{apiEndpoints.length}</div>
+              <div className={`text-2xl font-bold ${apiErrors.deviceGroups ? "text-destructive" : ""}`}>
+                {apiErrors.deviceGroups ? "!" : deviceGroups.length}
+              </div>
+              {apiErrors.deviceGroups && (
+                <p className="text-xs text-destructive mt-1">Service unavailable</p>
+              )}
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className={apiErrors.gateways ? "border-destructive/50 bg-destructive/5" : ""}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Documentation</CardTitle>
-              <Book className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                Gateways
+                {apiErrors.gateways && <span className="text-xs text-destructive">⚠️</span>}
+              </CardTitle>
+              <Zap className={`h-4 w-4 ${apiErrors.gateways ? "text-destructive" : "text-muted-foreground"}`} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{documentationLinks.length}</div>
+              <div className={`text-2xl font-bold ${apiErrors.gateways ? "text-destructive" : ""}`}>
+                {apiErrors.gateways ? "!" : gateways.length}
+              </div>
+              {apiErrors.gateways && (
+                <p className="text-xs text-destructive mt-1">Service unavailable</p>
+              )}
             </CardContent>
           </Card>
 
@@ -135,7 +276,7 @@ const DevCenter = () => {
               <Code className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">3</div>
+              <div className="text-2xl font-bold">{sdkExamples.length}</div>
             </CardContent>
           </Card>
         </div>
@@ -213,34 +354,14 @@ const DevCenter = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-medium mb-2">Python Gateway</h4>
-                <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">
-{`import requests
-
-# Send telemetry data
-response = requests.post(
-    'http://api.paapeli.local/api/v1/telemetry/device-001',
-    headers={'X-API-Key': 'your-api-key'},
-    json={
-        'timestamp': '2026-01-10T12:00:00Z',
-        'sensor_type': 'temperature',
-        'value': 23.5,
-        'unit': 'celsius'
-    }
-)`}
-                </pre>
-              </div>
-
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-medium mb-2">cURL Command</h4>
-                <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">
-{`curl -X POST http://api.paapeli.local/api/v1/telemetry/device-001 \\
-  -H "X-API-Key: your-api-key" \\
-  -H "Content-Type: application/json" \\
-  -d '{"sensor_type":"temperature","value":23.5,"unit":"celsius"}'`}
-                </pre>
-              </div>
+              {sdkExamples.map((example, index) => (
+                <div key={index} className="p-4 border rounded-lg">
+                  <h4 className="font-medium mb-2">{example.title}</h4>
+                  <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">
+                    {example.code}
+                  </pre>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
