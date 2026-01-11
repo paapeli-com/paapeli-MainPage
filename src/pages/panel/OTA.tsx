@@ -81,14 +81,34 @@ const OTA = () => {
   });
 
   const loadFirmwareVersions = useCallback(async () => {
-    const response = await otaAPI.getFirmwareVersions();
-    setFirmwareVersions(response.data || []);
-  }, []);
+    try {
+      const response = await otaAPI.getFirmwareVersions();
+      setFirmwareVersions(response.data || []);
+    } catch (error) {
+      console.error('Failed to load firmware versions:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load firmware versions. OTA service may not be available.",
+        variant: "destructive",
+      });
+      setFirmwareVersions([]);
+    }
+  }, [toast]);
 
   const loadCampaigns = useCallback(async () => {
-    const response = await otaAPI.getUpdateCampaigns();
-    setCampaigns(response.data || []);
-  }, []);
+    try {
+      const response = await otaAPI.getUpdateCampaigns();
+      setCampaigns(response.data || []);
+    } catch (error) {
+      console.error('Failed to load update campaigns:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load update campaigns. OTA service may not be available.",
+        variant: "destructive",
+      });
+      setCampaigns([]);
+    }
+  }, [toast]);
 
   const loadDeviceStatuses = useCallback(async () => {
     try {
@@ -131,17 +151,27 @@ const OTA = () => {
   }, [loadData]);
 
   const handleCreateVersion = async () => {
-    await otaAPI.createFirmwareVersion(versionForm);
-    toast({
-      title: "Success",
-      description: "Firmware version created successfully",
-    });
-    setAddVersionOpen(false);
-    setVersionForm({ version: '', file_url: '', sha256: '', description: '', released_at: '' });
-    loadFirmwareVersions();
+    try {
+      await otaAPI.createFirmwareVersion(versionForm);
+      toast({
+        title: "Success",
+        description: "Firmware version created successfully",
+      });
+      setAddVersionOpen(false);
+      setVersionForm({ version: '', file_url: '', sha256: '', description: '', released_at: '' });
+      loadFirmwareVersions();
+    } catch (error) {
+      console.error('Failed to create firmware version:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create firmware version. OTA service may not be available.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleCreateCampaign = async () => {    if (!validateStages()) {
+  const handleCreateCampaign = async () => {
+    if (!validateStages()) {
       toast({
         title: "Validation Error",
         description: "Stages must total 100% and all values must be valid",
@@ -149,14 +179,24 @@ const OTA = () => {
       });
       return;
     }
-    await otaAPI.createUpdateCampaign(campaignForm);
-    toast({
-      title: "Success",
-      description: "Update campaign created successfully",
-    });
-    setAddCampaignOpen(false);
-    setCampaignForm({ name: '', firmware_id: '', project_id: '', stages: [{ percentage: 25, duration_hours: 24 }] });
-    loadCampaigns();
+
+    try {
+      await otaAPI.createUpdateCampaign(campaignForm);
+      toast({
+        title: "Success",
+        description: "Update campaign created successfully",
+      });
+      setAddCampaignOpen(false);
+      setCampaignForm({ name: '', firmware_id: '', project_id: '', stages: [{ percentage: 25, duration_hours: 24 }] });
+      loadCampaigns();
+    } catch (error) {
+      console.error('Failed to create update campaign:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create update campaign. OTA service may not be available.",
+        variant: "destructive",
+      });
+    }
   };
   const addStage = () => {
     setCampaignForm({
@@ -191,19 +231,28 @@ const OTA = () => {
     );
   };
   const handleCampaignAction = async (campaignId: string, action: 'start' | 'pause' | 'cancel' | 'complete') => {
-    const actionMap = {
-      start: otaAPI.startCampaign,
-      pause: otaAPI.pauseCampaign,
-      cancel: otaAPI.cancelCampaign,
-      complete: otaAPI.completeCampaign
-    };
+    try {
+      const actionMap = {
+        start: otaAPI.startCampaign,
+        pause: otaAPI.pauseCampaign,
+        cancel: otaAPI.cancelCampaign,
+        complete: otaAPI.completeCampaign
+      };
 
-    await actionMap[action](campaignId);
-    toast({
-      title: "Success",
-      description: `Campaign ${action}ed successfully`,
-    });
-    loadCampaigns();
+      await actionMap[action](campaignId);
+      toast({
+        title: "Success",
+        description: `Campaign ${action}ed successfully`,
+      });
+      loadCampaigns();
+    } catch (error) {
+      console.error(`Failed to ${action} campaign:`, error);
+      toast({
+        title: "Error",
+        description: `Failed to ${action} campaign. OTA service may not be available.`,
+        variant: "destructive",
+      });
+    }
   };
 
   const getStatusBadge = (status: string) => {
