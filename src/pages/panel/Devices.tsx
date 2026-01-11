@@ -448,14 +448,23 @@ const Devices = () => {
 
     setIsLoading(true);
     try {
+      // Get current device data to preserve all fields
+      const currentDeviceResponse = await fetch(getApiUrl(`/api/v1/gateways/${editingDevice.id}`), createAuthHeaders());
+      if (!currentDeviceResponse.ok) {
+        throw new Error("Failed to fetch current device data");
+      }
+      const currentDeviceData = await currentDeviceResponse.json();
+      const currentDevice = currentDeviceData.data;
+
       const response = await fetch(getApiUrl(`/api/v1/gateways/${editingDevice.id}`), createAuthHeaders({
         method: "PUT",
         body: JSON.stringify({
           name: editName,
-          location: editingDevice.location || "Default Location",
+          location: currentDevice.location || editingDevice.location || "Default Location",
           project_id: editProjectId,
           config: {
             protocol: editProtocol,
+            use_ssl: currentDevice.config?.use_ssl || false,
           },
         }),
       }));
