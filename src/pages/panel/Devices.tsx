@@ -452,6 +452,7 @@ const Devices = () => {
         method: "PUT",
         body: JSON.stringify({
           name: editName,
+          location: editingDevice.location || "Default Location",
           project_id: editProjectId,
           config: {
             protocol: editProtocol,
