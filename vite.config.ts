@@ -38,7 +38,6 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           // Vendor libraries
-          recharts: ['recharts'],
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'ui-vendor': [
             '@radix-ui/react-accordion',

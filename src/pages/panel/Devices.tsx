@@ -13,6 +13,7 @@ import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, Refresh
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProject } from "@/contexts/ProjectContext";
 import { useToast } from "@/hooks/use-toast";
 import { copyTextToClipboard } from "@/utils/clipboard";
 import {
@@ -99,6 +100,7 @@ interface ProjectApiItem {
 const Devices = () => {
   const { t, isRTL } = useLanguage();
   const { toast } = useToast();
+  const { currentProject } = useProject();
   const navigate = useNavigate();
   const [addPanelOpen, setAddPanelOpen] = useState(false);
   const [devices, setDevices] = useState<Device[]>([]);
@@ -156,8 +158,16 @@ const Devices = () => {
     }
     
     try {
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (currentProject?.id) {
+        params.append('project_id', currentProject.id);
+      }
+      
+      const url = `/api/v1/gateways${params.toString() ? '?' + params.toString() : ''}`;
+      
       // Since auth is handled by APISIX, no need for tokens
-      const response = await fetch(getApiUrl("/api/v1/gateways"), createAuthHeaders());
+      const response = await fetch(getApiUrl(url), createAuthHeaders());
 
       if (response.ok) {
         const data = await response.json();
@@ -341,7 +351,7 @@ const Devices = () => {
   useEffect(() => {
     fetchDevices();
     fetchProjects();
-  }, [fetchDevices, fetchProjects]);
+  }, [fetchDevices, fetchProjects, currentProject]);
 
   const copyToClipboard = async (text: string, field: string) => {
     try {

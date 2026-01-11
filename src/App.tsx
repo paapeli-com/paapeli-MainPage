@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ProjectProvider } from "@/contexts/ProjectContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { DomainRouter } from "@/components/DomainRouter";
 
@@ -64,7 +65,8 @@ const App = () => {
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <LanguageProvider>
           <AuthProvider>
-            <TooltipProvider>
+            <ProjectProvider>
+              <TooltipProvider>
               <Toaster />
               <Sonner />
               <DomainRouter />
@@ -170,7 +172,8 @@ const App = () => {
               </Routes>
               </Suspense>
             </TooltipProvider>
-          </AuthProvider>
+          </ProjectProvider>
+        </AuthProvider>
         </LanguageProvider>
       </BrowserRouter>
     </QueryClientProvider>

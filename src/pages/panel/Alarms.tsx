@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProject } from "@/contexts/ProjectContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,7 @@ interface Gateway {
 
 const Alarms = () => {
   const { t } = useLanguage();
+  const { currentProject } = useProject();
   const { toast } = useToast();
   const [addPanelOpen, setAddPanelOpen] = useState(false);
   const [alarms, setAlarms] = useState<Alarm[]>([]);
@@ -65,7 +67,14 @@ const Alarms = () => {
 
   const fetchAlarms = useCallback(async () => {
     try {
-      const response = await apiRequest("/api/v1/alarms");
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (currentProject?.id) {
+        params.append('project_id', currentProject.id);
+      }
+      
+      const url = `/api/v1/alarms${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await apiRequest(url);
       const alarmsData = response.alarms || [];
       setAlarms(alarmsData);
     } catch (error) {
@@ -76,7 +85,7 @@ const Alarms = () => {
         variant: "destructive",
       });
     }
-  }, [toast, t]);
+  }, [toast, t, currentProject]);
 
   const fetchProjects = useCallback(async () => {
     try {
@@ -105,7 +114,7 @@ const Alarms = () => {
       setLoading(false);
     };
     loadData();
-  }, [fetchAlarms, fetchProjects, fetchGateways]);
+  }, [fetchAlarms, fetchProjects, fetchGateways, currentProject]);
 
   const handleAddAlarm = async () => {
     if (!alarmName.trim() || !threshold || !selectedProjectId) {

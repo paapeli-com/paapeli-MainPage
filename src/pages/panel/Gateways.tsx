@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProject } from "@/contexts/ProjectContext";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/api";
 import {
   Card,
   CardContent,
@@ -79,6 +81,7 @@ interface Project {
 const Gateways = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { currentProject } = useProject();
 
   // State for gateways
   const [gateways, setGateways] = useState<Gateway[]>([]);
@@ -109,17 +112,19 @@ const Gateways = () => {
   const [gatewayDevices, setGatewayDevices] = useState<GatewayDevice[]>([]);
   const [devicesLoading, setDevicesLoading] = useState(false);
 
-  // Load gateways and projects on component mount
-  useEffect(() => {
-    loadGateways();
-    loadProjects();
-  }, [loadGateways, loadProjects]);
-
   const loadGateways = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await gatewayAPI.getGateways();
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (currentProject?.id) {
+        params.append('project_id', currentProject.id);
+      }
+      
+      const url = `/api/v1/gateways${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await apiRequest(url);
       setGateways(response.data || []);
     } catch (err) {
       console.error("Failed to load gateways:", err);
@@ -132,7 +137,7 @@ const Gateways = () => {
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  }, [toast, currentProject]);
 
   const loadProjects = useCallback(async () => {
     try {
@@ -150,6 +155,12 @@ const Gateways = () => {
       setProjectsLoading(false);
     }
   }, [toast]);
+
+  // Load gateways and projects on component mount
+  useEffect(() => {
+    loadGateways();
+    loadProjects();
+  }, [loadGateways, loadProjects, currentProject]);
 
   const resetForm = () => {
     setFormData({

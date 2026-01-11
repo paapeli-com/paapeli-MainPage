@@ -2,6 +2,7 @@ import { ReactNode, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProject } from "@/contexts/ProjectContext";
 import { LucideIcon } from "lucide-react";
 import {
   Home,
@@ -30,7 +31,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import paapeliLogo from "@/assets/paapeli-logo.png";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import paapeliLogo from "/paapeli-logo.png";
 import { getGravatarUrl, getUserInitials } from "@/utils/gravatar";
 
 interface MenuItem {
@@ -52,6 +60,7 @@ interface PanelLayoutProps {
 export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, onBackClick }: PanelLayoutProps) => {
   const { t, isRTL, language } = useLanguage();
   const { user, signOut } = useAuth();
+  const { projects, currentProject, setCurrentProject } = useProject();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -113,6 +122,30 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
           <img src={paapeliLogo} alt="Paapeli" className="h-8 w-auto" />
           <span className="text-xl font-bold text-primary">Paapeli</span>
         </div>
+      </div>
+
+      {/* Project Selector */}
+      <div className="p-4 border-b border-border">
+        <Select
+          value={currentProject?.id || ""}
+          onValueChange={(value) => {
+            const project = projects.find(p => p.id === value);
+            if (project) {
+              setCurrentProject(project);
+            }
+          }}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={t("selectProject") || "Select Project"} />
+          </SelectTrigger>
+          <SelectContent>
+            {projects.map((project) => (
+              <SelectItem key={project.id} value={project.id}>
+                {project.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Menu Items */}
