@@ -1,0 +1,17 @@
+FROM oven/bun:1.3
+
+WORKDIR /app
+
+# Copy package files for dependency installation
+COPY package.json bun.lockb ./
+
+# Install all dependencies (including dev dependencies)
+RUN bun install
+
+# Copy source code (this will be overridden by volume mount in development)
+COPY . .
+
+EXPOSE 5173
+
+# Run development server with host binding for Docker
+CMD ["bun", "run", "dev", "--", "--host", "0.0.0.0"]

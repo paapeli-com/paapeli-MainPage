@@ -5,28 +5,43 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+bun-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+.next/
+out/
 
 # Coverage directory used by tools like istanbul
-coverage
+coverage/
 *.lcov
 
 # nyc test coverage
 .nyc_output
 
-# Dependency directories
-jspm_packages/
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.build.local
 
-# Optional npm cache directory
+# Cache directories
 .npm
-
-# Optional eslint cache
-.eslintcache
+.yarn/cache
+.yarn/install-state.gz
+.bun/cache
+.cache
+.parcel-cache
+.vite
 
 # Optional REPL history
 .node_repl_history
@@ -37,28 +52,36 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
+# ESLint cache
+.eslintcache
+
+# Optional eslint cache
+.eslintcache
+
+# TypeScript
+*.tsbuildinfo
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
 
 # OS generated files
-Thumbs.db
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 ehthumbs.db
+Thumbs.db
 Desktop.ini
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+*.tmp
+*.temp
 
 # Vercel deployment
 .vercel
@@ -67,5 +90,12 @@ Desktop.ini
 tmp/
 temp/
 
-# Lock files
-package-lock.json
+# Testing
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Lock files (keep only the one you use)
+# package-lock.json
+# yarn.lock
+bun.lockb

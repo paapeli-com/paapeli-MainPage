@@ -3,66 +3,102 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
+bun-debug.log*
 
-# Lock files (dependencies will be installed in container)
-package-lock.json
-
-# Version control
-.git
-.gitignore
-
-# Documentation
-README.md
-TODO.md
-CONNECTING.md
-
-# Environment variables
-.env*
-!.env.example
-
-# Testing and coverage
-coverage/
-.nyc_output/
-*.lcov
-
-# Build outputs (will be created during Docker build)
+# Build outputs
 dist/
+build/
+coverage/
+.next/
+out/
 
 # Development files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.build.local
+
+# IDE and Editor files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.cursor/
 
 # OS generated files
 .DS_Store
-Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 ehthumbs.db
+Thumbs.db
 Desktop.ini
+*.tmp
+*.temp
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+README*.md
+TODO.md
+CONNECTING.md
+*.md
+!README-docker.md
+
+# Testing and Coverage
+vitest.config.ts
+test/
+tests/
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+*.test.*
+*.spec.*
+
+# Cache directories
+.cache/
+.parcel-cache/
+.vite/
+.bun/cache/
+.yarn/cache/
 
 # Logs
 logs/
 *.log
 
-# Cache directories
-.npm/
-.yarn/
-.cache/
-.parcel-cache/
-
-# IDE and editor files
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-
-# Temporary files
+# Temporary files and folders
 tmp/
 temp/
+.tmp/
+.temp/
 
-# Vercel deployment
+# Lock files (Docker will install dependencies)
+package-lock.json
+yarn.lock
+bun.lockb
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.circleci/
+
+# Deployment
 .vercel/
+.netlify/
+
+# Local development
+Makefile
+*.local
