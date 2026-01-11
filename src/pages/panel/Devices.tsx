@@ -6,10 +6,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getApiUrl, createAuthHeaders } from "@/lib/api";
+import { apiRequest, getApiUrl, createAuthHeaders } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, RefreshCw, Trash2, ArrowUpDown, X } from "lucide-react";
+import { Search, Filter, LayoutGrid, Smartphone, Copy, CheckCheck, Plus, RefreshCw, Trash2, ArrowUpDown, X, MoreHorizontal, Edit } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/contexts/AuthContext";
@@ -128,6 +128,11 @@ const Devices = () => {
   const [editProtocol, setEditProtocol] = useState("");
   const [editProjectId, setEditProjectId] = useState("");
 
+  // Device groups management in edit modal
+  const [availableGroups, setAvailableGroups] = useState<any[]>([]);
+  const [deviceGroups, setDeviceGroups] = useState<any[]>([]);
+  const [selectedGroupId, setSelectedGroupId] = useState("");
+
   // Form state
   const [deviceName, setDeviceName] = useState("");
   const [protocol, setProtocol] = useState("MQTT");
@@ -149,8 +154,7 @@ const Devices = () => {
         const data = await response.json();
         console.log("API Response for gateways:", data); // Debug log
         // Transform gateways to device format for display
-        const deviceData = (data.gateways || []).map((item: GatewayApiItem) => {
-          const gateway = item.gateway;
+        const deviceData = (data.data || []).map((gateway: any) => {
           return {
             id: gateway.id,
             name: gateway.name,
@@ -181,6 +185,103 @@ const Devices = () => {
       setIsRefreshing(false);
     }
   }, [t, toast]);
+
+  const fetchAvailableGroups = useCallback(async () => {
+    try {
+      const response = await fetch(getApiUrl("/api/v1/device-groups"), createAuthHeaders());
+      if (response.ok) {
+        const data = await response.json();
+        const groupsData = data.data || [];
+        setAvailableGroups(groupsData);
+      }
+    } catch (error) {
+      console.error("Failed to fetch groups:", error);
+    }
+  }, []);
+
+  const fetchDeviceGroups = useCallback(async (deviceId: string) => {
+    try {
+      // Get all groups and check which ones contain this device
+      const response = await fetch(getApiUrl("/api/v1/device-groups"), createAuthHeaders());
+      if (response.ok) {
+        const data = await response.json();
+        const allGroups = data.data || [];
+
+        // For each group, check if device is a member
+        const deviceGroupsPromises = allGroups.map(async (group: any) => {
+          try {
+            const membersResponse = await fetch(getApiUrl(`/api/v1/device-groups/${group.id}/devices`), createAuthHeaders());
+            if (membersResponse.ok) {
+              const membersData = await membersResponse.json();
+              const members = membersData.data || [];
+              const isMember = members.some((member: any) => member.device_id === deviceId);
+              if (isMember) {
+                return { ...group, membership: members.find((m: any) => m.device_id === deviceId) };
+              }
+            }
+          } catch (error) {
+            console.error(`Failed to check membership for group ${group.id}:`, error);
+          }
+          return null;
+        });
+
+        const deviceGroupsResults = await Promise.all(deviceGroupsPromises);
+        const deviceGroupsFiltered = deviceGroupsResults.filter(group => group !== null);
+        setDeviceGroups(deviceGroupsFiltered);
+      }
+    } catch (error) {
+      console.error("Failed to fetch device groups:", error);
+    }
+  }, []);
+
+  const handleAddDeviceToGroup = async (groupId: string) => {
+    if (!editingDevice) return;
+
+    try {
+      await apiRequest(`/api/v1/device-groups/${groupId}/devices`, {
+        method: "POST",
+        body: JSON.stringify({ device_id: editingDevice.id }),
+      });
+
+      toast({
+        title: t("success"),
+        description: "Device added to group successfully",
+      });
+
+      // Refresh device groups
+      fetchDeviceGroups(editingDevice.id);
+    } catch (error) {
+      toast({
+        title: t("error"),
+        description: error instanceof Error ? error.message : "Failed to add device to group",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRemoveDeviceFromGroup = async (groupId: string) => {
+    if (!editingDevice) return;
+
+    try {
+      await apiRequest(`/api/v1/device-groups/${groupId}/devices/${editingDevice.id}`, {
+        method: "DELETE",
+      });
+
+      toast({
+        title: t("success"),
+        description: "Device removed from group successfully",
+      });
+
+      // Refresh device groups
+      fetchDeviceGroups(editingDevice.id);
+    } catch (error) {
+      toast({
+        title: t("error"),
+        description: error instanceof Error ? error.message : "Failed to remove device from group",
+        variant: "destructive",
+      });
+    }
+  };
 
   const fetchProjects = useCallback(async () => {
     try {
@@ -394,6 +495,12 @@ const Devices = () => {
     setEditModalOpen(false);
   };
 
+  const handleDeleteDevice = async (device: any) => {
+    const deviceId = device.deviceId || device.device_id || device.deviceID || device.id || device._id || '';
+    setSelectedDevices([deviceId]);
+    setDeleteDialogOpen(true);
+  };
+
   const filteredDevices = devices.filter(device => {
     const deviceId = device.deviceId || device.device_id || device.deviceID || device.id || device._id || '';
     const matchesSearch = device.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -438,6 +545,12 @@ const Devices = () => {
     setEditName(device.name);
     setEditProtocol(device.protocol);
     setEditProjectId(selectedProjectId || (projects.length > 0 ? projects[0].id : ""));
+    setSelectedGroupId("");
+
+    // Fetch available groups and device groups
+    fetchAvailableGroups();
+    fetchDeviceGroups(device.id);
+
     setEditModalOpen(true);
   };
 
@@ -747,7 +860,27 @@ const Devices = () => {
                         <TableCell>{formattedActivity}</TableCell>
                         <TableCell>{formattedDate}</TableCell>
                         <TableCell onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="sm">⋮</Button>
+                          <DropdownMenu modal={false}>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="z-[100]">
+                              <DropdownMenuItem onClick={() => handleDeviceClick(device)}>
+                                <Edit className="h-4 w-4 mr-2" />
+                                {t("edit") || "Edit"}
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => handleDeleteDevice(device)}
+                                className="text-destructive focus:text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                {t("delete") || "Delete"}
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     );
@@ -1110,7 +1243,7 @@ const Devices = () => {
 
       {/* Edit Device Modal */}
       <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>Edit Device</DialogTitle>
             <DialogDescription>
@@ -1160,6 +1293,63 @@ const Devices = () => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Device Groups Management */}
+            <div className="border-t pt-4">
+              <Label className="text-base font-medium mb-3 block">Device Groups</Label>
+
+              {/* Current Groups */}
+              {deviceGroups.length > 0 && (
+                <div className="mb-4">
+                  <Label className="text-sm text-muted-foreground mb-2 block">Current Groups</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {deviceGroups.map((group) => (
+                      <div key={group.id} className="flex items-center gap-1 bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-sm">
+                        <span>{group.name}</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-4 w-4 p-0 hover:bg-blue-100"
+                          onClick={() => handleRemoveDeviceFromGroup(group.id)}
+                        >
+                          ×
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Add to Group */}
+              <div className="flex gap-2">
+                <Select value={selectedGroupId} onValueChange={setSelectedGroupId}>
+                  <SelectTrigger className="flex-1">
+                    <SelectValue placeholder="Select group to add" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableGroups
+                      .filter(group => !deviceGroups.some(dg => dg.id === group.id))
+                      .map((group) => (
+                        <SelectItem key={group.id} value={group.id}>
+                          {group.name}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  onClick={() => {
+                    if (selectedGroupId) {
+                      handleAddDeviceToGroup(selectedGroupId);
+                      setSelectedGroupId("");
+                    }
+                  }}
+                  disabled={!selectedGroupId}
+                  size="sm"
+                >
+                  Add
+                </Button>
+              </div>
             </div>
           </div>
           <div className="flex justify-between gap-3">
