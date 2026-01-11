@@ -61,52 +61,61 @@ const DevCenter = () => {
         // Fetch user's projects
         try {
           const projectsResponse = await apiRequest("/api/v1/projects");
-          const projectsData = projectsResponse.data || [];
+          const projectsData = projectsResponse?.data || [];
           setProjects(projectsData);
           setApiErrors(prev => ({ ...prev, projects: false }));
         } catch (error) {
           console.error("Failed to fetch projects:", error);
           setProjects([]);
           setApiErrors(prev => ({ ...prev, projects: true }));
-          toast({
-            title: "Service Unavailable",
-            description: "Unable to load projects data. Projects service may not be running.",
-            variant: "destructive",
-          });
+          // Only show toast if it's not a JSON parsing error (which happens when services are down)
+          if (!error.message.includes('JSON.parse') && !error.message.includes('unexpected character')) {
+            toast({
+              title: "Service Unavailable",
+              description: "Unable to load projects data. Projects service may not be running.",
+              variant: "destructive",
+            });
+          }
         }
 
         // Fetch device groups
         try {
           const groupsResponse = await apiRequest("/api/v1/device-groups");
-          const groupsData = groupsResponse.data || [];
+          const groupsData = groupsResponse?.data || [];
           setDeviceGroups(groupsData);
           setApiErrors(prev => ({ ...prev, deviceGroups: false }));
         } catch (error) {
           console.error("Failed to fetch device groups:", error);
           setDeviceGroups([]);
           setApiErrors(prev => ({ ...prev, deviceGroups: true }));
-          toast({
-            title: "Service Unavailable",
-            description: "Unable to load device groups data. Device Groups service may not be running.",
-            variant: "destructive",
-          });
+          // Only show toast if it's not a JSON parsing error (which happens when services are down)
+          if (!error.message.includes('JSON.parse') && !error.message.includes('unexpected character')) {
+            toast({
+              title: "Service Unavailable",
+              description: "Unable to load device groups data. Device Groups service may not be running.",
+              variant: "destructive",
+            });
+          }
         }
 
         // Fetch gateways
         try {
           const gatewaysResponse = await apiRequest("/api/v1/gateways");
-          const gatewaysData = gatewaysResponse.data || [];
+          const gatewaysData = gatewaysResponse?.data || [];
           setGateways(gatewaysData);
           setApiErrors(prev => ({ ...prev, gateways: false }));
         } catch (error) {
           console.error("Failed to fetch gateways:", error);
           setGateways([]);
           setApiErrors(prev => ({ ...prev, gateways: true }));
-          toast({
-            title: "Service Unavailable",
-            description: "Unable to load gateways data. Gateways service may not be running.",
-            variant: "destructive",
-          });
+          // Only show toast if it's not a JSON parsing error (which happens when services are down)
+          if (!error.message.includes('JSON.parse') && !error.message.includes('unexpected character')) {
+            toast({
+              title: "Service Unavailable",
+              description: "Unable to load gateways data. Gateways service may not be running.",
+              variant: "destructive",
+            });
+          }
         }
       } catch (error) {
         console.error("Failed to fetch dev center data:", error);
@@ -185,9 +194,28 @@ devices = requests.get(
     }
   ];
 
+  const hasAnyErrors = apiErrors.projects || apiErrors.deviceGroups || apiErrors.gateways;
+
   return (
     <PanelLayout pageTitle={t("devCenter")}>
       <div className="space-y-6">
+        {hasAnyErrors && (
+          <div className="p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-5 h-5 text-amber-600 dark:text-amber-400">
+                ⚠️
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                  Some Services Unavailable
+                </h3>
+                <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                  Projects, Device Groups, and/or Gateways services may not be running. The data shown below may not be current.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
         {/* API Health Status */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
