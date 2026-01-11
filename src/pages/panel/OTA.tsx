@@ -58,6 +58,7 @@ const OTA = () => {
   const [campaigns, setCampaigns] = useState<UpdateCampaign[]>([]);
   const [deviceStatuses, setDeviceStatuses] = useState<DeviceFirmwareStatus[]>([]);
   const [loading, setLoading] = useState(false);
+  const [otaServiceError, setOtaServiceError] = useState(false);
 
   // Dialog states
   const [addVersionOpen, setAddVersionOpen] = useState(false);
@@ -84,31 +85,25 @@ const OTA = () => {
     try {
       const response = await otaAPI.getFirmwareVersions();
       setFirmwareVersions(response.data || []);
+      setOtaServiceError(false);
     } catch (error) {
       console.error('Failed to load firmware versions:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load firmware versions. OTA service may not be available.",
-        variant: "destructive",
-      });
       setFirmwareVersions([]);
+      setOtaServiceError(true);
     }
-  }, [toast]);
+  }, []);
 
   const loadCampaigns = useCallback(async () => {
     try {
       const response = await otaAPI.getUpdateCampaigns();
       setCampaigns(response.data || []);
+      setOtaServiceError(false);
     } catch (error) {
       console.error('Failed to load update campaigns:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load update campaigns. OTA service may not be available.",
-        variant: "destructive",
-      });
       setCampaigns([]);
+      setOtaServiceError(true);
     }
-  }, [toast]);
+  }, []);
 
   const loadDeviceStatuses = useCallback(async () => {
     try {
@@ -272,6 +267,24 @@ const OTA = () => {
 
   return (
     <PanelLayout pageTitle="OTA Updates">
+      {otaServiceError && (
+        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 w-5 h-5 text-amber-600 dark:text-amber-400">
+              ⚠️
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                OTA Service Unavailable
+              </h3>
+              <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                The Over-the-Air update service is currently not available. Some features may not work properly.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="versions">Firmware Versions</TabsTrigger>
