@@ -91,7 +91,7 @@ const Alarms = () => {
   const fetchGateways = useCallback(async () => {
     try {
       const response = await apiRequest("/api/v1/gateways");
-      const gatewaysData = response.gateways || [];
+      const gatewaysData = response.data || [];
       setGateways(gatewaysData);
     } catch (error) {
       console.error("Failed to fetch gateways:", error);

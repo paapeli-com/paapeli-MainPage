@@ -51,7 +51,7 @@ const PanelHome = () => {
       try {
         // Fetch gateways data
         const gatewaysResponse = await apiRequest("/api/v1/gateways");
-        const gatewaysData = gatewaysResponse.gateways || [];
+        const gatewaysData = gatewaysResponse.data || [];
         
         // Count total and active devices
         const totalDevices = gatewaysData.length;

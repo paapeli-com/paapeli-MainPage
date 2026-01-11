@@ -95,6 +95,9 @@ test-results/
 playwright-report/
 playwright/.cache/
 
+# Development SSL certificates
+dev-ssl/
+
 # Lock files (keep only the one you use)
 # package-lock.json
 # yarn.lock

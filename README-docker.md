@@ -22,6 +22,10 @@ A development Docker setup with volume mounts that allows you to edit code and s
 - **Port mapping**: Runs on `8080:80` (nginx default port)
 - **Production environment**: Optimized for deployment
 
+#### Dockerfile
+- **Port configuration**: Exposes port 80 (nginx standard port)
+- **Health check**: Includes curl-based health check for container monitoring
+
 #### nginx.conf
 - **SPA routing**: Handles client-side routing by serving `index.html` for all routes
 - **Gzip compression**: Optimizes file delivery
@@ -45,6 +49,8 @@ docker run -p 8080:80 paapeli-app
 ```
 
 **Access**: http://localhost:8080
+
+**Health Check**: The container includes a health check that verifies nginx is responding to requests.
 
 ## Development Setup
 

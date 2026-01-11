@@ -52,10 +52,17 @@ const DevCenter = () => {
     const fetchDevData = async () => {
       try {
         // Fetch API health
-        const healthResponse = await fetch(getApiUrl("/health"));
-        if (healthResponse.ok) {
-          const healthData = await healthResponse.json();
-          setHealth(healthData);
+        try {
+          const healthResponse = await fetch(getApiUrl("/health"));
+          if (healthResponse.ok) {
+            const contentType = healthResponse.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+              const healthData = await healthResponse.json();
+              setHealth(healthData);
+            }
+          }
+        } catch (healthError) {
+          console.error("Failed to fetch API health:", healthError);
         }
 
         // Fetch user's projects
@@ -125,7 +132,7 @@ const DevCenter = () => {
     };
 
     fetchDevData();
-  }, []);
+  }, [toast]);
 
   const apiEndpoints = [
     { name: "Health Check", path: "/health", method: "GET", description: "Check API availability" },

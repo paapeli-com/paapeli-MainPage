@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -67,6 +67,16 @@ const DeviceGroup = () => {
   const [dialogLoading, setDialogLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [viewDevicesDialogOpen, setViewDevicesDialogOpen] = useState(false);
+  interface GroupDevice {
+    device_id: string;
+    name?: string;
+    location?: string;
+    status?: string;
+    added_at: string;
+  }
+  const [groupDevices, setGroupDevices] = useState<GroupDevice[]>([]);
+  const [isLoadingGroupDevices, setIsLoadingGroupDevices] = useState(false);
   const itemsPerPage = 10;
 
   const fetchGroups = useCallback(async () => {
@@ -96,6 +106,51 @@ const DeviceGroup = () => {
       console.error("Failed to fetch projects:", error);
     }
   }, [selectedProjectId]);
+
+  const fetchGroupDevices = useCallback(async (group: DeviceGroup) => {
+    setIsLoadingGroupDevices(true);
+    try {
+      const response = await apiRequest(`/api/v1/device-groups/${group.id}/devices`);
+      const devicesData = response.data || [];
+      setGroupDevices(devicesData);
+    } catch (error) {
+      console.error("Failed to fetch group devices:", error);
+      toast({
+        title: t("error"),
+        description: "Failed to load devices in group",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingGroupDevices(false);
+    }
+  }, [toast, t]);
+
+  const handleRemoveDeviceFromGroup = async (deviceId: string) => {
+    if (!selectedGroup) return;
+
+    try {
+      await apiRequest(`/api/v1/device-groups/${selectedGroup.id}/devices/${deviceId}`, {
+        method: "DELETE",
+      });
+
+      // Remove the device from the local state
+      setGroupDevices(prev => prev.filter(device => device.device_id !== deviceId));
+
+      // Update the group count
+      setGroups(prev => prev.map(g => g.id === selectedGroup.id ? { ...g, device_count: g.device_count - 1 } : g));
+
+      toast({
+        title: t("success"),
+        description: "Device removed from group successfully",
+      });
+    } catch (error) {
+      toast({
+        title: t("error"),
+        description: error instanceof Error ? error.message : "Failed to remove device from group",
+        variant: "destructive",
+      });
+    }
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -379,6 +434,9 @@ const DeviceGroup = () => {
                               <DropdownMenuItem onClick={() => { setSelectedGroup(group); setAddDeviceDialogOpen(true); }}>
                                 Add Device
                               </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => { setSelectedGroup(group); fetchGroupDevices(group); setViewDevicesDialogOpen(true); }}>
+                                View Devices
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -605,6 +663,74 @@ const DeviceGroup = () => {
               </Button>
               <Button onClick={handleAddDevices} disabled={dialogLoading || selectedDevices.length === 0}>
                 {dialogLoading ? "Adding..." : `Add ${selectedDevices.length} Device(s)`}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Devices Dialog */}
+      <Dialog open={viewDevicesDialogOpen} onOpenChange={setViewDevicesDialogOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Devices in {selectedGroup?.name}</DialogTitle>
+            <DialogDescription>
+              View and manage devices in this group. You can remove devices from the group using the action buttons.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {isLoadingGroupDevices ? (
+              <div className="flex justify-center py-8">
+                <LoadingSpinner />
+              </div>
+            ) : groupDevices.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No devices in this group yet.
+              </div>
+            ) : (
+              <div className="border rounded-lg">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Added At</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {groupDevices.map((device) => (
+                      <TableRow key={device.device_id}>
+                        <TableCell className="font-medium">{device.name}</TableCell>
+                        <TableCell>{device.location || '-'}</TableCell>
+                        <TableCell>
+                          <Badge variant={device.status === 'online' ? 'default' : 'secondary'}>
+                            {device.status || 'Unknown'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {new Date(device.added_at).toLocaleString()}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleRemoveDeviceFromGroup(device.device_id)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            Remove
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+            <div className="flex justify-end">
+              <Button variant="outline" onClick={() => setViewDevicesDialogOpen(false)}>
+                Close
               </Button>
             </div>
           </div>

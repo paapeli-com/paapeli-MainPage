@@ -129,8 +129,17 @@ const Devices = () => {
   const [editProjectId, setEditProjectId] = useState("");
 
   // Device groups management in edit modal
-  const [availableGroups, setAvailableGroups] = useState<any[]>([]);
-  const [deviceGroups, setDeviceGroups] = useState<any[]>([]);
+  interface DeviceGroup {
+    id: string;
+    name: string;
+    description?: string;
+    membership?: {
+      device_id: string;
+      added_at: string;
+    };
+  }
+  const [availableGroups, setAvailableGroups] = useState<DeviceGroup[]>([]);
+  const [deviceGroups, setDeviceGroups] = useState<DeviceGroup[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState("");
 
   // Form state
@@ -154,7 +163,18 @@ const Devices = () => {
         const data = await response.json();
         console.log("API Response for gateways:", data); // Debug log
         // Transform gateways to device format for display
-        const deviceData = (data.data || []).map((gateway: any) => {
+        interface GatewayResponse {
+          id: string;
+          name: string;
+          config?: {
+            protocol?: string;
+          };
+          last_heartbeat?: string;
+          created_at: string;
+          location?: string;
+          status?: string;
+        }
+        const deviceData = (data.data || []).map((gateway: GatewayResponse) => {
           return {
             id: gateway.id,
             name: gateway.name,
@@ -208,15 +228,24 @@ const Devices = () => {
         const allGroups = data.data || [];
 
         // For each group, check if device is a member
-        const deviceGroupsPromises = allGroups.map(async (group: any) => {
+        interface GroupResponse {
+          id: string;
+          name: string;
+          description?: string;
+        }
+        interface GroupMember {
+          device_id: string;
+          added_at: string;
+        }
+        const deviceGroupsPromises = allGroups.map(async (group: GroupResponse) => {
           try {
             const membersResponse = await fetch(getApiUrl(`/api/v1/device-groups/${group.id}/devices`), createAuthHeaders());
             if (membersResponse.ok) {
               const membersData = await membersResponse.json();
-              const members = membersData.data || [];
-              const isMember = members.some((member: any) => member.device_id === deviceId);
+              const members: GroupMember[] = membersData.data || [];
+              const isMember = members.some((member: GroupMember) => member.device_id === deviceId);
               if (isMember) {
-                return { ...group, membership: members.find((m: any) => m.device_id === deviceId) };
+                return { ...group, membership: members.find((m: GroupMember) => m.device_id === deviceId) };
               }
             }
           } catch (error) {
@@ -437,15 +466,6 @@ const Devices = () => {
       return;
     }
 
-    if (!editProjectId) {
-      toast({
-        title: t("error"),
-        description: "Please select a project",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsLoading(true);
     try {
       // Get current device data to preserve all fields
@@ -456,12 +476,12 @@ const Devices = () => {
       const currentDeviceData = await currentDeviceResponse.json();
       const currentDevice = currentDeviceData.data;
 
+      // Note: project_id cannot be updated after gateway creation (backend doesn't accept it)
       const response = await fetch(getApiUrl(`/api/v1/gateways/${editingDevice.id}`), createAuthHeaders({
         method: "PUT",
         body: JSON.stringify({
           name: editName,
           location: currentDevice.location || editingDevice.location || "Default Location",
-          project_id: editProjectId,
           config: {
             protocol: editProtocol,
             use_ssl: currentDevice.config?.use_ssl || false,
@@ -505,7 +525,7 @@ const Devices = () => {
     setEditModalOpen(false);
   };
 
-  const handleDeleteDevice = async (device: any) => {
+  const handleDeleteDevice = async (device: Device) => {
     const deviceId = device.deviceId || device.device_id || device.deviceID || device.id || device._id || '';
     setSelectedDevices([deviceId]);
     setDeleteDialogOpen(true);
@@ -1291,8 +1311,8 @@ const Devices = () => {
             </div>
             <div>
               <Label>Project</Label>
-              <Select value={editProjectId} onValueChange={setEditProjectId}>
-                <SelectTrigger>
+              <Select value={editProjectId} onValueChange={setEditProjectId} disabled>
+                <SelectTrigger className="opacity-60">
                   <SelectValue placeholder="Select Project" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1303,6 +1323,7 @@ const Devices = () => {
                   ))}
                 </SelectContent>
               </Select>
+              <p className="text-xs text-muted-foreground mt-1">Project cannot be changed after creation</p>
             </div>
 
             {/* Device Groups Management */}

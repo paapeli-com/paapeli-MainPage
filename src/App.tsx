@@ -76,7 +76,7 @@ const App = () => {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/auth/error" element={<AuthError />} />
-                <Route path="/account-settings" element={<AccountSettings />} />
+                <Route path="/account-settings" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
                 <Route path="/google-signup" element={<GoogleSignup />} />
                 
                 {/* Public Product Pages - only on main domain */}

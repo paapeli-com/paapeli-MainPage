@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { apiRequest, getApiUrl } from '@/lib/api';
+import { apiRequest, getApiUrl, userAPI } from '@/lib/api';
 
 interface User {
   id: string;
   email: string;
   name?: string;
+  phone?: string;
+  notifications_enabled?: boolean;
 }
 
 interface AuthContextType {
@@ -14,6 +16,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   authenticateWithToken: (token: string) => Promise<void>;
   signOut: (redirectToLogin?: boolean) => Promise<void>;
+  updateCurrentUser: (data: { username?: string; email?: string; password?: string; phone?: string; notifications_enabled?: boolean }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -40,6 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: userData.id,
         email: userData.email,
         name: userData.name,
+        phone: userData.phone,
+        notifications_enabled: userData.notifications_enabled,
       });
     } catch (error) {
       // Token might be invalid, clear it
@@ -89,11 +94,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('Fetching user info...');
       const userData = await apiRequest('/api/v1/users/me', {}, false);
       console.log('User data received:', userData);
-      
+
       setUser({
         id: userData.id,
         email: userData.email,
         name: userData.name,
+        phone: userData.phone,
+        notifications_enabled: userData.notifications_enabled,
       });
     } catch (error) {
       console.error('Login error:', error);
@@ -115,6 +122,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: userData.id,
         email: userData.email,
         name: userData.name,
+        phone: userData.phone,
+        notifications_enabled: userData.notifications_enabled,
       });
     } catch (error) {
       localStorage.removeItem('auth_token');
@@ -131,6 +140,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const updateCurrentUser = async (data: { username?: string; email?: string; password?: string; phone?: string; notifications_enabled?: boolean }) => {
+    try {
+      const updatedUser = await userAPI.updateCurrentUser(data);
+      setUser({
+        id: updatedUser.id,
+        email: updatedUser.email,
+        name: updatedUser.username || updatedUser.name,
+        phone: updatedUser.phone,
+        notifications_enabled: updatedUser.notifications_enabled,
+      });
+    } catch (error) {
+      console.error('Failed to update user:', error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     isAuthenticated: !!user,
@@ -138,6 +163,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     login,
     authenticateWithToken,
     signOut,
+    updateCurrentUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

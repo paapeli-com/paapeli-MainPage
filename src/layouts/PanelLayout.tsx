@@ -31,6 +31,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import paapeliLogo from "@/assets/paapeli-logo.png";
+import { getGravatarUrl, getUserInitials } from "@/utils/gravatar";
 
 interface MenuItem {
   title: string;
@@ -188,10 +189,30 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
       <div className="p-4 border-t border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2 overflow-hidden">
-            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-semibold">
-              U
-            </div>
-            <span className="text-sm truncate">User</span>
+            {user?.email ? (
+              <img
+                src={getGravatarUrl(user.email, 32)}
+                alt="User avatar"
+                className="h-8 w-8 rounded-full object-cover"
+                onError={(e) => {
+                  // Fallback to initials if Gravatar fails to load
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    const fallback = document.createElement('div');
+                    fallback.className = "h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-semibold";
+                    fallback.textContent = getUserInitials(user.name, user.email);
+                    parent.insertBefore(fallback, target);
+                  }
+                }}
+              />
+            ) : (
+              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-semibold">
+                {getUserInitials(user?.name)}
+              </div>
+            )}
+            <span className="text-sm truncate">{user?.name || 'User'}</span>
           </div>
         </div>
         <div className="flex gap-2">

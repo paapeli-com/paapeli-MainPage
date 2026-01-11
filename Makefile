@@ -1,5 +1,11 @@
 .PHONY: help install test test-unit test-integration test-system test-acceptance test-watch test-coverage build dev clean lint lint-fix docker-build docker-up docker-down docker-dev-build docker-dev-up docker-dev-down docker-prod-build docker-prod-up docker-prod-down
 
+# Detect package manager (prefer bun, fallback to npm/yarn/pnpm)
+PM := $(shell command -v bun 2> /dev/null || command -v npm 2> /dev/null || command -v yarn 2> /dev/null || command -v pnpm 2> /dev/null || echo "npm")
+PM_RUN := $(if $(findstring bun,$(PM)),bun run,$(if $(findstring pnpm,$(PM)),pnpm run,$(if $(findstring yarn,$(PM)),yarn,npm run)))
+PM_INSTALL := $(if $(findstring bun,$(PM)),bun install,$(if $(findstring pnpm,$(PM)),pnpm install,$(if $(findstring yarn,$(PM)),yarn install,npm install)))
+PM_EXEC := $(if $(findstring bun,$(PM)),bunx,npx)
+
 help:
 	@echo "🎨 Paapeli Frontend Commands"
 	@echo ""
@@ -40,10 +46,11 @@ help:
 	@echo "  make clean             - Remove build artifacts"
 
 install:
-	@bun install
+	@echo "Using package manager: $(PM)"
+	@$(PM_INSTALL)
 
 dev:
-	@bun run dev
+	@$(PM_RUN) dev
 
 test: test-unit test-integration test-system test-acceptance
 
@@ -53,33 +60,33 @@ test-unit:
 
 test-integration:
 	@echo "Running integration tests..."
-	@bun run test:run -- --run 2>/dev/null || echo "Integration tests completed"
+	@$(PM_RUN) test:run -- --run 2>/dev/null || echo "Integration tests completed"
 
 test-system:
 	@echo "Running system tests..."
-	@bunx vitest run src/**/*.system.test.tsx 2>/dev/null || echo "No system tests found"
+	@$(PM_EXEC) vitest run src/**/*.system.test.tsx 2>/dev/null || echo "No system tests found"
 
 test-acceptance:
 	@echo "Running acceptance tests..."
-	@bunx vitest run src/**/*.acceptance.test.tsx 2>/dev/null || echo "No acceptance tests found"
+	@$(PM_EXEC) vitest run src/**/*.acceptance.test.tsx 2>/dev/null || echo "No acceptance tests found"
 
 test-watch:
-	@bun run test
+	@$(PM_RUN) test
 
 test-coverage:
-	@bun run test:coverage
+	@$(PM_RUN) test:coverage
 
 build:
-	@bun run build
+	@$(PM_RUN) build
 
 lint:
-	@bun run lint
+	@$(PM_RUN) lint
 
 lint-fix:
 	@echo "Running linter with auto-fix..."
-	@bun run lint -- --fix || echo "Lint auto-fix completed"
+	@$(PM_RUN) lint -- --fix || echo "Lint auto-fix completed"
 	@echo "Running linter to check remaining issues..."
-	@bun run lint
+	@$(PM_RUN) lint
 
 docker-dev-build:
 	@docker-compose -f docker-compose.dev.yml build

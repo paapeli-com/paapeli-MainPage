@@ -93,7 +93,7 @@ cd paapeli-MainPage
 docker-compose up
 ```
 
-The frontend will start on port 5173 (Vite's default port, as configured in `vite.config.ts`).
+The frontend will start on port 5173 for development (Vite's default port, as configured in `vite.config.ts`). For production Docker deployment, it runs on port 8080.
 
 ### 4. Access the Application
 
@@ -146,10 +146,15 @@ VITE_COGNITO_REGION=us-east-1
 
 ## Port Configuration
 
-The frontend uses **port 5173** (Vite's default) to avoid conflicts:
+**Development** (npm/bun or Docker dev):
+- **Port 5173**: Frontend Dev Server (paapeli-MainPage) ✓
+
+**Production** (Docker production):
+- **Port 8080**: Frontend Production Server (paapeli-MainPage) ✓
+
+**Backend Services**:
 - **Port 8080**: Backend API (paapeli-platform)
 - **Port 3000**: Grafana Dashboard (paapeli-platform)
-- **Port 5173**: Frontend Dev Server (paapeli-MainPage) ✓
 
 ### Customizing the Frontend Port
 

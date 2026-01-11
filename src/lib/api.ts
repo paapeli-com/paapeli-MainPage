@@ -66,6 +66,39 @@ export interface AlertData {
   [key: string]: unknown;
 }
 
+export interface GatewayData {
+  name: string;
+  description?: string;
+  project_id: string;
+  location?: string;
+  config?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+export interface Gateway {
+  id: string;
+  name: string;
+  description?: string;
+  project_id: string;
+  location?: string;
+  status: 'online' | 'offline' | 'maintenance';
+  config?: Record<string, unknown>;
+  last_seen?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GatewayDevice {
+  id: string;
+  gateway_id: string;
+  device_id: string;
+  connected_at: string;
+  disconnected_at?: string;
+  name?: string;
+  status?: string;
+  last_heartbeat?: string;
+}
+
 /**
  * Construct full API endpoint URL
  * @param path - API endpoint path (e.g., '/api/v1/devices')
@@ -142,6 +175,12 @@ export async function apiRequest(path: string, options: RequestInit = {}, redire
   // Handle responses with no content (e.g., 204 No Content)
   if (response.status === 204 || response.headers.get('content-length') === '0') {
     return null;
+  }
+
+  // Check Content-Type before parsing JSON to avoid parse errors
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    throw new Error(`API returned non-JSON response: ${contentType || 'no content-type'}`);
   }
 
   return response.json();
@@ -225,6 +264,97 @@ export const alertsAPI = {
   acknowledgeAlert: (id: string) => apiRequest(`/api/v1/alerts/${id}/acknowledge`, {
     method: 'POST'
   })
+};
+
+/**
+ * User Management API functions
+ */
+export const userAPI = {
+  // Update current user profile
+  updateCurrentUser: (data: { username?: string; email?: string; password?: string; phone?: string; notifications_enabled?: boolean }) =>
+    apiRequest('/api/v1/users/me', {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    }),
+
+  // Get current user
+  getCurrentUser: () => apiRequest('/api/v1/users/me')
+};
+
+/**
+ * Project Management API functions
+ */
+export const projectAPI = {
+  // Get all projects for current user
+  getProjects: () => apiRequest('/api/v1/projects'),
+
+  // Create a new project
+  createProject: (data: { name: string; description?: string }) =>
+    apiRequest('/api/v1/projects', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+
+  // Get project details
+  getProject: (id: string) => apiRequest(`/api/v1/projects/${id}`),
+
+  // Update project
+  updateProject: (id: string, data: { name?: string; description?: string }) =>
+    apiRequest(`/api/v1/projects/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    }),
+
+  // Delete project
+  deleteProject: (id: string) => apiRequest(`/api/v1/projects/${id}`, {
+    method: 'DELETE'
+  }),
+
+  // Get API keys for a project
+  getProjectAPIKeys: (projectId: string) => apiRequest(`/api/v1/projects/${projectId}/api-keys`),
+
+  // Create API key for a project
+  createProjectAPIKey: (projectId: string, data: { name: string }) =>
+    apiRequest(`/api/v1/projects/${projectId}/api-keys`, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+
+  // Delete API key
+  deleteAPIKey: (apiKeyId: string) => apiRequest(`/api/v1/api-keys/${apiKeyId}`, {
+    method: 'DELETE'
+  })
+};
+
+/**
+ * Gateway API functions
+ */
+export const gatewayAPI = {
+  // Get all gateways
+  getGateways: () => apiRequest('/api/v1/gateways'),
+
+  // Create a new gateway
+  createGateway: (data: GatewayData) => apiRequest('/api/v1/gateways', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }),
+
+  // Get gateway by ID
+  getGateway: (id: string) => apiRequest(`/api/v1/gateways/${id}`),
+
+  // Update gateway
+  updateGateway: (id: string, data: Partial<GatewayData>) => apiRequest(`/api/v1/gateways/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  }),
+
+  // Delete gateway
+  deleteGateway: (id: string) => apiRequest(`/api/v1/gateways/${id}`, {
+    method: 'DELETE'
+  }),
+
+  // Get devices for a gateway
+  getGatewayDevices: (gatewayId: string) => apiRequest(`/api/v1/gateways/${gatewayId}/devices`)
 };
 
 /**

@@ -40,7 +40,7 @@ const Dashboard = () => {
       try {
         // Fetch devices
         const devicesResponse = await apiRequest("/api/v1/gateways");
-        const devicesData = devicesResponse.gateways || [];
+        const devicesData = devicesResponse.data || [];
 
         // Count total and active devices
         const totalDevices = devicesData.length;

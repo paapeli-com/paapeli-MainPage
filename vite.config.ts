@@ -8,6 +8,10 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 5173,
+    https: mode === 'development' ? {
+      key: './dev-ssl/key.pem',
+      cert: './dev-ssl/cert.pem'
+    } : false,
     allowedHosts: [
       "paapeli.local",
       "app.paapeli.local",

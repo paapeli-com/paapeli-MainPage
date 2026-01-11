@@ -17,11 +17,15 @@ import { copyTextToClipboard } from "@/utils/clipboard";
 
 interface Member {
   project_id: string;
-  user_id: string;
+  user_id?: string;
   email: string;
   username?: string;
   role: 'owner' | 'admin' | 'member' | 'viewer';
+  status: 'active' | 'disabled' | 'pending';
+  is_pending: boolean;
   created_at: string;
+  invitation_id?: string;
+  invitation_url?: string;
 }
 
 interface Project {
@@ -207,6 +211,102 @@ const Members = () => {
     }
   };
 
+  const handleResendInvitation = async (member: Member) => {
+    try {
+      // Create invitation for existing member
+      const response = await apiRequest(`/api/v1/members/invitations`, {
+        method: "POST",
+        body: JSON.stringify({
+          project_id: selectedProjectId,
+          user_id: member.user_id,
+          email: member.email,
+          role: member.role,
+        }),
+      });
+
+      const invitation = response.data;
+      const invitationURL = invitation.invitation_url;
+
+      toast({
+        title: t("success"),
+        description: "Invitation link regenerated successfully",
+      });
+
+      // Show the invitation link
+      setInvitationLink(invitationURL);
+      setInvitationEmail(member.email);
+      setCopyButtonText("Copy");
+    } catch (error: unknown) {
+      console.error("Failed to resend invitation:", error);
+      toast({
+        title: t("error"),
+        description: error instanceof Error ? error.message : "Failed to resend invitation",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleToggleMemberStatus = async (member: Member) => {
+    try {
+      const newStatus = member.status === 'active' ? 'disabled' : 'active';
+
+      await apiRequest(`/api/v1/members/${member.user_id}/status`, {
+        method: "PUT",
+        body: JSON.stringify({
+          project_id: selectedProjectId,
+          status: newStatus,
+        }),
+      });
+
+      toast({
+        title: t("success"),
+        description: `Member ${newStatus === 'active' ? 'enabled' : 'disabled'} successfully`,
+      });
+
+      // Refresh members list
+      fetchMembers(selectedProjectId);
+    } catch (error: unknown) {
+      console.error("Failed to toggle member status:", error);
+      toast({
+        title: t("error"),
+        description: error instanceof Error ? error.message : "Failed to update member status",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCancelInvitation = async (member: Member) => {
+    if (!member.invitation_id) {
+      toast({
+        title: t("error"),
+        description: "Invitation ID not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      await apiRequest(`/api/v1/members/invitations/${member.invitation_id}`, {
+        method: "DELETE",
+      });
+
+      toast({
+        title: t("success"),
+        description: "Invitation cancelled successfully",
+      });
+
+      // Refresh members list
+      fetchMembers(selectedProjectId);
+    } catch (error: unknown) {
+      console.error("Failed to cancel invitation:", error);
+      toast({
+        title: t("error"),
+        description: error instanceof Error ? error.message : "Failed to cancel invitation",
+        variant: "destructive",
+      });
+    }
+  };
+
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'owner': return <Crown className="h-4 w-4 text-yellow-500" />;
@@ -352,6 +452,7 @@ const Members = () => {
                         <TableRow>
                           <TableHead>User</TableHead>
                           <TableHead>Role</TableHead>
+                          <TableHead>Status</TableHead>
                           <TableHead>Added</TableHead>
                           <TableHead>Actions</TableHead>
                         </TableRow>
@@ -374,14 +475,47 @@ const Members = () => {
                               </Badge>
                             </TableCell>
                             <TableCell>
+                              <Badge
+                                variant={
+                                  member.status === 'active' ? 'default' :
+                                  member.status === 'pending' ? 'secondary' :
+                                  'destructive'
+                                }
+                                className="w-fit"
+                              >
+                                {member.is_pending ? 'Pending Invitation' : member.status}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
                               {new Date(member.created_at).toLocaleDateString()}
                             </TableCell>
                             <TableCell>
-                              {member.role !== 'owner' && (
+                              {member.is_pending ? (
+                                // Pending invitation actions
+                                <div className="flex items-center gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleResendInvitation(member)}
+                                    className="text-blue-600 hover:text-blue-600"
+                                  >
+                                    Resend Invitation
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleCancelInvitation(member)}
+                                    className="text-orange-600 hover:text-orange-600"
+                                  >
+                                    Cancel
+                                  </Button>
+                                </div>
+                              ) : member.role !== 'owner' ? (
+                                // Regular member actions
                                 <div className="flex items-center gap-2">
                                   <Select
                                     value={member.role}
-                                    onValueChange={(value: 'admin' | 'member' | 'viewer') => handleRoleChange(member.user_id, value)}
+                                    onValueChange={(value: 'admin' | 'member' | 'viewer') => handleRoleChange(member.user_id!, value)}
                                   >
                                     <SelectTrigger className="w-[100px] h-8">
                                       <SelectValue />
@@ -395,13 +529,29 @@ const Members = () => {
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => handleRemoveMember(member.user_id)}
+                                    onClick={() => handleToggleMemberStatus(member)}
+                                    className={member.status === 'active' ? 'text-orange-600 hover:text-orange-600' : 'text-green-600 hover:text-green-600'}
+                                  >
+                                    {member.status === 'active' ? 'Disable' : 'Enable'}
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleResendInvitation(member)}
+                                    className="text-blue-600 hover:text-blue-600"
+                                  >
+                                    Reset Password
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleRemoveMember(member.user_id!)}
                                     className="text-destructive hover:text-destructive"
                                   >
                                     Remove
                                   </Button>
                                 </div>
-                              )}
+                              ) : null}
                             </TableCell>
                           </TableRow>
                         ))}

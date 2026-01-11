@@ -35,6 +35,7 @@ A modern React-based frontend for the Paapeli IoT Platform, providing comprehens
 - **Routing**: React Router
 - **Testing**: Vitest with React Testing Library
 - **Internationalization**: Custom i18n system
+- **User Avatars**: Gravatar integration with fallback initials
 - **Build Automation**: Makefile for common tasks
 
 ## Getting Started

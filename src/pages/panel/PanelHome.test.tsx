@@ -59,7 +59,7 @@ const createWrapper = () => {
 
 describe('PanelHome Component', () => {
   const mockGatewaysData = {
-    gateways: [
+    data: [
       { id: '1', name: 'Gateway 1', status: 'active' },
       { id: '2', name: 'Gateway 2', status: 'inactive' },
       { id: '3', name: 'Gateway 3', status: 'active' },
@@ -130,6 +130,14 @@ describe('PanelHome Component', () => {
   });
 
   it('shows loading state initially', async () => {
+    // Delay the API response to ensure loading state is visible
+    (apiRequest as any).mockImplementation(() => 
+      new Promise(resolve => setTimeout(() => resolve(mockGatewaysData), 100))
+    );
+    (alertsAPI.getAlertsCount as any).mockImplementation(() => 
+      new Promise(resolve => setTimeout(() => resolve(mockAlertsCount), 100))
+    );
+
     render(<PanelHome />, { wrapper: createWrapper() });
 
     // Initially should show loading dots
@@ -138,6 +146,6 @@ describe('PanelHome Component', () => {
     // Wait for data to load
     await waitFor(() => {
       expect(screen.getByText('3')).toBeInTheDocument();
-    });
+    }, { timeout: 2000 });
   });
 });
