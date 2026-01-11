@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -63,7 +63,7 @@ const Alarms = () => {
   const [duration, setDuration] = useState("60");
   const [severity, setSeverity] = useState<'info' | 'warning' | 'critical'>('warning');
 
-  const fetchAlarms = async () => {
+  const fetchAlarms = useCallback(async () => {
     try {
       const response = await apiRequest("/api/v1/alarms");
       const alarmsData = response.alarms || [];
@@ -76,9 +76,9 @@ const Alarms = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [toast, t]);
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await apiRequest("/api/v1/projects");
       const projectsData = response.projects || [];
@@ -86,9 +86,9 @@ const Alarms = () => {
     } catch (error) {
       console.error("Failed to fetch projects:", error);
     }
-  };
+  }, []);
 
-  const fetchGateways = async () => {
+  const fetchGateways = useCallback(async () => {
     try {
       const response = await apiRequest("/api/v1/gateways");
       const gatewaysData = response.gateways || [];
@@ -96,7 +96,7 @@ const Alarms = () => {
     } catch (error) {
       console.error("Failed to fetch gateways:", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -105,7 +105,7 @@ const Alarms = () => {
       setLoading(false);
     };
     loadData();
-  }, []);
+  }, [fetchAlarms, fetchProjects, fetchGateways]);
 
   const handleAddAlarm = async () => {
     if (!alarmName.trim() || !threshold || !selectedProjectId) {
@@ -146,11 +146,11 @@ const Alarms = () => {
       // Reset form
       resetForm();
       setAddPanelOpen(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to create alarm:", error);
       toast({
         title: t("error"),
-        description: error.message || "Failed to create alarm",
+        description: error instanceof Error ? error.message : "Failed to create alarm",
         variant: "destructive",
       });
     } finally {
@@ -361,7 +361,7 @@ const Alarms = () => {
 
               <div>
                 <Label>Metric</Label>
-                <Select value={metricName} onValueChange={(value: any) => setMetricName(value)}>
+                <Select value={metricName} onValueChange={(value: string) => setMetricName(value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -379,7 +379,7 @@ const Alarms = () => {
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <Label>Condition</Label>
-                <Select value={condition} onValueChange={(value: any) => setCondition(value)}>
+                <Select value={condition} onValueChange={(value: 'gt' | 'lt' | 'eq' | 'gte' | 'lte') => setCondition(value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -405,7 +405,7 @@ const Alarms = () => {
 
               <div>
                 <Label>Severity</Label>
-                <Select value={severity} onValueChange={(value: any) => setSeverity(value)}>
+                <Select value={severity} onValueChange={(value: 'info' | 'warning' | 'critical') => setSeverity(value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

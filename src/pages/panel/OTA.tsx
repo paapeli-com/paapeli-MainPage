@@ -80,6 +80,31 @@ const OTA = () => {
     stages: [{ percentage: 25, duration_hours: 24 }]
   });
 
+  const loadFirmwareVersions = useCallback(async () => {
+    const response = await otaAPI.getFirmwareVersions();
+    setFirmwareVersions(response.data || []);
+  }, []);
+
+  const loadCampaigns = useCallback(async () => {
+    const response = await otaAPI.getUpdateCampaigns();
+    setCampaigns(response.data || []);
+  }, []);
+
+  const loadDeviceStatuses = useCallback(async () => {
+    try {
+      const response = await otaAPI.getAllDeviceFirmwareStatuses();
+      setDeviceStatuses(response.data || []);
+    } catch (error) {
+      console.error('Failed to load device statuses:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load device firmware statuses",
+        variant: "destructive",
+      });
+      setDeviceStatuses([]);
+    }
+  }, [toast]);
+
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
@@ -99,36 +124,11 @@ const OTA = () => {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, toast]);
+  }, [activeTab, toast, loadFirmwareVersions, loadCampaigns, loadDeviceStatuses]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
-
-  const loadFirmwareVersions = async () => {
-    const response = await otaAPI.getFirmwareVersions();
-    setFirmwareVersions(response.data || []);
-  };
-
-  const loadCampaigns = async () => {
-    const response = await otaAPI.getUpdateCampaigns();
-    setCampaigns(response.data || []);
-  };
-
-  const loadDeviceStatuses = async () => {
-    try {
-      const response = await otaAPI.getAllDeviceFirmwareStatuses();
-      setDeviceStatuses(response.data || []);
-    } catch (error) {
-      console.error('Failed to load device statuses:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load device firmware statuses",
-        variant: "destructive",
-      });
-      setDeviceStatuses([]);
-    }
-  };
 
   const handleCreateVersion = async () => {
     await otaAPI.createFirmwareVersion(versionForm);

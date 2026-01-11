@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -35,6 +35,13 @@ interface Project {
   description?: string;
 }
 
+interface Device {
+  id: string;
+  name?: string;
+  location?: string;
+  status?: string;
+}
+
 const DeviceGroup = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -55,14 +62,14 @@ const DeviceGroup = () => {
   const [addDeviceDialogOpen, setAddDeviceDialogOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<DeviceGroup | null>(null);
   const [editName, setEditName] = useState("");
-  const [availableDevices, setAvailableDevices] = useState<any[]>([]);
+  const [availableDevices, setAvailableDevices] = useState<Device[]>([]);
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [dialogLoading, setDialogLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const fetchGroups = async () => {
+  const fetchGroups = useCallback(async () => {
     try {
       const response = await apiRequest("/api/v1/device-groups");
       const groupsData = response.data || [];
@@ -75,9 +82,9 @@ const DeviceGroup = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [toast, t]);
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await apiRequest("/api/v1/projects");
       const projectsData = response.data || [];
@@ -88,7 +95,7 @@ const DeviceGroup = () => {
     } catch (error) {
       console.error("Failed to fetch projects:", error);
     }
-  };
+  }, [selectedProjectId]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -97,7 +104,7 @@ const DeviceGroup = () => {
       setLoading(false);
     };
     loadData();
-  }, []);
+  }, [fetchGroups, fetchProjects]);
 
   useEffect(() => {
     if (addDeviceDialogOpen && selectedGroup) {
@@ -119,7 +126,7 @@ const DeviceGroup = () => {
       setSearchTerm("");
       setCurrentPage(1);
     }
-  }, [addDeviceDialogOpen, selectedGroup]);
+  }, [addDeviceDialogOpen, selectedGroup, toast, t]);
 
   const handleAddGroup = async () => {
     if (!groupName.trim()) {
@@ -163,11 +170,11 @@ const DeviceGroup = () => {
       setGroupName("");
       setDescription("");
       setAddPanelOpen(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to create device group:", error);
       toast({
         title: t("error"),
-        description: error.message || "Failed to create device group",
+        description: error instanceof Error ? error.message : "Failed to create device group",
         variant: "destructive",
       });
     } finally {
@@ -198,10 +205,10 @@ const DeviceGroup = () => {
         description: "Group updated successfully",
       });
       setEditDialogOpen(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: t("error"),
-        description: error.message || "Failed to update group",
+        description: error instanceof Error ? error.message : "Failed to update group",
         variant: "destructive",
       });
     } finally {
@@ -223,10 +230,10 @@ const DeviceGroup = () => {
         description: "Group deleted successfully",
       });
       setDeleteDialogOpen(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: t("error"),
-        description: error.message || "Failed to delete group",
+        description: error instanceof Error ? error.message : "Failed to delete group",
         variant: "destructive",
       });
     } finally {
@@ -252,10 +259,10 @@ const DeviceGroup = () => {
         description: `${selectedDevices.length} device(s) added successfully`,
       });
       setAddDeviceDialogOpen(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: t("error"),
-        description: error.message || "Failed to add devices",
+        description: error instanceof Error ? error.message : "Failed to add devices",
         variant: "destructive",
       });
     } finally {

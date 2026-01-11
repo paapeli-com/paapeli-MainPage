@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -52,7 +52,7 @@ const Members = () => {
     setMemberRole('viewer');
   };
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await apiRequest("/api/v1/projects");
       const projectsData = response.data || [];
@@ -71,9 +71,9 @@ const Members = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedProjectId, toast, t]);
 
-  const fetchMembers = async (projectId: string) => {
+  const fetchMembers = useCallback(async (projectId: string) => {
     if (!projectId) return;
 
     try {
@@ -89,17 +89,17 @@ const Members = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [toast, t]);
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   useEffect(() => {
     if (selectedProjectId) {
       fetchMembers(selectedProjectId);
     }
-  }, [selectedProjectId]);
+  }, [selectedProjectId, fetchMembers]);
 
   const handleAddMember = async () => {
     if (!memberEmail.trim() || !selectedProjectId) {
@@ -142,11 +142,11 @@ const Members = () => {
 
       // Refresh members list
       fetchMembers(selectedProjectId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to add member:", error);
       toast({
         title: t("error"),
-        description: error.message || "Failed to add member",
+        description: error instanceof Error ? error.message : "Failed to add member",
         variant: "destructive",
       });
     } finally {
@@ -171,11 +171,11 @@ const Members = () => {
 
       // Refresh members list
       fetchMembers(selectedProjectId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to update member role:", error);
       toast({
         title: t("error"),
-        description: error.message || "Failed to update member role",
+        description: error instanceof Error ? error.message : "Failed to update member role",
         variant: "destructive",
       });
     }
@@ -197,11 +197,11 @@ const Members = () => {
 
       // Refresh members list
       fetchMembers(selectedProjectId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to remove member:", error);
       toast({
         title: t("error"),
-        description: error.message || "Failed to remove member",
+        description: error instanceof Error ? error.message : "Failed to remove member",
         variant: "destructive",
       });
     }
@@ -536,7 +536,7 @@ const Members = () => {
 
                 <div>
                   <Label>Role</Label>
-                  <Select value={memberRole} onValueChange={(value: any) => setMemberRole(value)}>
+                  <Select value={memberRole} onValueChange={(value: 'admin' | 'member' | 'viewer') => setMemberRole(value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
