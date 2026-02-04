@@ -270,14 +270,24 @@ const Login = () => {
               </form>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Demo login notice */}
+              <div className="bg-amber-50 border border-amber-200 rounded-md p-3 mb-2">
+                <p className="text-sm text-amber-800 font-medium">
+                  {language === 'en' ? '🔑 Demo Login:' : language === 'ar' ? '🔑 تسجيل دخول تجريبي:' : '🔑 ورود دمو:'}
+                </p>
+                <p className="text-sm text-amber-700">
+                  User: <code className="bg-amber-100 px-1 rounded">demo</code> | Pass: <code className="bg-amber-100 px-1 rounded">demo</code>
+                </p>
+              </div>
+              
               <div>
                 <Label htmlFor="email" className="text-gray-700 font-normal">
-                  {language === 'en' ? 'Email' : language === 'ar' ? 'البريد الإلكتروني' : 'ایمیل'}
+                  {language === 'en' ? 'Email / Username' : language === 'ar' ? 'البريد الإلكتروني / اسم المستخدم' : 'ایمیل / نام کاربری'}
                 </Label>
                 <Input
                   id="email"
-                  type="email"
-                  placeholder={language === 'en' ? 'name@host.com' : language === 'ar' ? 'الاسم@المضيف.com' : 'نام@هاست.com'}
+                  type="text"
+                  placeholder={language === 'en' ? 'name@host.com or demo' : language === 'ar' ? 'الاسم@المضيف.com أو demo' : 'نام@هاست.com یا demo'}
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="mt-1 bg-white border-gray-300"

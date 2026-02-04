@@ -71,6 +71,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signIn = async (email: string, password: string): Promise<void> => {
+    // Demo login bypass - for testing when Cognito is unavailable
+    if (email === 'demo' && password === 'demo') {
+      // Create a mock user object for demo purposes
+      const mockUser = {
+        getUsername: () => 'demo',
+        getSession: (callback: any) => callback(null, null),
+        signOut: () => {},
+      } as unknown as CognitoUser;
+      
+      setUser(mockUser);
+      // Create a minimal mock session
+      setSession({
+        isValid: () => true,
+        getIdToken: () => ({ getJwtToken: () => 'demo-token' }),
+        getAccessToken: () => ({ getJwtToken: () => 'demo-access-token' }),
+        getRefreshToken: () => ({ getToken: () => 'demo-refresh-token' }),
+      } as unknown as CognitoUserSession);
+      
+      return Promise.resolve();
+    }
+
     return new Promise((resolve, reject) => {
       const authenticationDetails = new AuthenticationDetails({
         Username: email,
