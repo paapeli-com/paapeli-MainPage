@@ -52,44 +52,44 @@ export const DeviceDetailsContent = ({ deviceId, onBack }: DeviceDetailsContentP
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   useEffect(() => {
-    if (session && deviceId) {
-      fetchDeviceDetails();
-    }
-  }, [session, deviceId]);
+    const fetchDeviceDetails = async () => {
+      try {
+        const accessToken = session?.getAccessToken().getJwtToken();
+        if (!accessToken) return;
 
-  const fetchDeviceDetails = async () => {
-    try {
-      const accessToken = session?.getAccessToken().getJwtToken();
-      if (!accessToken) return;
+        const response = await fetch(`https://api.paapeli.com/api/v1/devices/${deviceId}`, {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        });
 
-      const response = await fetch(`https://api.paapeli.com/api/v1/devices/${deviceId}`, {
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Device details API response:", data);
-        setDevice(data);
-      } else {
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Device details API response:", data);
+          setDevice(data);
+        } else {
+          toast({
+            title: t("error"),
+            description: "Failed to fetch device details",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch device details:", error);
         toast({
           title: t("error"),
           description: "Failed to fetch device details",
           variant: "destructive",
         });
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Failed to fetch device details:", error);
-      toast({
-        title: t("error"),
-        description: "Failed to fetch device details",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
+    };
+
+    if (session && deviceId) {
+      fetchDeviceDetails();
     }
-  };
+  }, [session, deviceId, t, toast]);
 
   const copyToClipboard = async (text: string, field: string) => {
     try {

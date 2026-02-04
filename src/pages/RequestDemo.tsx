@@ -86,8 +86,8 @@ const RequestDemo = () => {
         description: "",
         requirements: "",
       });
-    } catch (error: any) {
-      toast.error(error?.message || "Something went wrong. Please try again.");
+    } catch (error: unknown) {
+      toast.error((error as Error)?.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

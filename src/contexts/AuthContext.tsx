@@ -131,12 +131,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password,
         attributeList,
         null, // validation data should be null, not []
-        (err: any, result) => {
+        (err: unknown, result) => {
           if (err) {
             console.error('Cognito signUp error:', err);
-            console.error('Error code:', err?.code || 'no code');
-            console.error('Error message:', err?.message || 'no message');
-            console.error('Error name:', err?.name || 'no name');
+            console.error('Error code:', (err as { code?: string })?.code || 'no code');
+            console.error('Error message:', (err as { message?: string })?.message || 'no message');
+            console.error('Error name:', (err as { name?: string })?.name || 'no name');
             reject(err);
             return;
           }
@@ -272,4 +272,4 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
-};
+};  

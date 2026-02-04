@@ -1,5 +1,5 @@
 // Cognito error code mapping to user-friendly messages
-export const getCognitoErrorMessage = (error: any, language: 'en' | 'ar' | 'fa' = 'en'): string => {
+export const getCognitoErrorMessage = (error: unknown, language: 'en' | 'ar' | 'fa' = 'en'): string => {
   const errorCode = error?.code || error?.name || '';
   const errorMessage = error?.message || '';
 
