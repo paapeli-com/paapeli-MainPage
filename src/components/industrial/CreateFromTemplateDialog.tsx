@@ -63,64 +63,59 @@ export const CreateFromTemplateDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#1a1f2e] border-[#2a3441] text-white max-w-lg">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-xl text-white">
-            Create Dashboard from Template
+          <DialogTitle className="text-xl">
+            {t("createDashboardFromTemplate")}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
           {/* Template Info */}
-          <div className="p-4 bg-[#232a3b] rounded-lg">
+          <div className="p-4 bg-accent/50 rounded-lg">
             <div className="flex items-start justify-between mb-2">
-              <h3 className="font-medium text-white">{template.name}</h3>
+              <h3 className="font-medium">{template.name}</h3>
               <Badge className={getRoleBadgeColor(template.role)}>
                 {getRoleIcon(template.role)}
                 <span className="ml-1 capitalize">{template.role}</span>
               </Badge>
             </div>
-            <p className="text-sm text-gray-400">{template.description}</p>
-            <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
-              <span>Default View:</span>
+            <p className="text-sm text-muted-foreground">{template.description}</p>
+            <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
+              <span>{t("defaultLocation")}:</span>
               <Badge variant="outline" className="text-xs">
-                {template.defaultView === 'all_sites' ? 'All Sites' : 'Single Site'}
+                {template.defaultView === 'all_sites' ? t("allLocations") : t("singleLocation")}
               </Badge>
             </div>
           </div>
 
           {/* Dashboard Name */}
           <div className="space-y-2">
-            <Label className="text-gray-300">Dashboard Name *</Label>
+            <Label>{t("dashboardNameLabel")} *</Label>
             <Input
               value={dashboardName}
               onChange={(e) => setDashboardName(e.target.value)}
               placeholder="e.g., Main Operations Dashboard"
-              className="bg-[#232a3b] border-[#2a3441] text-white"
             />
           </div>
 
-          {/* Site Selection */}
+          {/* Location Selection */}
           <div className="space-y-2">
-            <Label className="text-gray-300">Default Site / Plant</Label>
+            <Label>{t("defaultLocation")}</Label>
             <Select value={selectedSite} onValueChange={setSelectedSite}>
-              <SelectTrigger className="bg-[#232a3b] border-[#2a3441] text-white">
-                <SelectValue placeholder="Select a site" />
+              <SelectTrigger>
+                <SelectValue placeholder={t("allLocations")} />
               </SelectTrigger>
-              <SelectContent className="bg-[#1a1f2e] border-[#2a3441]">
-                <SelectItem value="all" className="text-white hover:bg-[#2a3441]">
+              <SelectContent className="bg-popover border-border z-50">
+                <SelectItem value="all">
                   <div className="flex items-center gap-2">
                     <Globe className="h-4 w-4" />
-                    <span>All Sites</span>
-                    <span className="text-xs text-gray-500 ml-2">(Aggregated View)</span>
+                    <span>{t("allLocations")}</span>
+                    <span className="text-xs text-muted-foreground ml-2">({t("aggregatedView")})</span>
                   </div>
                 </SelectItem>
                 {mockSites.map((site) => (
-                  <SelectItem 
-                    key={site.id} 
-                    value={site.id}
-                    className="text-white hover:bg-[#2a3441]"
-                  >
+                  <SelectItem key={site.id} value={site.id}>
                     <div className="flex items-center gap-2">
                       <Building2 className="h-4 w-4" />
                       <span>{site.name}</span>
@@ -129,16 +124,16 @@ export const CreateFromTemplateDialog = ({
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               {selectedSite === 'all' 
-                ? 'Shows high-level KPIs across all sites. No raw SCADA data.'
-                : 'Shows detailed asset data, alarms, and SCADA references for the selected site.'}
+                ? t("highLevelKPIsOnly")
+                : t("fullSiteData")}
             </p>
           </div>
 
           {/* Package Warning */}
-          <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-xs text-yellow-400">
-            <strong>Note:</strong> Some widgets may be limited based on your subscription package.
+          <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-xs text-yellow-600 dark:text-yellow-400">
+            <strong>Note:</strong> {t("packageNote")}
           </div>
         </div>
 
@@ -146,16 +141,14 @@ export const CreateFromTemplateDialog = ({
           <Button 
             variant="ghost" 
             onClick={() => onOpenChange(false)}
-            className="text-gray-400 hover:text-white"
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button 
             onClick={handleCreate}
             disabled={!dashboardName.trim()}
-            className="bg-primary hover:bg-primary/90"
           >
-            Create Dashboard
+            {t("createDashboard")}
           </Button>
         </div>
       </DialogContent>
