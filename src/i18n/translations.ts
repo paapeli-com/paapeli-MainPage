@@ -346,7 +346,23 @@ export const translations = {
     carbonFootprint: "MT Carbon Footprint",
     trendsInsights: "Trends & Insights",
     plantMetrics: "Plant Metrics",
-    packageNote: "Some widgets may be limited based on your subscription package."
+    packageNote: "Some widgets may be limited based on your subscription package.",
+    
+    // Locations
+    locations: "Locations",
+    locationsSubtitle: "Sites, Units, and Assets",
+    locationLabel: "Location",
+    areaUnit: "Area / Unit",
+    assets: "Assets",
+    devicesLabel: "Devices",
+    allLocations: "All Locations",
+    singleLocation: "Selected Location",
+    selectLocationPrompt: "Select a node from the tree to view details",
+    relatedDashboards: "Related Dashboards",
+    permissionsAccess: "Permissions & Access",
+    managersLabel: "Managers",
+    operatorsLabel: "Operators",
+    defaultLocation: "Default Location",
   },
   ar: {
     // Hero Section
@@ -666,7 +682,23 @@ export const translations = {
     analyzeTrends: "تحليل الاتجاهات",
     intelligentRecommendations: "توصيات ذكية",
     detectAnomalies: "اكتشاف الشذوذ",
-    aiCoPilot: "مساعد الذكاء الاصطناعي"
+    aiCoPilot: "مساعد الذكاء الاصطناعي",
+    
+    // Locations
+    locations: "المواقع",
+    locationsSubtitle: "المواقع، الوحدات، والمعدات",
+    locationLabel: "موقعـع",
+    areaUnit: "وحدة / قسم",
+    assets: "المعدات",
+    devicesLabel: "الأجهزة / الحساسات",
+    allLocations: "جميع المواقع",
+    singleLocation: "الموقع المحدد",
+    selectLocationPrompt: "حدد عنصرًا من الشجرة لعرض التفاصيل",
+    relatedDashboards: "لوحات التحكم المرتبطة",
+    permissionsAccess: "الصلاحيات والوصول",
+    managersLabel: "مديرين",
+    operatorsLabel: "مشغلين",
+    defaultLocation: "الموقع الافتراضي",
   },
   fa: {
     // Hero Section
@@ -986,7 +1018,23 @@ export const translations = {
     analyzeTrends: "تحلیل روندها",
     intelligentRecommendations: "توصیه‌های هوشمند",
     detectAnomalies: "تشخیص ناهنجاری‌ها",
-    aiCoPilot: "دستیار هوش مصنوعی"
+    aiCoPilot: "دستیار هوش مصنوعی",
+    
+    // Locations
+    locations: "مکان‌ها",
+    locationsSubtitle: "سایت‌ها، واحدها و تجهیزات",
+    locationLabel: "مکان",
+    areaUnit: "بخش / واحد",
+    assets: "تجهیزات",
+    devicesLabel: "دستگاه‌ها / سنسورها",
+    allLocations: "همه مکان‌ها",
+    singleLocation: "مکان انتخاب‌شده",
+    selectLocationPrompt: "یک گره از درخت را انتخاب کنید تا جزئیات آن را ببینید",
+    relatedDashboards: "داشبوردهای مرتبط",
+    permissionsAccess: "مجوزها و دسترسی",
+    managersLabel: "مدیران",
+    operatorsLabel: "اپراتورها",
+    defaultLocation: "مکان پیش‌فرض",
   },
 };
 

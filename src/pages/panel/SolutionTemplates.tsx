@@ -88,7 +88,7 @@ const SolutionTemplates = () => {
         {/* Templates Section */}
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Heavy Industry Templates</h2>
+            <h2 className="text-lg font-semibold">{t("heavyIndustryTemplates")}</h2>
             <Badge variant="outline" className="text-xs">
               Industrial IoT
             </Badge>
@@ -131,9 +131,9 @@ const SolutionTemplates = () => {
                   </p>
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">Default:</span>
+                      <span className="text-muted-foreground">{t("defaultLocation")}:</span>
                       <Badge variant="secondary" className="text-xs">
-                        {template.defaultView === 'all_sites' ? 'All Sites' : 'Single Site'}
+                        {template.defaultView === 'all_sites' ? t("allLocations") : t("singleLocation")}
                       </Badge>
                     </div>
                     <span className="text-muted-foreground">
@@ -150,7 +150,7 @@ const SolutionTemplates = () => {
         {createdDashboards.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Your Dashboards</h2>
+              <h2 className="text-lg font-semibold">{t("yourDashboards")}</h2>
               <Badge variant="outline" className="text-xs">
                 {createdDashboards.length} dashboards
               </Badge>

@@ -13,7 +13,7 @@ import {
   ArrowLeft,
   Settings
 } from "lucide-react";
-import { SiteSwitcher } from "./SiteSwitcher";
+import { LocationSwitcher } from "./LocationSwitcher";
 import { PlantHealthWidget } from "./PlantHealthWidget";
 import { ActiveAlarmsWidget } from "./ActiveAlarmsWidget";
 import { CriticalAssetsWidget } from "./CriticalAssetsWidget";
@@ -34,6 +34,7 @@ interface IndustrialDashboardCanvasProps {
 
 export const IndustrialDashboardCanvas = ({ dashboard, onBack }: IndustrialDashboardCanvasProps) => {
   const { isRTL } = useLanguage();
+  const { t } = useLanguage();
   const [selectedSite, setSelectedSite] = useState(dashboard.siteId);
 
   const currentDate = new Date().toLocaleString('en-US', {
@@ -60,10 +61,10 @@ export const IndustrialDashboardCanvas = ({ dashboard, onBack }: IndustrialDashb
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Site Switcher */}
-          <SiteSwitcher 
-            selectedSite={selectedSite} 
-            onSiteChange={setSelectedSite} 
+          {/* Location Switcher */}
+          <LocationSwitcher 
+            selectedLocation={selectedSite} 
+            onLocationChange={setSelectedSite} 
           />
 
           <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded">
@@ -125,23 +126,23 @@ export const IndustrialDashboardCanvas = ({ dashboard, onBack }: IndustrialDashb
           </div>
         )}
 
-        {/* Site Context Indicator */}
-        <div className="mt-6 p-4 bg-[#1a1f2e] rounded-lg border border-[#2a3441]">
+        {/* Location Context Indicator */}
+        <div className="mt-6 p-4 bg-card rounded-lg border border-border">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-gray-400 text-sm">Current View: </span>
-              <span className="text-white font-medium">
-                {selectedSite === 'all' ? 'All Sites (Aggregated)' : `Single Site View`}
+              <span className="text-muted-foreground text-sm">{t("currentView")}: </span>
+              <span className="font-medium">
+                {selectedSite === 'all' ? t("allLocations") : t("singleLocation")}
               </span>
             </div>
             {selectedSite === 'all' && (
               <span className="text-xs text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded">
-                High-level KPIs only • No raw SCADA data
+                {t("highLevelKPIsOnly")}
               </span>
             )}
             {selectedSite !== 'all' && (
               <span className="text-xs text-green-500 bg-green-500/10 px-2 py-1 rounded">
-                Full site data • Read-only SCADA reference
+                {t("fullSiteData")}
               </span>
             )}
           </div>

@@ -64,6 +64,7 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
   const menuItems: MenuItem[] = [
     { title: t("home"), icon: Home, path: getLocalizedPath("/home") },
     { title: t("dashboard"), icon: LayoutDashboard, path: getLocalizedPath("/dashboard") },
+    { title: t("locations"), icon: Radio, path: getLocalizedPath("/locations") },
     {
       title: t("devices"),
       icon: Smartphone,
@@ -82,11 +83,11 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
       title: "AIoT",
       icon: Brain,
       children: [
-        { title: "Forecast Equipment Failures", path: getLocalizedPath("/aiot/forecast-failures") },
-        { title: "Analyze Trends", path: getLocalizedPath("/aiot/analyze-trends") },
-        { title: "Intelligent Recommendations", path: getLocalizedPath("/aiot/intelligent-recommendations") },
-        { title: "Detect Anomalies", path: getLocalizedPath("/aiot/detect-anomalies") },
-        { title: "AI Co-Pilot", path: getLocalizedPath("/aiot/co-pilot") },
+        { title: t("forecastFailures"), path: getLocalizedPath("/aiot/forecast-failures") },
+        { title: t("analyzeTrends"), path: getLocalizedPath("/aiot/analyze-trends") },
+        { title: t("intelligentRecommendations"), path: getLocalizedPath("/aiot/intelligent-recommendations") },
+        { title: t("detectAnomalies"), path: getLocalizedPath("/aiot/detect-anomalies") },
+        { title: t("aiCoPilot"), path: getLocalizedPath("/aiot/co-pilot") },
       ],
     },
   ];

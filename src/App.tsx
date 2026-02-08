@@ -27,6 +27,7 @@ import DeviceGroup from "./pages/panel/DeviceGroup";
 import Gateways from "./pages/panel/Gateways";
 import Alarms from "./pages/panel/Alarms";
 import SolutionTemplates from "./pages/panel/SolutionTemplates";
+import Locations from "./pages/panel/Locations";
 import OTA from "./pages/panel/OTA";
 import Members from "./pages/panel/Members";
 import DevCenter from "./pages/panel/DevCenter";
@@ -113,6 +114,8 @@ const App = () => (
               <Route path="/:lang/alarms" element={<ProtectedRoute><Alarms /></ProtectedRoute>} />
               <Route path="/solution-templates" element={<ProtectedRoute><SolutionTemplates /></ProtectedRoute>} />
               <Route path="/:lang/solution-templates" element={<ProtectedRoute><SolutionTemplates /></ProtectedRoute>} />
+              <Route path="/locations" element={<ProtectedRoute><Locations /></ProtectedRoute>} />
+              <Route path="/:lang/locations" element={<ProtectedRoute><Locations /></ProtectedRoute>} />
               <Route path="/ota" element={<ProtectedRoute><OTA /></ProtectedRoute>} />
               <Route path="/:lang/ota" element={<ProtectedRoute><OTA /></ProtectedRoute>} />
               <Route path="/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
