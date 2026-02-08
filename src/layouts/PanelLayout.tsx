@@ -70,7 +70,6 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
       icon: Smartphone,
       children: [
         { title: t("devices"), path: getLocalizedPath("/devices") },
-        { title: t("group"), path: getLocalizedPath("/devices/group") },
         { title: t("gateways"), path: getLocalizedPath("/devices/gateways") },
       ],
     },
