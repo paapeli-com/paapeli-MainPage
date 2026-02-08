@@ -28,7 +28,6 @@ import Gateways from "./pages/panel/Gateways";
 import Alarms from "./pages/panel/Alarms";
 import SolutionTemplates from "./pages/panel/SolutionTemplates";
 import Locations from "./pages/panel/Locations";
-import UserSettings from "./pages/panel/UserSettings";
 import OTA from "./pages/panel/OTA";
 import Members from "./pages/panel/Members";
 import DevCenter from "./pages/panel/DevCenter";
@@ -107,8 +106,10 @@ const App = () => (
               <Route path="/:lang/devices" element={<ProtectedRoute><Devices /></ProtectedRoute>} />
               <Route path="/devices/:deviceId" element={<ProtectedRoute><DeviceDetails /></ProtectedRoute>} />
               <Route path="/:lang/devices/:deviceId" element={<ProtectedRoute><DeviceDetails /></ProtectedRoute>} />
-              <Route path="/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
-              <Route path="/:lang/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
+              <Route path="/devices/group" element={<ProtectedRoute><DeviceGroup /></ProtectedRoute>} />
+              <Route path="/:lang/devices/group" element={<ProtectedRoute><DeviceGroup /></ProtectedRoute>} />
+              <Route path="/devices/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
+              <Route path="/:lang/devices/gateways" element={<ProtectedRoute><Gateways /></ProtectedRoute>} />
               <Route path="/alarms" element={<ProtectedRoute><Alarms /></ProtectedRoute>} />
               <Route path="/:lang/alarms" element={<ProtectedRoute><Alarms /></ProtectedRoute>} />
               <Route path="/solution-templates" element={<ProtectedRoute><SolutionTemplates /></ProtectedRoute>} />
@@ -121,8 +122,6 @@ const App = () => (
               <Route path="/:lang/members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
               <Route path="/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
               <Route path="/:lang/dev-center" element={<ProtectedRoute><DevCenter /></ProtectedRoute>} />
-              <Route path="/user-settings" element={<ProtectedRoute><UserSettings /></ProtectedRoute>} />
-              <Route path="/:lang/user-settings" element={<ProtectedRoute><UserSettings /></ProtectedRoute>} />
               
               {/* AIoT Routes */}
               <Route path="/aiot/forecast-failures" element={<ProtectedRoute><AIoTForecastFailures /></ProtectedRoute>} />
