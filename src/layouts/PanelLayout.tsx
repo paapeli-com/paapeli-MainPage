@@ -6,7 +6,6 @@ import {
   Home,
   LayoutDashboard,
   Smartphone,
-  Users,
   Radio,
   Bell,
   FileCode,
@@ -15,28 +14,21 @@ import {
   Code,
   Plus,
   Menu,
-  X,
   LogOut,
   Settings,
-  ChevronDown,
   Brain,
+  Wifi,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import paapeliLogo from "@/assets/paapeli-logo.png";
 
 interface MenuItem {
   title: string;
   subtitle?: string;
   icon: any;
-  path?: string;
-  children?: { title: string; path: string }[];
+  path: string;
 }
 
 interface PanelLayoutProps {
@@ -49,46 +41,28 @@ interface PanelLayoutProps {
 
 export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, onBackClick }: PanelLayoutProps) => {
   const { t, isRTL, language } = useLanguage();
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [devicesOpen, setDevicesOpen] = useState(true);
-  const [aiotOpen, setAiotOpen] = useState(true);
   
-  // Helper to add language prefix to paths
   const getLocalizedPath = (path: string) => {
     return language === 'en' ? path : `/${language}${path}`;
   };
 
   const menuItems: MenuItem[] = [
     { title: t("home"), icon: Home, path: getLocalizedPath("/home") },
-    { title: t("dashboard"), icon: LayoutDashboard, path: getLocalizedPath("/dashboard") },
+    { title: t("dashboards"), icon: LayoutDashboard, path: getLocalizedPath("/dashboard") },
     { title: t("locations"), icon: Radio, path: getLocalizedPath("/locations") },
-    {
-      title: t("devices"),
-      icon: Smartphone,
-      children: [
-        { title: t("devices"), path: getLocalizedPath("/devices") },
-        { title: t("gateways"), path: getLocalizedPath("/devices/gateways") },
-      ],
-    },
+    { title: t("devices"), icon: Smartphone, path: getLocalizedPath("/devices") },
+    { title: t("gateways"), icon: Wifi, path: getLocalizedPath("/gateways") },
     { title: t("alarms"), icon: Bell, path: getLocalizedPath("/alarms") },
     { title: t("solutionTemplates"), icon: FileCode, path: getLocalizedPath("/solution-templates") },
     { title: "OTA", subtitle: t("otaUpdate"), icon: Download, path: getLocalizedPath("/ota") },
+    { title: t("ai"), icon: Brain, path: getLocalizedPath("/aiot/co-pilot") },
     { title: t("members"), icon: UserCog, path: getLocalizedPath("/members") },
     { title: t("devCenter"), icon: Code, path: getLocalizedPath("/dev-center") },
-    {
-      title: "AIoT",
-      icon: Brain,
-      children: [
-        { title: t("forecastFailures"), path: getLocalizedPath("/aiot/forecast-failures") },
-        { title: t("analyzeTrends"), path: getLocalizedPath("/aiot/analyze-trends") },
-        { title: t("intelligentRecommendations"), path: getLocalizedPath("/aiot/intelligent-recommendations") },
-        { title: t("detectAnomalies"), path: getLocalizedPath("/aiot/detect-anomalies") },
-        { title: t("aiCoPilot"), path: getLocalizedPath("/aiot/co-pilot") },
-      ],
-    },
+    { title: t("userSettings"), icon: Settings, path: getLocalizedPath("/user-settings") },
   ];
 
   const handleLogout = async () => {
@@ -97,7 +71,6 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
   };
 
   const isActive = (path: string) => {
-    // Remove language prefix from current path for comparison
     const currentPath = location.pathname.replace(/^\/(en|ar|fa)/, '');
     const comparePath = path.replace(/^\/(en|ar|fa)/, '');
     return currentPath === comparePath;
@@ -116,70 +89,27 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
       {/* Menu Items */}
       <nav className="flex-1 overflow-y-auto p-4">
         <ul className="space-y-1">
-          {menuItems.map((item, index) => {
-            const hasChildren = !!item.children;
-            const isDevicesMenu = hasChildren && item.title === t("devices");
-            const isAiotMenu = hasChildren && item.title === "AIoT";
-            const openState = isDevicesMenu ? devicesOpen : isAiotMenu ? aiotOpen : devicesOpen;
-            const setOpenState = isDevicesMenu ? setDevicesOpen : isAiotMenu ? setAiotOpen : setDevicesOpen;
-
-            return (
-              <li key={index}>
-                {hasChildren ? (
-                  <Collapsible open={openState} onOpenChange={setOpenState}>
-                    <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-accent transition-colors">
-                      <div className="flex items-center gap-3">
-                        <item.icon className="h-5 w-5" />
-                        <span>{item.title}</span>
-                      </div>
-                      <ChevronDown className={`h-4 w-4 transition-transform ${openState ? "rotate-180" : ""}`} />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <ul className={`mt-1 space-y-1 ${isRTL ? "mr-6" : "ml-6"}`}>
-                        {item.children?.map((child, childIndex) => (
-                          <li key={childIndex}>
-                            <button
-                              onClick={() => {
-                                navigate(child.path);
-                                setSidebarOpen(false);
-                              }}
-                              className={`w-full ${isRTL ? "text-right pr-4" : "text-left pl-4"} p-2 rounded-lg transition-colors ${
-                                isActive(child.path)
-                                  ? "bg-primary text-primary-foreground"
-                                  : "hover:bg-accent"
-                              }`}
-                            >
-                              {child.title}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </CollapsibleContent>
-                  </Collapsible>
-                ) : (
-                  <button
-                    onClick={() => {
-                      if (item.path) {
-                        navigate(item.path);
-                        setSidebarOpen(false);
-                      }
-                    }}
-                    className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${
-                      item.path && isActive(item.path)
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-accent"
-                    }`}
-                  >
-                    <item.icon className="h-5 w-5" />
-                    <div className="flex flex-col items-start">
-                      <span>{item.title}</span>
-                      {item.subtitle && <span className="text-xs opacity-70">({item.subtitle})</span>}
-                    </div>
-                  </button>
-                )}
-              </li>
-            );
-          })}
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              <button
+                onClick={() => {
+                  navigate(item.path);
+                  setSidebarOpen(false);
+                }}
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${
+                  isActive(item.path)
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-accent"
+                }`}
+              >
+                <item.icon className="h-5 w-5" />
+                <div className="flex flex-col items-start">
+                  <span className="text-sm">{item.title}</span>
+                  {item.subtitle && <span className="text-xs opacity-70">({item.subtitle})</span>}
+                </div>
+              </button>
+            </li>
+          ))}
         </ul>
       </nav>
 
@@ -194,14 +124,6 @@ export const PanelLayout = ({ children, pageTitle, onAddClick, showBackButton, o
           </div>
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex-1"
-            onClick={() => navigate("/account-settings")}
-          >
-            <Settings className="h-4 w-4" />
-          </Button>
           <Button variant="ghost" size="sm" className="flex-1" onClick={handleLogout}>
             <LogOut className="h-4 w-4" />
           </Button>
