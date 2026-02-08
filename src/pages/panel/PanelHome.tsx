@@ -28,25 +28,25 @@ const PanelHome = () => {
     { 
       title: t("createDashboard"), 
       icon: LayoutDashboard, 
-      onClick: () => navigate("/panel/dashboard"),
+      onClick: () => navigate("/dashboard"),
       variant: "default" as const
     },
     { 
       title: t("addNewDevice"), 
       icon: Plus, 
-      onClick: () => navigate("/panel/devices"),
+      onClick: () => navigate("/devices"),
       variant: "default" as const
     },
     { 
       title: t("addNewTemplate"), 
       icon: FileCode, 
-      onClick: () => navigate("/panel/solution-templates"),
+      onClick: () => navigate("/solution-templates"),
       variant: "default" as const
     },
     { 
       title: t("createAlarm"), 
       icon: BellRing, 
-      onClick: () => navigate("/panel/alarms"),
+      onClick: () => navigate("/alarms"),
       variant: "default" as const
     },
   ];
