@@ -18,7 +18,11 @@ const channelIcons: Record<NotificationChannelType, any> = {
   mqtt: Radio,
 };
 
-export const NotificationChannels = () => {
+interface NotificationChannelsProps {
+  onCreateClick?: () => void;
+}
+
+export const NotificationChannels = ({ onCreateClick }: NotificationChannelsProps) => {
   const { t } = useLanguage();
   const [channels, setChannels] = useState(mockNotificationChannels);
 
@@ -34,12 +38,12 @@ export const NotificationChannels = () => {
         </p>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button size="sm" disabled>
+            <Button size="sm" onClick={onCreateClick} disabled={!onCreateClick}>
               <Plus className="h-4 w-4 me-1" />
               {t("alertAddChannel")}
             </Button>
           </TooltipTrigger>
-          <TooltipContent>{t("settingsComingSoon")}</TooltipContent>
+          <TooltipContent>{onCreateClick ? "" : t("settingsComingSoon")}</TooltipContent>
         </Tooltip>
       </div>
 
