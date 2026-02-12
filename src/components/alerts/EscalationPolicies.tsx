@@ -8,7 +8,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Plus, Edit, Clock, Users, ArrowRight } from "lucide-react";
 import { mockEscalationPolicies } from "@/data/mockAlertData";
 
-export const EscalationPolicies = () => {
+interface EscalationPoliciesProps {
+  onCreateClick?: () => void;
+}
+
+export const EscalationPolicies = ({ onCreateClick }: EscalationPoliciesProps) => {
   const { t } = useLanguage();
   const [policies, setPolicies] = useState(mockEscalationPolicies);
 
@@ -24,12 +28,12 @@ export const EscalationPolicies = () => {
         </p>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button size="sm" disabled>
+            <Button size="sm" onClick={onCreateClick} disabled={!onCreateClick}>
               <Plus className="h-4 w-4 me-1" />
               {t("alertCreateEscalation")}
             </Button>
           </TooltipTrigger>
-          <TooltipContent>{t("settingsComingSoon")}</TooltipContent>
+          <TooltipContent>{onCreateClick ? "" : t("settingsComingSoon")}</TooltipContent>
         </Tooltip>
       </div>
 

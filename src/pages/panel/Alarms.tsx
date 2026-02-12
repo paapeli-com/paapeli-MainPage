@@ -9,11 +9,15 @@ import { AlertAnalytics } from "@/components/alerts/AlertAnalytics";
 import { EscalationPolicies } from "@/components/alerts/EscalationPolicies";
 import { NotificationChannels } from "@/components/alerts/NotificationChannels";
 import { AlertTemplates } from "@/components/alerts/AlertTemplates";
-import { Bell, List, Activity, Shield, Radio, BarChart3, FileText } from "lucide-react";
+import { CreateEscalationDialog } from "@/components/alerts/CreateEscalationDialog";
+import { CreateChannelDialog } from "@/components/alerts/CreateChannelDialog";
+import { Bell, Shield, Radio, BarChart3, FileText } from "lucide-react";
 
 const Alarms = () => {
   const { t } = useLanguage();
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [escalationOpen, setEscalationOpen] = useState(false);
+  const [channelOpen, setChannelOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
 
   return (
@@ -24,14 +28,6 @@ const Alarms = () => {
             <TabsTrigger value="all" className="gap-1.5">
               <Bell className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">{t("alertTabAll")}</span>
-            </TabsTrigger>
-            <TabsTrigger value="active" className="gap-1.5">
-              <Activity className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{t("alertTabActive")}</span>
-            </TabsTrigger>
-            <TabsTrigger value="resolved" className="gap-1.5">
-              <List className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{t("alertTabResolved")}</span>
             </TabsTrigger>
             <TabsTrigger value="rules" className="gap-1.5">
               <Shield className="h-3.5 w-3.5" />
@@ -56,17 +52,17 @@ const Alarms = () => {
           </TabsList>
         </div>
 
-        <TabsContent value="all"><AlertList filter="all" /></TabsContent>
-        <TabsContent value="active"><AlertList filter="active" /></TabsContent>
-        <TabsContent value="resolved"><AlertList filter="resolved" /></TabsContent>
+        <TabsContent value="all"><AlertList /></TabsContent>
         <TabsContent value="rules"><AlertRulesList onCreateRule={() => setWizardOpen(true)} /></TabsContent>
-        <TabsContent value="escalation"><EscalationPolicies /></TabsContent>
-        <TabsContent value="channels"><NotificationChannels /></TabsContent>
+        <TabsContent value="escalation"><EscalationPolicies onCreateClick={() => setEscalationOpen(true)} /></TabsContent>
+        <TabsContent value="channels"><NotificationChannels onCreateClick={() => setChannelOpen(true)} /></TabsContent>
         <TabsContent value="analytics"><AlertAnalytics /></TabsContent>
         <TabsContent value="templates"><AlertTemplates onUseTemplate={() => setWizardOpen(true)} /></TabsContent>
       </Tabs>
 
       <AlertRuleWizard open={wizardOpen} onOpenChange={setWizardOpen} />
+      <CreateEscalationDialog open={escalationOpen} onOpenChange={setEscalationOpen} />
+      <CreateChannelDialog open={channelOpen} onOpenChange={setChannelOpen} />
     </PanelLayout>
   );
 };

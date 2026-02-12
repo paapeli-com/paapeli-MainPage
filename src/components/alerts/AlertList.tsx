@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { CheckCircle, Search, Download, RefreshCw, Filter, X } from "lucide-react";
+import { CheckCircle, Search, Download, RefreshCw, Filter, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { mockAlerts } from "@/data/mockAlertData";
 import type { Alert, AlertSeverity, AlertStatus } from "@/types/alerts";
 
