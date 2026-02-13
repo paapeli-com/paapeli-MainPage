@@ -35,7 +35,7 @@ const ForgotPassword = () => {
           ? 'يرجى التحقق من بريدك الإلكتروني للحصول على رمز إعادة التعيين.'
           : 'لطفاً ایمیل خود را برای کد بازیابی بررسی کنید.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         variant: "destructive",
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',
@@ -61,7 +61,7 @@ const ForgotPassword = () => {
           : 'بازیابی رمز عبور موفقیت‌آمیز بود. اکنون می‌توانید با رمز عبور جدید وارد شوید.',
       });
       navigate("/login");
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         variant: "destructive",
         title: language === 'en' ? 'Error' : language === 'ar' ? 'خطأ' : 'خطا',

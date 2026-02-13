@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { PanelLayout } from "@/layouts/PanelLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -98,13 +98,7 @@ const Devices = () => {
   const [label, setLabel] = useState("");
   const [useSsl, setUseSsl] = useState(false);
 
-  useEffect(() => {
-    if (session) {
-      fetchDevices();
-    }
-  }, [session]);
-
-  const fetchDevices = async (showRefreshToast = false) => {
+  const fetchDevices = useCallback(async (showRefreshToast = false) => {
     if (showRefreshToast) {
       setIsRefreshing(true);
     } else {
@@ -145,7 +139,13 @@ const Devices = () => {
       setIsLoadingDevices(false);
       setIsRefreshing(false);
     }
-  };
+  }, [session, t, toast]);
+
+  useEffect(() => {
+    if (session) {
+      fetchDevices();
+    }
+  }, [session, fetchDevices]);
 
   const copyToClipboard = async (text: string, field: string) => {
     try {

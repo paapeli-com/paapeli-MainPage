@@ -2,6 +2,7 @@ import { ReactNode, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { LucideIcon } from "lucide-react";
 import {
   Home,
   LayoutDashboard,
@@ -34,7 +35,7 @@ import paapeliLogo from "@/assets/paapeli-logo.png";
 interface MenuItem {
   title: string;
   subtitle?: string;
-  icon: any;
+  icon: LucideIcon;
   path?: string;
   children?: { title: string; path: string }[];
 }
